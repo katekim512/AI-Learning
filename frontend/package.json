@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@types/underscore": "^1.11.12"
+    "@types/underscore": "^1.11.12",
+    "prettier": "3.3.3"
   }
 }

@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
-import router from './router';
+import router from "./router";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 
 const queryClient = new QueryClient();
@@ -20,5 +20,5 @@ root.render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </RecoilRoot>
-  </ChakraProvider>
+  </ChakraProvider>,
 );
