@@ -1,10 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import "./style/font.css";
 
 import router from "./router";
 
