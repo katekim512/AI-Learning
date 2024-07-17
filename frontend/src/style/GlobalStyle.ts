@@ -21,7 +21,6 @@ time, mark, audio, video {
 	font: 'inherit';
 	vertical-align: baseline;
 	box-sizing: border-box;
-	height: calc(var(--vh, 1vh) * 100);
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -30,6 +29,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+    height: calc(var(--vh, 1vh) * 100);
 }
 a {
 	text-decoration: none;
