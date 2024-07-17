@@ -18,6 +18,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
+	font: 'inherit';
 	vertical-align: baseline;
 	box-sizing: border-box;
 	height: calc(var(--vh, 1vh) * 100);
@@ -32,7 +33,7 @@ body {
 }
 a {
 	text-decoration: none;
-	color: inherit
+	color: inherit;
 }
 ol, ul {
 	list-style: none;
