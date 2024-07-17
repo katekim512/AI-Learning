@@ -1,22 +1,13 @@
-import { Button, Icon } from '@chakra-ui/react'
-import { HiArrowLeft } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
+
+import { StyledButton, StyledIcon } from './styles/BackButton.style'
 
 const BackButton = () => {
   const navigate = useNavigate()
   return (
-    <Button
-      position="absolute"
-      top="0"
-      left="0"
-      w="4rem"
-      h="3rem"
-      p="0"
-      background="transparent"
-      onClick={() => navigate(-1)}
-    >
-      <Icon as={HiArrowLeft} width="3rem" height="2rem" />
-    </Button>
+    <StyledButton onClick={() => navigate(-1)}>
+      <StyledIcon />
+    </StyledButton>
   )
 }
 
