@@ -1,18 +1,33 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import SocialLogin from './SocialLogin'
+import { login } from '../../../api/auth/postLogin'
 import * as L from '../styles/Login.style'
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const navigate = useNavigate()
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value)
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value)
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // 로그인 로직
+
+    if (email.trim() !== '' && password.trim() !== '') {
+      const loginResult = await login(email, password)
+
+      if (loginResult) {
+        navigate('/login')
+        console.log('token: ', loginResult.data.token)
+        localStorage.setItem('token', loginResult.data.token)
+      } else {
+        console.error('login fail')
+      }
+    }
   }
 
   return (
@@ -32,6 +47,7 @@ const LoginForm = () => {
         required
       />
       <L.LoginButton type="submit">로그인</L.LoginButton>
+      <SocialLogin />
     </L.Form>
   )
 }
