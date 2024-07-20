@@ -6,6 +6,7 @@ import Login from './pages/LoginPage/Login'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
+import Register from './pages/RegisterPage/Register'
 import Test from './pages/TestPage/Test'
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+      },
+      {
+        path: 'register',
+        element: <Register />,
       },
       {
         path: 'calendar',
