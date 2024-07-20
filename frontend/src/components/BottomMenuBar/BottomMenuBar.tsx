@@ -1,12 +1,15 @@
+// BottomMenuBar.tsx
+
 import calendarIcon from '@iconify/icons-heroicons/calendar-solid'
 import profileIcon from '@iconify/icons-heroicons/user-20-solid'
 import rankingIcon from '@iconify/icons-icon-park-solid/five-star-badge'
 import recommendationIcon from '@iconify/icons-majesticons/map-marker-area'
 import { Icon } from '@iconify/react'
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { MenuBar, MenuIcon } from './styles/BottomMenuBar.style'
+import { useMenuStore } from '../../stores/useBottomMenuStore'
 
 const icons = [
   {
@@ -36,6 +39,13 @@ const icons = [
 ]
 
 const BottomNav: React.FC = () => {
+  const location = useLocation()
+  const setCurrentMenu = useMenuStore(state => state.setCurrentMenu)
+
+  useEffect(() => {
+    setCurrentMenu(location.pathname)
+  }, [location.pathname, setCurrentMenu])
+
   return (
     <MenuBar>
       {icons.map((icon, index) => (

@@ -6,6 +6,7 @@ import Login from './pages/LoginPage/Login'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
+import Test from './pages/TestPage/Test'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: 'ranking-place',
         element: <Rank />,
+      },
+      {
+        path: 'test',
+        element: <Test />,
       },
     ],
   },

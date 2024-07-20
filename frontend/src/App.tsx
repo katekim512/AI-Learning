@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
-import BottomNav from './components/BottomMenuBar/BottomMenuBar'
 import GlobalStyle from './style/GlobalStyle'
 import setScreenHeight from './utils/mobileScreenSize/setScreenHeight'
 
@@ -27,7 +26,6 @@ const App = () => {
       <GlobalStyle />
       <CenteredContainer>
         <Outlet />
-        <BottomNav />
       </CenteredContainer>
     </>
   )
