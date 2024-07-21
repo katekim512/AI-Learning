@@ -8,4 +8,5 @@ if (!url) {
 
 export const aiLearningAxios = axios.create({
   baseURL: url,
+  withCredentials: true,
 })
