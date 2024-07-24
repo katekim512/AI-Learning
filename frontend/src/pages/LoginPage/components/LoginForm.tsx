@@ -21,7 +21,7 @@ const LoginForm = () => {
       const loginResult = await login(email, password)
 
       if (loginResult) {
-        navigate('/login')
+        navigate('/calendar')
         console.log('token: ', loginResult.data.token)
         localStorage.setItem('token', loginResult.data.token)
       } else {
