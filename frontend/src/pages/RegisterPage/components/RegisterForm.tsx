@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { checkEmail } from '../../../api/auth/postCheckEmail'
 import { checkNickname } from '../../../api/auth/postCheckNickname'
 import { register } from '../../../api/auth/postRegister'
+import { cities } from '../styles/City.list'
 import * as L from '../styles/Register.style'
 
 const RegisterForm = () => {
@@ -16,7 +17,7 @@ const RegisterForm = () => {
   const [signupForm, setSignupForm] = useState({
     email: '',
     nickname: '',
-    year: 0,
+    year: 2024,
     city: '',
     password: '',
     checkedPassword: '',
@@ -38,8 +39,16 @@ const RegisterForm = () => {
     checkedPassword: false,
   })
 
+  const currentYear = new Date().getFullYear()
+  const startYear = currentYear - 30
+  const years = Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => currentYear - i,
+  )
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+
     setSignupForm({ ...signupForm, [name]: value })
 
     // if (name === 'email') {
@@ -54,6 +63,16 @@ const RegisterForm = () => {
     //     nicknameMessage: '다시 중복확인을 해주세요.',
     //   }))
     // }
+  }
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target
+
+    if (name === 'year') {
+      setSignupForm({ ...signupForm, [name]: Number(value) })
+    } else {
+      setSignupForm({ ...signupForm, [name]: value })
+    }
   }
 
   const handleCheckEmail = async () => {
@@ -212,6 +231,44 @@ const RegisterForm = () => {
         </L.ValidationMessage>
       </L.InputWrapper>
       <L.InputWrapper>
+        <L.Label>자녀 출생연도</L.Label>
+        <L.Select
+          name="year"
+          id="year"
+          value={signupForm.year}
+          onChange={handleSelectChange}
+          required
+        >
+          <option value="" disabled>
+            출생연도
+          </option>
+          {years.map(year => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </L.Select>
+      </L.InputWrapper>
+      <L.InputWrapper>
+        <L.Label>사는 곳</L.Label>
+        <L.Select
+          name="city"
+          id="city"
+          value={signupForm.city}
+          onChange={handleSelectChange}
+          required
+        >
+          <option value="" disabled>
+            도시
+          </option>
+          {cities.map(city => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </L.Select>
+      </L.InputWrapper>
+      <L.InputWrapper>
         <L.Label>비밀번호</L.Label>
         <L.Input
           type="password"
@@ -225,8 +282,6 @@ const RegisterForm = () => {
         <L.ValidationMessage error={!isValid.password}>
           {validMessage.passwordMessage}
         </L.ValidationMessage>
-      </L.InputWrapper>
-      <L.InputWrapper>
         <L.Input
           type="password"
           name="checkedPassword"
@@ -242,10 +297,10 @@ const RegisterForm = () => {
       </L.InputWrapper>
       <br />
       <L.SubmitButton type="submit">회원가입 완료하기</L.SubmitButton>
-      <L.TextCenter>
+      {/* <L.TextCenter>
         이미 회원가입을 하셨나요?&nbsp;&nbsp;&nbsp;
         <L.Link href="/login">로그인하기</L.Link>
-      </L.TextCenter>
+      </L.TextCenter> */}
 
       {/* <L.ModalOverlay className={`${openModal ? 'block' : 'hidden'}`} />
       <L.ModalWrapper className={`${openModal ? 'flex' : 'hidden'}`}>

@@ -7,7 +7,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  justify-content: center;
   align-items: center;
   padding: 1.5rem;
 `
@@ -19,7 +18,7 @@ export const Title = styled.h1`
   text-align: center;
   padding: 1rem;
   border-bottom: 1px solid #dcdcdc;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 `
 
 export const Form = styled.form`
@@ -52,7 +51,25 @@ export const Input = styled.input`
   box-sizing: border-box;
 
   &:focus {
-    ring: #2563eb;
+    outline: 1px solid #2563eb;
+    border-color: #525fd4;
+  }
+`
+
+export const Select = styled.select`
+  width: 40%;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #1a202c;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: 1px solid #2563eb;
     border-color: #525fd4;
   }
 `
@@ -81,7 +98,7 @@ interface ValidationMessageProps {
 
 export const ValidationMessage = styled.p<ValidationMessageProps>`
   margin-left: 0.5rem;
-  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
   color: ${props => (props.error ? '#f56565' : '#6b7280')};
 `
