@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import App from './App'
+import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import Calendar from './pages/CalendarPage/Calendar'
 import Login from './pages/LoginPage/Login'
 import Profile from './pages/ProfilePage/Profile'
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: 'ranking-place',
         element: <Rank />,
+      },
+      {
+        path: 'ai-schedule-step2',
+        element: <AISchedule2 />,
       },
       {
         path: 'test',
