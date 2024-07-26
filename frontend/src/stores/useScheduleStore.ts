@@ -53,7 +53,7 @@ interface ScheduleState {
   location: string[]
   travelStyle: string[]
   description: string
-  frequency: string // 빈도 추가
+  frequency: string
   setStartDate: (date: string) => void
   setEndDate: (date: string) => void
   updateDates: () => void // 빈도에 따라 날짜 배열을 업데이트하는 함수

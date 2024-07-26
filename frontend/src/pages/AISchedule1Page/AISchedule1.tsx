@@ -20,7 +20,6 @@ const AISchedule1: React.FC = () => {
     setFrequency,
     setLocation,
     setTravelStyle,
-    // setDescription,
   } = useScheduleStore(state => ({
     startDate: state.startDate,
     endDate: state.endDate,
@@ -37,25 +36,11 @@ const AISchedule1: React.FC = () => {
     setDescription: state.setDescription,
   }))
 
+  //useEffect 사용 부분
   useEffect(() => {
     updateDates() // 빈도가 변경될 때마다 날짜를 업데이트
   }, [frequency, updateDates])
 
-  // const handleLocationClick = (loc: string) => {
-  //   if (loc === '전국') {
-  //     // "전국"을 클릭하면 다른 모든 위치 선택을 취소하고 "전국"만 선택
-  //     setLocation(location.includes('전국') ? [] : ['전국'])
-  //   } else {
-  //     // 다른 지역을 클릭하면 "전국"을 취소하고 해당 지역만 선택
-  //     setLocation(
-  //       location.includes('전국')
-  //         ? [loc]
-  //         : location.includes(loc)
-  //           ? location.filter(l => l !== loc)
-  //           : [...location, loc],
-  //     )
-  //   }
-  // }
   const handleLocationClick = (loc: string) => {
     if (loc === '전국') {
       // "전국"을 클릭하면 모든 지역을 선택

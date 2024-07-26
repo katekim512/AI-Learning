@@ -20,11 +20,6 @@ export const Button = styled.button`
   }
 `
 
-// export const DateInput = styled.input`
-//   margin: 10px 0px;
-//   margin-right: 10px;
-//   padding: 5px;
-// `
 export const DateInput = styled.input.attrs({ type: 'date' })`
   border: 1px solid #ddd;
   border-radius: 8px;
