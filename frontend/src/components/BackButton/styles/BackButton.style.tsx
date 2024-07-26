@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const StyledButton = styled.button`
+  position: fixed;
   width: 4rem;
   height: 3rem;
   background: transparent;
