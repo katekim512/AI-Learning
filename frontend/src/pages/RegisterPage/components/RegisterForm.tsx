@@ -196,15 +196,15 @@ const RegisterForm = () => {
       <L.InputWrapper>
         <L.Label>이메일</L.Label>
         <L.Input
-          type="email"
-          name="email"
-          id="email"
+          type='email'
+          name='email'
+          id='email'
           value={signupForm.email}
           onChange={handleChange}
-          placeholder="이메일을 입력해주세요"
+          placeholder='이메일을 입력해주세요'
           required
         />
-        <L.Button type="button" onClick={handleCheckEmail}>
+        <L.Button type='button' onClick={handleCheckEmail}>
           중복확인
         </L.Button>
         <L.ValidationMessage error={!isValid.email}>
@@ -214,16 +214,16 @@ const RegisterForm = () => {
       <L.InputWrapper>
         <L.Label>닉네임</L.Label>
         <L.Input
-          type="text"
-          name="nickname"
-          id="nickname"
+          type='text'
+          name='nickname'
+          id='nickname'
           value={signupForm.nickname}
           onChange={handleChange}
           maxLength={10}
-          placeholder="닉네임"
+          placeholder='닉네임'
           required
         />
-        <L.Button type="button" onClick={handleCheckNickname}>
+        <L.Button type='button' onClick={handleCheckNickname}>
           중복확인
         </L.Button>
         <L.ValidationMessage error={!isValid.nickname}>
@@ -233,13 +233,13 @@ const RegisterForm = () => {
       <L.InputWrapper>
         <L.Label>자녀 출생연도</L.Label>
         <L.Select
-          name="year"
-          id="year"
+          name='year'
+          id='year'
           value={signupForm.year}
           onChange={handleSelectChange}
           required
         >
-          <option value="" disabled>
+          <option value='' disabled>
             출생연도
           </option>
           {years.map(year => (
@@ -252,13 +252,13 @@ const RegisterForm = () => {
       <L.InputWrapper>
         <L.Label>사는 곳</L.Label>
         <L.Select
-          name="city"
-          id="city"
+          name='city'
+          id='city'
           value={signupForm.city}
           onChange={handleSelectChange}
           required
         >
-          <option value="" disabled>
+          <option value='' disabled>
             도시
           </option>
           {cities.map(city => (
@@ -271,22 +271,22 @@ const RegisterForm = () => {
       <L.InputWrapper>
         <L.Label>비밀번호</L.Label>
         <L.Input
-          type="password"
-          name="password"
-          id="password"
+          type='password'
+          name='password'
+          id='password'
           value={signupForm.password}
           onChange={handleChange}
-          placeholder="영문자, 숫자, 특수문자 포함 8~20자리"
+          placeholder='영문자, 숫자, 특수문자 포함 8~20자리'
           required
         />
         <L.ValidationMessage error={!isValid.password}>
           {validMessage.passwordMessage}
         </L.ValidationMessage>
         <L.Input
-          type="password"
-          name="checkedPassword"
-          id="checkedPassword"
-          placeholder="비밀번호 확인"
+          type='password'
+          name='checkedPassword'
+          id='checkedPassword'
+          placeholder='비밀번호 확인'
           value={signupForm.checkedPassword}
           onChange={handleChange}
           required
@@ -296,7 +296,7 @@ const RegisterForm = () => {
         </L.ValidationMessage>
       </L.InputWrapper>
       <br />
-      <L.SubmitButton type="submit">회원가입 완료하기</L.SubmitButton>
+      <L.SubmitButton type='submit'>회원가입 완료하기</L.SubmitButton>
       {/* <L.TextCenter>
         이미 회원가입을 하셨나요?&nbsp;&nbsp;&nbsp;
         <L.Link href="/login">로그인하기</L.Link>

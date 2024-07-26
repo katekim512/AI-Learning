@@ -33,20 +33,20 @@ const LoginForm = () => {
   return (
     <L.Form onSubmit={handleSubmit}>
       <L.Input
-        type="email"
+        type='email'
         value={email}
         onChange={handleEmailChange}
-        placeholder="이메일을 입력해주세요"
+        placeholder='이메일을 입력해주세요'
         required
       />
       <L.Input
-        type="password"
+        type='password'
         value={password}
         onChange={handlePasswordChange}
-        placeholder="비밀번호를 입력해주세요"
+        placeholder='비밀번호를 입력해주세요'
         required
       />
-      <L.LoginButton type="submit">로그인</L.LoginButton>
+      <L.LoginButton type='submit'>로그인</L.LoginButton>
       <SocialLogin />
     </L.Form>
   )
