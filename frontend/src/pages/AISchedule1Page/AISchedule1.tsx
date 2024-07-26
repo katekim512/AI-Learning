@@ -37,6 +37,19 @@ const AISchedule1: React.FC = () => {
   }
 
   const handleComplete = () => {
+    const {
+      setStartDate,
+      setEndDate,
+      setFrequency,
+      setLocation,
+      setTravelStyle,
+    } = useScheduleStore.getState()
+
+    setStartDate(startDate)
+    setEndDate(endDate)
+    setFrequency(frequency)
+    setLocation(location)
+    setTravelStyle(travelStyle)
     // 현재 상태를 콘솔에 출력합니다.
     console.log('Current Schedule State:', {
       startDate,

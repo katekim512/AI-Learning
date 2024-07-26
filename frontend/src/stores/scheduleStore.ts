@@ -28,7 +28,7 @@ interface ScheduleState {
 export const useScheduleStore = create<ScheduleState>(set => ({
   startDate: getCurrentDate(),
   endDate: getFutureDate(29),
-  frequency: '',
+  frequency: '1주에 1번',
   location: [],
   travelStyle: [],
   setStartDate: date => set({ startDate: date }),
