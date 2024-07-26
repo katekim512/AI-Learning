@@ -41,12 +41,50 @@ const AISchedule1: React.FC = () => {
     updateDates() // 빈도가 변경될 때마다 날짜를 업데이트
   }, [frequency, updateDates])
 
+  // const handleLocationClick = (loc: string) => {
+  //   if (loc === '전국') {
+  //     // "전국"을 클릭하면 다른 모든 위치 선택을 취소하고 "전국"만 선택
+  //     setLocation(location.includes('전국') ? [] : ['전국'])
+  //   } else {
+  //     // 다른 지역을 클릭하면 "전국"을 취소하고 해당 지역만 선택
+  //     setLocation(
+  //       location.includes('전국')
+  //         ? [loc]
+  //         : location.includes(loc)
+  //           ? location.filter(l => l !== loc)
+  //           : [...location, loc],
+  //     )
+  //   }
+  // }
   const handleLocationClick = (loc: string) => {
-    setLocation(
-      location.includes(loc)
-        ? location.filter(l => l !== loc)
-        : [...location, loc],
-    )
+    if (loc === '전국') {
+      // "전국"을 클릭하면 모든 지역을 선택
+      setLocation(
+        location.length === 7
+          ? []
+          : [
+              '전국',
+              '거주 지역 인근',
+              '서울・수도권',
+              '경상도권',
+              '전라도권',
+              '충청도권',
+              '제주도',
+            ],
+      )
+    } else {
+      // "전국"이 선택된 상태에서 다른 지역을 클릭하면 "전국"을 해제
+      if (location.includes('전국')) {
+        setLocation([loc])
+      } else {
+        // "전국"이 선택되지 않은 상태에서 다른 지역을 클릭하면 해당 지역만 토글
+        setLocation(
+          location.includes(loc)
+            ? location.filter(l => l !== loc)
+            : [...location, loc],
+        )
+      }
+    }
   }
 
   const handleStyleClick = (style: string) => {
