@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import * as L from './styles/AISchedule2.style'
 import BackButton from '../../components/BackButton/BackButton'
-import { useScheduleStore } from '../../stores/scheduleStore'
+import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule2 = () => {
   const { startDate, endDate, frequency, location, travelStyle } =

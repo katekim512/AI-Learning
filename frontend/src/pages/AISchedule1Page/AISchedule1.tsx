@@ -3,63 +3,71 @@ import { useNavigate } from 'react-router-dom'
 
 import * as S from './styles/AISchedule1.style'
 import BackButton from '../../components/BackButton/BackButton'
-import { useScheduleStore } from '../../stores/scheduleStore'
+import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule1: React.FC = () => {
   const navigate = useNavigate()
   const {
     startDate,
     endDate,
-    frequency,
+    dates,
     location,
     travelStyle,
+    frequency,
     setStartDate,
     setEndDate,
+    updateDates,
     setFrequency,
     setLocation,
     setTravelStyle,
-  } = useScheduleStore()
+    // setDescription,
+  } = useScheduleStore(state => ({
+    startDate: state.startDate,
+    endDate: state.endDate,
+    dates: state.dates,
+    location: state.location,
+    travelStyle: state.travelStyle,
+    frequency: state.frequency,
+    updateDates: state.updateDates,
+    setFrequency: state.setFrequency,
+    setStartDate: state.setStartDate,
+    setEndDate: state.setEndDate,
+    setLocation: state.setLocation,
+    setTravelStyle: state.setTravelStyle,
+    setDescription: state.setDescription,
+  }))
 
   const handleLocationClick = (loc: string) => {
-    if (location.includes(loc)) {
-      setLocation(location.filter(l => l !== loc))
-    } else {
-      setLocation([...location, loc])
-    }
+    setLocation(
+      location.includes(loc)
+        ? location.filter(l => l !== loc)
+        : [...location, loc],
+    )
   }
 
   const handleStyleClick = (style: string) => {
-    if (travelStyle.includes(style)) {
-      setTravelStyle(travelStyle.filter(s => s !== style))
-    } else {
-      setTravelStyle([...travelStyle, style])
-    }
+    setTravelStyle(
+      travelStyle.includes(style)
+        ? travelStyle.filter(s => s !== style)
+        : [...travelStyle, style],
+    )
+  }
+
+  const handleFrequencyChange = (newFrequency: string) => {
+    setFrequency(newFrequency)
+    updateDates() // 빈도 변경 후 날짜 업데이트
   }
 
   const handleComplete = () => {
-    const {
-      setStartDate,
-      setEndDate,
-      setFrequency,
-      setLocation,
-      setTravelStyle,
-    } = useScheduleStore.getState()
-
-    setStartDate(startDate)
-    setEndDate(endDate)
-    setFrequency(frequency)
-    setLocation(location)
-    setTravelStyle(travelStyle)
-    // 현재 상태를 콘솔에 출력합니다.
     console.log('Current Schedule State:', {
       startDate,
       endDate,
       frequency,
+      dates,
       location,
       travelStyle,
     })
 
-    // 다음 페이지로 이동합니다.
     navigate('/ai-schedule-step2')
   }
 
@@ -90,19 +98,19 @@ const AISchedule1: React.FC = () => {
         <S.Section>
           <S.Label>어느 주기로</S.Label>
           <S.Button
-            onClick={() => setFrequency('1주에 1번')}
+            onClick={() => handleFrequencyChange('1주에 1번')}
             className={frequency === '1주에 1번' ? 'selected' : ''}
           >
             1주에 1번
           </S.Button>
           <S.Button
-            onClick={() => setFrequency('2주에 1번')}
+            onClick={() => handleFrequencyChange('2주에 1번')}
             className={frequency === '2주에 1번' ? 'selected' : ''}
           >
             2주에 1번
           </S.Button>
           <S.Button
-            onClick={() => setFrequency('한 달에 1번')}
+            onClick={() => handleFrequencyChange('한 달에 1번')}
             className={frequency === '한 달에 1번' ? 'selected' : ''}
           >
             한 달에 1번
