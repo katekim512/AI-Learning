@@ -35,6 +35,7 @@ export const InputBox = styled.textarea`
   background-color: #f4f4f4;
   box-sizing: border-box;
   overflow: auto;
+  font-size: 0.9rem;
   text-align: left;
   line-height: 1.5;
 `
