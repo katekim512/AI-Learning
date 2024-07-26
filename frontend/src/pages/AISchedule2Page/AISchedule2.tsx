@@ -1,26 +1,47 @@
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as L from './styles/AISchedule2.style'
+import { makeSchedule } from '../../api/schedule/postMakeSchedule'
 import BackButton from '../../components/BackButton/BackButton'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule2 = () => {
-  const { startDate, endDate, frequency, dates, location, travelStyle } =
+  const token = localStorage.getItem('token')
+  const navigate = useNavigate()
+
+  const { startDate, endDate, dates, location, travelStyle } =
     useScheduleStore()
 
-  console.log('Received Schedule State from Zustand:', {
-    startDate,
-    endDate,
-    dates,
-    frequency,
-    location,
-    travelStyle,
-  })
-  const [description, setDescription] = useState<string>('')
+  const { description, setDescription } = useScheduleStore(state => ({
+    description: state.description,
+    setDescription: state.setDescription,
+  }))
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target
-    setDescription(value)
+  const handleSubmitAIInput = async () => {
+    console.log('Received Schedule State from Zustand:', {
+      startDate,
+      endDate,
+      dates,
+      location,
+      travelStyle,
+      description,
+    })
+
+    const duration = [startDate, endDate]
+    if (token) {
+      const successResponse = await makeSchedule(
+        token,
+        duration,
+        dates,
+        description,
+        location,
+        travelStyle,
+      )
+
+      if (successResponse && successResponse.data) {
+        navigate('/ai-schedule-step3')
+      }
+    }
   }
 
   return (
@@ -38,12 +59,12 @@ const AISchedule2 = () => {
           name='ai-Input2'
           id='ai-Input2'
           value={description}
-          onChange={handleChange}
+          onChange={e => setDescription(e.target.value)}
           maxLength={300}
           placeholder='예시) 4, 5월엔 멀리 이동이 어려울 거 같아, 서울 내 장소로만 추천해주세요!'
         />
       </L.Container>
-      <L.BottomButton>완료</L.BottomButton>
+      <L.BottomButton onClick={handleSubmitAIInput}>완료</L.BottomButton>
     </>
   )
 }

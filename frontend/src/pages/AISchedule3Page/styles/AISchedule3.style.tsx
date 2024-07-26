@@ -21,25 +21,6 @@ export const Text = styled.p`
   font-weight: 700;
 `
 
-export const Highlighted = styled.span`
-  background-color: rgb(82, 95, 212, 0.3);
-`
-
-export const InputBox = styled.textarea`
-  width: 100%;
-  max-width: 400px;
-  padding: 1rem;
-  height: 200px;
-  border: none;
-  border-radius: 10px;
-  background-color: #f4f4f4;
-  box-sizing: border-box;
-  overflow: auto;
-  font-size: 0.9rem;
-  text-align: left;
-  line-height: 1.5;
-`
-
 export const BottomButton = styled.button`
   position: absolute;
   bottom: 1.5rem;
