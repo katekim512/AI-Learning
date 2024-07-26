@@ -2,8 +2,19 @@ import { useState } from 'react'
 
 import * as L from './styles/AISchedule2.style'
 import BackButton from '../../components/BackButton/BackButton'
+import { useScheduleStore } from '../../stores/scheduleStore'
 
 const AISchedule2 = () => {
+  const { startDate, endDate, frequency, location, travelStyle } =
+    useScheduleStore()
+
+  console.log('Received Schedule State from Zustand:', {
+    startDate,
+    endDate,
+    frequency,
+    location,
+    travelStyle,
+  })
   const [description, setDescription] = useState<string>('')
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
