@@ -43,6 +43,7 @@ module.exports = {
       'error',
       {
         singleQuote: true,
+        jsxSingleQuote: true,
         semi: false,
         tabWidth: 2,
         trailingComma: 'all',
