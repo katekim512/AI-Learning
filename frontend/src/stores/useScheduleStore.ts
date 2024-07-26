@@ -19,6 +19,11 @@ const getDatesArray = (
   const dates: string[] = []
   const start = new Date(startDate)
   const end = new Date(endDate)
+
+  if (frequency === '직접 커스튬하기') {
+    return dates // 빈 배열 반환
+  }
+
   const current = new Date(start)
 
   while (current <= end) {
@@ -69,13 +74,17 @@ export const useScheduleStore = create<ScheduleState>(set => ({
   frequency: '1주에 1번', // 초기 빈도 설정
   setStartDate: date => set({ startDate: date }),
   setEndDate: date => set({ endDate: date }),
+  setFrequency: frequency =>
+    set(state => {
+      const dates = getDatesArray(state.startDate, state.endDate, frequency)
+      return { frequency, dates } // 빈도 변경과 함께 날짜도 업데이트
+    }),
   updateDates: () =>
     set(state => {
       const { startDate, endDate, frequency } = state
       const dates = getDatesArray(startDate, endDate, frequency)
       return { dates }
     }),
-  setFrequency: frequency => set({ frequency }), // 빈도 설정
   setLocation: location => set({ location }),
   toggleLocation: location =>
     set(state => {

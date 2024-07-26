@@ -5,12 +5,13 @@ import BackButton from '../../components/BackButton/BackButton'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule2 = () => {
-  const { startDate, endDate, frequency, location, travelStyle } =
+  const { startDate, endDate, frequency, dates, location, travelStyle } =
     useScheduleStore()
 
   console.log('Received Schedule State from Zustand:', {
     startDate,
     endDate,
+    dates,
     frequency,
     location,
     travelStyle,

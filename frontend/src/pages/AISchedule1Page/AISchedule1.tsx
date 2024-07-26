@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as S from './styles/AISchedule1.style'
@@ -37,6 +37,10 @@ const AISchedule1: React.FC = () => {
     setDescription: state.setDescription,
   }))
 
+  useEffect(() => {
+    updateDates() // 빈도가 변경될 때마다 날짜를 업데이트
+  }, [frequency, updateDates])
+
   const handleLocationClick = (loc: string) => {
     setLocation(
       location.includes(loc)
@@ -56,6 +60,7 @@ const AISchedule1: React.FC = () => {
   const handleFrequencyChange = (newFrequency: string) => {
     setFrequency(newFrequency)
     updateDates() // 빈도 변경 후 날짜 업데이트
+    console.log('Update date')
   }
 
   const handleComplete = () => {
@@ -114,6 +119,12 @@ const AISchedule1: React.FC = () => {
             className={frequency === '한 달에 1번' ? 'selected' : ''}
           >
             한 달에 1번
+          </S.Button>
+          <S.Button
+            onClick={() => handleFrequencyChange('직접 커스튬하기')}
+            className={frequency === '직접 커스튬하기' ? 'selected' : ''}
+          >
+            직접 커스튬하기
           </S.Button>
         </S.Section>
         <S.Section>
