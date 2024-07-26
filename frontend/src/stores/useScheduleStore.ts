@@ -17,12 +17,14 @@ interface ScheduleState {
   frequency: string
   location: string[]
   travelStyle: string[]
+  description: string
   setStartDate: (date: string) => void
   setEndDate: (date: string) => void
   setFrequency: (frequency: string) => void
   setLocation: (location: string[]) => void
   toggleLocation: (location: string) => void
   setTravelStyle: (style: string[]) => void
+  setDescription: (description: string) => void
 }
 
 export const useScheduleStore = create<ScheduleState>(set => ({
@@ -31,6 +33,7 @@ export const useScheduleStore = create<ScheduleState>(set => ({
   frequency: '1주에 1번',
   location: [],
   travelStyle: [],
+  description: '', // 초기값 설정
   setStartDate: date => set({ startDate: date }),
   setEndDate: date => set({ endDate: date }),
   setFrequency: frequency => set({ frequency }),
@@ -43,4 +46,5 @@ export const useScheduleStore = create<ScheduleState>(set => ({
       return { location: newLocation }
     }),
   setTravelStyle: style => set({ travelStyle: style }),
+  setDescription: description => set({ description }), // 메서드 추가
 }))
