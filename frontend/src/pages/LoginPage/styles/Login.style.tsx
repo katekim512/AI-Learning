@@ -64,7 +64,7 @@ export const KaKaoButton = styled(Button)`
 `
 
 export const CreateAccountSection = styled.div`
-  font-size: 0.8rem;
+  color: #141414;
 `
 
 export const BottomButton = styled.button`
