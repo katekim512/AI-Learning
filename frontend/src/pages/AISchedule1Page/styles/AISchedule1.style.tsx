@@ -9,11 +9,6 @@ export const Button = styled.button`
   border-radius: 20px;
   cursor: pointer;
 
-  &:hover {
-    background-color: rgba(82, 95, 212, 0.7);
-    color: white;
-  }
-
   &.selected {
     background-color: #525fd4;
     color: white;
