@@ -19,7 +19,7 @@ export const MenuIcon = styled.div<{ isActive: boolean }>`
   flex-direction: column;
   align-items: center;
   color: ${({ isActive }) =>
-    isActive ? '#007bff' : '#333'}; // Active color vs Inactive color
+    isActive ? '#525FD4' : '#333'}; // Active color vs Inactive color
 
   span {
     margin-top: 4px;
