@@ -63,7 +63,7 @@ const ProfileSection = () => {
           onClick={handleFileUpload}
         />
       </L.ProfileContainer>
-      <L.ProfileNickname>{userInfo?.nicknmae}</L.ProfileNickname>
+      <L.ProfileNickname>{userInfo?.nickname}</L.ProfileNickname>
     </L.ProfileSection>
   )
 }

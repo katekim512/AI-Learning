@@ -5,7 +5,7 @@ import { aiLearningAxios } from '../axiosInstance'
 export interface User {
   id: number
   email: string
-  nicknmae: string
+  nickname: string
   profile: string
   birth: number
   city: string
