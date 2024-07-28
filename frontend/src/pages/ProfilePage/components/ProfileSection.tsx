@@ -18,6 +18,7 @@ const ProfileSection = () => {
 
       if (successResponse && successResponse.data) {
         setUserInfo(successResponse.data)
+        setPreviewSrc(successResponse.data.profile)
       }
     }
   }
