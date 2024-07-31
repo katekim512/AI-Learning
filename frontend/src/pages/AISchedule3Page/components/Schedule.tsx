@@ -2,6 +2,7 @@ import React from 'react'
 
 import { AISchedule } from '../../../api/schedule/getSchedule'
 import { cityColors } from '../../../style/CityColor'
+import { monthColors } from '../../../style/MonthColor'
 import * as L from '../styles/AISchedule3.style'
 
 interface ScheduleProps {
@@ -19,12 +20,20 @@ const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo }) => {
   return (
     <div>
       {scheduleInfo?.map((item, index) => {
-        const backgroundColor = cityColors[item.city]
+        const cityBackgroundColor = cityColors[item.city]
+        const date = new Date(item.date)
+        const month = date.getMonth() + 1
+        const monthBackgroundColor = monthColors[month]
+
         return (
           <L.ScheduleContainer key={index}>
-            <L.DateBox>{formatDate(item.date)}</L.DateBox>
+            <L.DateBox style={{ backgroundColor: monthBackgroundColor }}>
+              {formatDate(item.date)}
+            </L.DateBox>
             <L.PlaceBox>
-              <L.CityBox style={{ backgroundColor }}>{item.city}</L.CityBox>
+              <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
+                {item.city}
+              </L.CityBox>
               {item.place}
             </L.PlaceBox>
           </L.ScheduleContainer>
