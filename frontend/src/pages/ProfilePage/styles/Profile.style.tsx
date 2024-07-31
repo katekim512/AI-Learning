@@ -23,6 +23,7 @@ export const ProfileContainer = styled.div`
   margin-left: 1rem;
   margin-right: 2rem;
   width: 6rem;
+  height: 6rem;
 `
 
 export const ProfileImage = styled.img`
