@@ -35,7 +35,6 @@ const ProfileSection = () => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
         setSelectedFile(file)
-        setPreviewSrc(URL.createObjectURL(file))
 
         await handleUploadPhoto(file)
       }
