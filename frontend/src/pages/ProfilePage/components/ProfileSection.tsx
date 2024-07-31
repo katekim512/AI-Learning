@@ -18,6 +18,7 @@ const ProfileSection = () => {
 
       if (successResponse && successResponse.data) {
         setUserInfo(successResponse.data)
+        setPreviewSrc(successResponse.data.profile)
       }
     }
   }
@@ -34,7 +35,6 @@ const ProfileSection = () => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
         setSelectedFile(file)
-        setPreviewSrc(URL.createObjectURL(file))
 
         await handleUploadPhoto(file)
       }
