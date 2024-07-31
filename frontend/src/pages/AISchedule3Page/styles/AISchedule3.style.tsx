@@ -65,7 +65,7 @@ export const CityBox = styled.p`
   position: absolute;
   left: 1rem;
   top: 0.3rem;
-  background-color: #297b02;
+  background-color: #525fd4;
   border-radius: 8px;
   padding: 0.3rem;
   color: white;

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { AISchedule } from '../../../api/schedule/getSchedule'
+import { cityColors } from '../../../style/CityColor'
 import * as L from '../styles/AISchedule3.style'
 
 interface ScheduleProps {
@@ -17,15 +18,18 @@ const formatDate = (dateString: string): string => {
 const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo }) => {
   return (
     <div>
-      {scheduleInfo?.map((item, index) => (
-        <L.ScheduleContainer key={index}>
-          <L.DateBox>{formatDate(item.date)}</L.DateBox>{' '}
-          <L.PlaceBox>
-            <L.CityBox>{item.city}</L.CityBox>
-            {item.place}
-          </L.PlaceBox>
-        </L.ScheduleContainer>
-      ))}
+      {scheduleInfo?.map((item, index) => {
+        const backgroundColor = cityColors[item.city]
+        return (
+          <L.ScheduleContainer key={index}>
+            <L.DateBox>{formatDate(item.date)}</L.DateBox>
+            <L.PlaceBox>
+              <L.CityBox style={{ backgroundColor }}>{item.city}</L.CityBox>
+              {item.place}
+            </L.PlaceBox>
+          </L.ScheduleContainer>
+        )
+      })}
     </div>
   )
 }

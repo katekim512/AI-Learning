@@ -17,13 +17,13 @@ const AISchedule3 = () => {
     },
     {
       date: '2024-10-30',
-      city: '경주',
-      place: '석굴암',
+      city: '부산',
+      place: '해운대',
     },
     {
       date: '2024-11-03',
-      city: '경주',
-      place: '불국사',
+      city: '서울',
+      place: '국립중앙박물관',
     },
   ])
 
