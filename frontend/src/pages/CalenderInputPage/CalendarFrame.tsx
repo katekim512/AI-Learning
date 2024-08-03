@@ -27,6 +27,8 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   const startDateObj = startDate ? new Date(startDate) : today
   const endDateObj = new Date(startDateObj)
   endDateObj.setDate(startDateObj.getDate() + 100)
+  console.log(`Start Date: ${startDateObj.toISOString().split('T')[0]}`)
+  console.log(`End Date: ${endDateObj.toISOString().split('T')[0]}`)
 
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate()
@@ -82,7 +84,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
               $isSaturday={isSaturday}
               $isSelectedDay={isSelectedDay}
               $isPast={!isWithinRange}
-              onClick={isWithinRange ? undefined : handleDayClick}
+              onClick={isWithinRange ? handleDayClick : undefined}
               title={formattedDate}
             >
               {day}

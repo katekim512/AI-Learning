@@ -23,7 +23,6 @@ export const DateInputContainer = styled.div`
 export const DateInput = styled.input.attrs({ type: 'date' })`
   border: 1px solid #ddd;
   border-radius: 8px;
-  // margin-top: 7px;
   padding: 6px;
   font-size: 14px;
   background-color: #fafafa;
