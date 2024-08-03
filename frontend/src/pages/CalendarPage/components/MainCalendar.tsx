@@ -45,7 +45,8 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
     const weekSectionHeight = weekSectionRef.current?.offsetHeight || 0
     const calendarHeight = calendarRef.current?.offsetHeight || 0
     const availableHeight = calendarHeight - weekSectionHeight
-    setDaySectionHeight(availableHeight / 6)
+    const numWeeks = calculateNumberOfWeeks(year, month)
+    setDaySectionHeight(availableHeight / numWeeks)
   }, [year, month])
 
   const getDaysInMonth = (year: number, month: number) => {
@@ -54,6 +55,13 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 
   const getFirstDayOfMonth = (year: number, month: number) => {
     return new Date(year, month - 1, 1).getDay()
+  }
+
+  const calculateNumberOfWeeks = (year: number, month: number) => {
+    const daysInMonth = getDaysInMonth(year, month)
+    const firstDay = getFirstDayOfMonth(year, month)
+    const numWeeks = Math.ceil((daysInMonth + firstDay) / 7)
+    return numWeeks
   }
 
   const daysInMonth = getDaysInMonth(year, month)
