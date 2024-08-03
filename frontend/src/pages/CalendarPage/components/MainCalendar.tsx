@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useState, useEffect } from 'react'
 
+import {
+  CalendarSchedule,
+  getTimelineAll,
+} from '../../../api/calendar/getTimelineAll'
 import * as L from '../styles/Calendar.style'
 
 interface MainCalendarProps {
@@ -9,6 +13,7 @@ interface MainCalendarProps {
 }
 
 const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
+  const token = localStorage.getItem('token')
   const today = new Date()
   const isToday = (day: number) => {
     return (
@@ -21,6 +26,20 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
+  const [schedule, setSchedule] = useState<CalendarSchedule[]>([]) // 스케줄 상태를 추가합니다.
+
+  const fetchSchedule = async () => {
+    if (token) {
+      const successResponse = await getTimelineAll(token)
+      if (successResponse && successResponse.data) {
+        setSchedule(successResponse.data)
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchSchedule()
+  }, [year, month])
 
   useEffect(() => {
     const weekSectionHeight = weekSectionRef.current?.offsetHeight || 0
@@ -50,8 +69,9 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
         week.push(<L.Day key={`${i}-${j}`} />)
       } else if (day <= daysInMonth) {
         const isCurrentDay = isToday(day)
-        const dayStyle = {
-          backgroundColor: isCurrentDay ? '#525FD4' : 'transparent',
+        const dayTextStyle = {
+          borderRadius: '50%',
+          backgroundColor: isCurrentDay ? 'black' : 'transparent',
           color: isCurrentDay
             ? 'white'
             : j === 0
@@ -61,9 +81,16 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
                 : 'black',
         }
 
+        const currentDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+        const places =
+          schedule.find(item => item.date === currentDate)?.info || []
+
         week.push(
-          <L.Day key={`${i}-${j}`} style={dayStyle}>
-            {day}
+          <L.Day key={`${i}-${j}`}>
+            <L.DayText style={dayTextStyle}>{day}</L.DayText>
+            {places.map(place => (
+              <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
+            ))}
           </L.Day>,
         )
         day++
