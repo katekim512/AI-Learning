@@ -76,6 +76,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 
   const calendarDays = []
   let day = 1
+  let allDaysAdded = false
 
   for (let i = 0; i < 6; i++) {
     const week = []
@@ -156,11 +157,18 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
         day++
       }
     }
+
+    if (day > daysInMonth && !allDaysAdded) {
+      allDaysAdded = true
+    }
+
     calendarDays.push(
       <L.DaySection key={i} height={daySectionHeight}>
         {week}
       </L.DaySection>,
     )
+
+    if (allDaysAdded) break
   }
 
   return (
