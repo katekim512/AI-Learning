@@ -65,13 +65,19 @@ export const Day = styled.div`
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  padding: 0.4rem 0.1rem;
+  padding: 0.1rem 0.1rem;
   overflow: hidden;
 `
 
 export const DayText = styled.p`
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.8rem;
-  margin-bottom: 0.5rem;
+  padding: 0.3rem;
+  margin-bottom: 0.1rem;
 `
 
 export const PlaceSection = styled.div`
@@ -81,7 +87,7 @@ export const PlaceSection = styled.div`
   border-radius: 6px;
   font-size: 0.5rem;
   color: white;
-  padding: 0.3rem;
+  padding: 0.22rem 0.3rem;
   margin-bottom: 0.1rem;
   white-space: nowrap;
   text-overflow: ellipsis;

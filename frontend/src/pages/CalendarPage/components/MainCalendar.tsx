@@ -69,8 +69,9 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
         week.push(<L.Day key={`${i}-${j}`} />)
       } else if (day <= daysInMonth) {
         const isCurrentDay = isToday(day)
-        const dayStyle = {
-          backgroundColor: isCurrentDay ? '#525FD4' : 'transparent',
+        const dayTextStyle = {
+          borderRadius: '50%',
+          backgroundColor: isCurrentDay ? 'black' : 'transparent',
           color: isCurrentDay
             ? 'white'
             : j === 0
@@ -85,8 +86,8 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
           schedule.find(item => item.date === currentDate)?.info || []
 
         week.push(
-          <L.Day key={`${i}-${j}`} style={dayStyle}>
-            <L.DayText>{day}</L.DayText>
+          <L.Day key={`${i}-${j}`}>
+            <L.DayText style={dayTextStyle}>{day}</L.DayText>
             {places.map(place => (
               <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
             ))}
