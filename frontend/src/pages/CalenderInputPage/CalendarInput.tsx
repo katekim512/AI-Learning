@@ -4,23 +4,26 @@ import { useNavigate } from 'react-router-dom'
 
 import CalendarFrame from './CalendarFrame'
 import * as L from './styles/CalendarFrame.style'
-import { useScheduleStore } from '../../stores/useScheduleStore' // 경로를 실제 store 파일로 변경하세요
+import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const CalendarInput = () => {
   const navigate = useNavigate()
   const today = new Date()
+  const startDate = useScheduleStore(state => state.startDate)
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
   const [selectedDate, setSelectedDate] = useState<string>(
-    `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
+    today.toISOString().split('T')[0],
   )
 
   const setStartDate = useScheduleStore(state => state.setStartDate)
 
   useEffect(() => {
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
+    setSelectedDate(today.toISOString().split('T')[0])
+    console.log(`Initial selected date: ${today.toISOString().split('T')[0]}`)
   }, [])
 
   const handleClose = () => {
@@ -54,6 +57,7 @@ const CalendarInput = () => {
           year={currentDate.year}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          startDate={startDate}
         />
       </L.CalendarWrapper>
       <L.BottomSection>

@@ -10,7 +10,7 @@ interface CalendarFrameProps {
   startDate: string | null
 }
 
-const CalendarFrame: React.FC<CalendarFrameProps> = ({
+const CalendarFrame2: React.FC<CalendarFrameProps> = ({
   year,
   selectedDate,
   setSelectedDate,
@@ -19,13 +19,21 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   const today = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
   )
+  const startDateObj = startDate ? new Date(startDate) : today
+  const selStartDateObj = new Date(startDateObj)
+  selStartDateObj.setDate(startDateObj.getDate() + 29)
+  const endDateObj = new Date(startDateObj)
+  endDateObj.setDate(startDateObj.getDate() + 365)
+
+  console.log(`Start Date: ${startDateObj.toISOString().split('T')[0]}`)
+  console.log(
+    `Selected Start Date: ${selStartDateObj.toISOString().split('T')[0]}`,
+  )
+  console.log(`End Date: ${endDateObj.toISOString().split('T')[0]}`)
+
   const currentDayRef = useRef<HTMLButtonElement>(null)
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
-
-  const startDateObj = startDate ? new Date(startDate) : today
-  const endDateObj = new Date(startDateObj)
-  endDateObj.setDate(startDateObj.getDate() + 100)
 
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate()
@@ -58,12 +66,12 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
       for (let j = 0; j < 7; j++) {
         if (i === 0 && j < firstDay) {
           week.push(
-            <L.CalendarButton
+            <L.CalendarButton2
               key={`${i}-${j}`}
               style={{ visibility: 'hidden' }}
             >
               N/A
-            </L.CalendarButton>,
+            </L.CalendarButton2>,
           )
         } else if (day <= daysInMonth) {
           const isSunday = j === 0
@@ -71,31 +79,32 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
           const formattedDate = formatDate(year, month, day)
           const isSelectedDay = selectedDate === formattedDate
           const dateObj = new Date(year, month - 1, day)
-          const isWithinRange = dateObj >= startDateObj && dateObj <= endDateObj
+          const isWithinRange =
+            dateObj >= selStartDateObj && dateObj <= endDateObj
 
           week.push(
-            <L.CalendarButton
+            <L.CalendarButton2
               key={`${i}-${j}`}
               ref={isSelectedDay ? currentDayRef : null}
               $isSunday={isSunday}
               $isSaturday={isSaturday}
               $isSelectedDay={isSelectedDay}
-              $isPast={!isWithinRange}
-              onClick={isWithinRange ? undefined : handleDayClick}
+              $isGrey={!isWithinRange}
+              onClick={isWithinRange ? handleDayClick : undefined}
               title={formattedDate}
             >
               {day}
-            </L.CalendarButton>,
+            </L.CalendarButton2>,
           )
           day++
         } else {
           week.push(
-            <L.CalendarButton
+            <L.CalendarButton2
               key={`${i}-${j}`}
               style={{ visibility: 'hidden' }}
             >
               N/A
-            </L.CalendarButton>,
+            </L.CalendarButton2>,
           )
         }
       }
@@ -174,10 +183,11 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   )
 }
 
-CalendarFrame.propTypes = {
+CalendarFrame2.propTypes = {
   year: PropTypes.number.isRequired,
   selectedDate: PropTypes.string.isRequired,
   setSelectedDate: PropTypes.func.isRequired,
+  startDate: PropTypes.string,
 }
 
-export default CalendarFrame
+export default CalendarFrame2

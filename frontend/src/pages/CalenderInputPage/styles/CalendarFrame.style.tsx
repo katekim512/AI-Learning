@@ -70,42 +70,6 @@ export const HeaderText = styled.p`
   font-size: 0.8rem;
 `
 
-// export const DaySection = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(7, 1fr);
-//   gap: 1rem;
-//   justify-items: center;
-//   margin-top: 0.5rem;
-// `
-
-// export const CalendarButton = styled.button<{
-//   isSunday?: boolean
-//   isSaturday?: boolean
-//   isSelectedDay?: boolean
-// }>`
-//   font-size: 0.8rem;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 0.5rem;
-//   width: 100%;
-//   height: 40px;
-//   border: none;
-//   border-radius: 50%;
-//   background-color: ${({ isSelectedDay }) =>
-//     isSelectedDay ? '#525FD4' : 'transparent'};
-//   color: ${({ isSelectedDay, isSunday, isSaturday }) =>
-//     isSelectedDay
-//       ? 'white'
-//       : isSunday
-//         ? '#D63535'
-//         : isSaturday
-//           ? '#525FD4'
-//           : 'black'};
-//   clip-path: ${({ isSelectedDay }) => (isSelectedDay ? 'circle(40%)' : 'none')};
-//   cursor: pointer;
-//   margin: 5px;
-// `
 export const DaySection = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -115,32 +79,68 @@ export const DaySection = styled.div`
 `
 
 export const CalendarButton = styled.button<{
-  isSunday?: boolean
-  isSaturday?: boolean
-  isSelectedDay?: boolean
+  $isSunday?: boolean
+  $isSaturday?: boolean
+  $isSelectedDay?: boolean
+  $isPast?: boolean
 }>`
   font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; /* 부모 그리드 셀의 크기에 맞춤 */
-  height: 40px; /* 고정 높이 */
+  padding: 0.5rem;
+  width: 100%;
+  height: 40px;
   border: none;
   border-radius: 50%;
-  background-color: ${({ isSelectedDay }) =>
-    isSelectedDay ? '#525FD4' : 'transparent'};
-  color: ${({ isSelectedDay, isSunday, isSaturday }) =>
-    isSelectedDay
+  background-color: ${({ $isSelectedDay }) =>
+    $isSelectedDay ? '#525FD4' : 'transparent'};
+  color: ${({ $isSelectedDay, $isSunday, $isSaturday, $isPast }) =>
+    $isSelectedDay
       ? 'white'
-      : isSunday
-        ? '#D63535'
-        : isSaturday
-          ? '#525FD4'
-          : 'black'};
-  clip-path: ${({ isSelectedDay }) => (isSelectedDay ? 'circle(40%)' : 'none')};
-  cursor: pointer;
-  margin: 0; /* 버튼 간격 제거 */
-  box-sizing: border-box; /* 박스 크기 계산 방식 설정 */
+      : $isPast
+        ? 'grey'
+        : $isSunday
+          ? '#D63535'
+          : $isSaturday
+            ? '#525FD4'
+            : 'black'};
+  clip-path: ${({ $isSelectedDay }) =>
+    $isSelectedDay ? 'circle(40%)' : 'none'};
+  cursor: ${({ $isPast }) => ($isPast ? 'default' : 'pointer')};
+  margin: 5px;
+`
+export const CalendarButton2 = styled.button<{
+  $isSunday?: boolean
+  $isSaturday?: boolean
+  $isSelectedDay?: boolean
+  $isGrey?: boolean
+}>`
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: ${({ $isSelectedDay }) =>
+    $isSelectedDay ? '#525FD4' : 'transparent'};
+  color: ${({ $isSelectedDay, $isSunday, $isSaturday, $isGrey }) =>
+    $isSelectedDay
+      ? 'white'
+      : $isGrey
+        ? 'grey'
+        : $isSunday
+          ? '#D63535'
+          : $isSaturday
+            ? '#525FD4'
+            : 'black'};
+  clip-path: ${({ $isSelectedDay }) =>
+    $isSelectedDay ? 'circle(40%)' : 'none'};
+  cursor: ${({ $isGrey }) => ($isGrey ? 'not-allowed' : 'pointer')};
+  margin: 5px;
 `
 
 export const BottomSection = styled.div`

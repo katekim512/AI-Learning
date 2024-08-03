@@ -2,26 +2,37 @@ import React, { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
-import CalendarFrame from './CalendarFrame'
+import CalendarFrame2 from './CalendarFrame2'
 import * as L from './styles/CalendarFrame.style'
 import { useScheduleStore } from '../../stores/useScheduleStore' // 경로를 실제 store 파일로 변경하세요
 
 const CalendarInput2 = () => {
   const navigate = useNavigate()
   const today = new Date()
+
+  // Add 29 days to the current date
+  const defaultEndDate = new Date(today)
+  defaultEndDate.setDate(today.getDate() + 29)
+
+  const storedEndDate = useScheduleStore(state => state.endDate)
+  const startDate = useScheduleStore(state => state.startDate)
+
+  const initialEndDate =
+    storedEndDate || defaultEndDate.toISOString().split('T')[0]
+
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
-  const [selectedDate, setSelectedDate] = useState<string>(
-    `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
-  )
+  const [selectedDate, setSelectedDate] = useState<string>(initialEndDate)
 
   const setEndDate = useScheduleStore(state => state.setEndDate)
 
   useEffect(() => {
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
-  }, [])
+    setSelectedDate(initialEndDate)
+    console.log(`Initial selected date: ${initialEndDate}`)
+  }, [initialEndDate])
 
   const handleClose = () => {
     navigate('/ai-schedule-step1')
@@ -50,10 +61,11 @@ const CalendarInput2 = () => {
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
       <L.CalendarWrapper>
-        <CalendarFrame
+        <CalendarFrame2
           year={currentDate.year}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          startDate={startDate}
         />
       </L.CalendarWrapper>
       <L.BottomSection>
@@ -64,4 +76,5 @@ const CalendarInput2 = () => {
     </>
   )
 }
+
 export default CalendarInput2
