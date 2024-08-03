@@ -12,6 +12,8 @@ export const HeaderTitle = styled.h1`
 
 export const CalendarSelect = styled.select`
   border: none;
+  background-color: white;
+  color: black;
   font-weight: 800;
   font-size: 0.9rem;
 `

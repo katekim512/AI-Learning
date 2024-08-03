@@ -33,7 +33,7 @@ const Calendar = () => {
 
   const generateYearOptions = () => {
     const years = []
-    for (let i = 2000; i <= 2030; i++) {
+    for (let i = 2024; i <= today.getFullYear() + 1; i++) {
       years.push(
         <option key={i} value={i}>
           {i}
