@@ -15,7 +15,8 @@ interface MainCalendarProps {
 const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const token = localStorage.getItem('token')
   const today = new Date()
-  const isToday = (day: number) => {
+
+  const isToday = (day: number, month: number, year: number) => {
     return (
       year === today.getFullYear() &&
       month === today.getMonth() + 1 &&
@@ -67,28 +68,62 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfMonth(year, month)
 
+  const prevMonthDays = getDaysInMonth(year, month - 1)
+  const nextMonth = month === 12 ? 1 : month + 1
+  const prevMonth = month === 1 ? 12 : month - 1
+  const prevMonthYear = month === 1 ? year - 1 : year
+  const nextMonthYear = month === 12 ? year + 1 : year
+
   const calendarDays = []
   let day = 1
 
   for (let i = 0; i < 6; i++) {
     const week = []
     for (let j = 0; j < 7; j++) {
-      if (i === 0 && j < firstDay) {
-        week.push(<L.Day key={`${i}-${j}`} />)
-      } else if (day <= daysInMonth) {
-        const isCurrentDay = isToday(day)
-        const dayTextStyle = {
-          borderRadius: '50%',
-          backgroundColor: isCurrentDay ? 'black' : 'transparent',
-          color: isCurrentDay
-            ? 'white'
-            : j === 0
-              ? '#D63535'
-              : j === 6
-                ? '#525FD4'
-                : 'black',
-        }
+      let currentDay = day
+      let currentMonth = month
+      let currentYear = year
 
+      if (i === 0 && j < firstDay) {
+        currentDay = prevMonthDays - (firstDay - j - 1)
+        currentMonth = prevMonth
+        currentYear = prevMonthYear
+      } else if (day > daysInMonth) {
+        currentDay = day - daysInMonth
+        currentMonth = nextMonth
+        currentYear = nextMonthYear
+      }
+
+      const isCurrentDay = isToday(currentDay, currentMonth, currentYear)
+      const dayTextStyle = {
+        borderRadius: '50%',
+        backgroundColor: isCurrentDay ? 'black' : 'transparent',
+        color: isCurrentDay
+          ? 'white'
+          : j === 0
+            ? '#D63535'
+            : j === 6
+              ? '#525FD4'
+              : 'black',
+      }
+
+      if (i === 0 && j < firstDay) {
+        const prevMonthDay = prevMonthDays - (firstDay - j - 1)
+        const currentDate = `${prevMonthYear}-${String(prevMonth).padStart(2, '0')}-${String(prevMonthDay).padStart(2, '0')}`
+        const places =
+          schedule.find(item => item.date === currentDate)?.info || []
+
+        week.push(
+          <L.Day key={`${i}-${j}`}>
+            <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
+              {prevMonthDay}
+            </L.DayText>
+            {places.map(place => (
+              <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
+            ))}
+          </L.Day>,
+        )
+      } else if (day <= daysInMonth) {
         const currentDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         const places =
           schedule.find(item => item.date === currentDate)?.info || []
@@ -103,7 +138,22 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
         )
         day++
       } else {
-        week.push(<L.Day key={`${i}-${j}`} />)
+        const nextMonthDay = day - daysInMonth
+        const currentDate = `${nextMonthYear}-${String(nextMonth).padStart(2, '0')}-${String(nextMonthDay).padStart(2, '0')}`
+        const places =
+          schedule.find(item => item.date === currentDate)?.info || []
+
+        week.push(
+          <L.Day key={`${i}-${j}`}>
+            <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
+              {nextMonthDay}
+            </L.DayText>
+            {places.map(place => (
+              <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
+            ))}
+          </L.Day>,
+        )
+        day++
       }
     }
     calendarDays.push(

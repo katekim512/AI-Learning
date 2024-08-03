@@ -76,6 +76,7 @@ export const DayText = styled.p`
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
+  font-weight: 600;
   padding: 0.3rem;
   margin-bottom: 0.1rem;
 `
@@ -84,7 +85,7 @@ export const PlaceSection = styled.div`
   width: 100%;
   text-align: center;
   background-color: #525fd4;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 0.5rem;
   color: white;
   padding: 0.22rem 0.3rem;
