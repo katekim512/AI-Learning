@@ -1,4 +1,13 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+`
 
 export const HeaderSection = styled.div`
   display: flex;
@@ -12,6 +21,8 @@ export const HeaderTitle = styled.h1`
 
 export const CalendarSelect = styled.select`
   border: none;
+  background-color: white;
+  color: black;
   font-weight: 800;
   font-size: 0.9rem;
 `
@@ -76,6 +87,7 @@ export const DayText = styled.p`
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
+  font-weight: 600;
   padding: 0.3rem;
   margin-bottom: 0.1rem;
 `
@@ -84,11 +96,33 @@ export const PlaceSection = styled.div`
   width: 100%;
   text-align: center;
   background-color: #525fd4;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 0.5rem;
   color: white;
   padding: 0.22rem 0.3rem;
   margin-bottom: 0.1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
+`
+
+export const DrawerContainer = styled.div`
+  width: 100%;
+  max-width: 400px;
+  height: 15rem;
+  background-color: white;
+  position: fixed;
+  bottom: 4rem; // BottomMenuBar 위에 위치하도록 설정
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  animation: ${slideUp} 0.1s ease-out;
+`
+
+export const DrawerHeader = styled.div`
+  margin: 1rem 1rem 0.5rem 1rem; // 상우하좌
+  padding: 1rem;
+`
+
+export const DrawerHeaderText = styled.p`
+  font-weight: 600;
 `
