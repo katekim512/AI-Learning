@@ -14,20 +14,21 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   year,
   selectedDate,
   setSelectedDate,
-  startDate,
+  //startDate,
 }) => {
   const today = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
   )
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
   const currentMonth = today.getMonth() + 1
   const currentDayRef = useRef<HTMLButtonElement>(null)
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
 
-  const startDateObj = startDate ? new Date(startDate) : today
-  const endDateObj = new Date(startDateObj)
-  endDateObj.setDate(startDateObj.getDate() + 100)
-  console.log(`Start Date: ${startDateObj.toISOString().split('T')[0]}`)
+  const endDateObj = new Date(today)
+  endDateObj.setDate(today.getDate() + 100)
+  console.log(`Start Date: ${today.toISOString().split('T')[0]}`)
   console.log(`End Date: ${endDateObj.toISOString().split('T')[0]}`)
 
   const getDaysInMonth = (year: number, month: number) => {
@@ -74,7 +75,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
           const formattedDate = formatDate(year, month, day)
           const isSelectedDay = selectedDate === formattedDate
           const dateObj = new Date(year, month - 1, day)
-          const isWithinRange = dateObj >= startDateObj && dateObj <= endDateObj
+          const isWithinRange = dateObj >= yesterday && dateObj <= endDateObj
 
           week.push(
             <L.CalendarButton
