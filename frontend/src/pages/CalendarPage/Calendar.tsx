@@ -18,7 +18,7 @@ const Calendar = () => {
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
   }, [])
 
-  const handleComplete = () => {
+  const handleAIScheduleButton = () => {
     navigate('/ai-schedule-step1')
   }
 
@@ -73,7 +73,7 @@ const Calendar = () => {
           </L.CalendarSelect>
           월
         </L.HeaderTitle>
-        <L.AIScheduleButton onClick={handleComplete}>
+        <L.AIScheduleButton onClick={handleAIScheduleButton}>
           <FaWandMagicSparkles />
           &nbsp;&nbsp;AI 교육여행
         </L.AIScheduleButton>
