@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useState, useEffect } from 'react'
 
+import DateDrawer from './DateDrawer'
 import {
   CalendarSchedule,
   getTimelineAll,
@@ -28,6 +29,8 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const calendarRef = useRef<HTMLDivElement>(null)
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
   const [schedule, setSchedule] = useState<CalendarSchedule[]>([])
+  const [selectedDay, setSelectedDay] = useState<string>('')
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
   const fetchSchedule = async () => {
     if (token) {
@@ -65,6 +68,15 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
     return numWeeks
   }
 
+  const handleDayClick = (date: string) => {
+    if (selectedDay === date) {
+      setDrawerOpen(true)
+    } else {
+      setSelectedDay(date)
+      setDrawerOpen(false)
+    }
+  }
+
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfMonth(year, month)
 
@@ -96,6 +108,11 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
       }
 
       const isCurrentDay = isToday(currentDay, currentMonth, currentYear)
+      const currentDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`
+      const dayStyle = {
+        backgroundColor:
+          selectedDay === currentDate ? '#F1F1F1' : 'transparent',
+      }
       const dayTextStyle = {
         borderRadius: '50%',
         backgroundColor: isCurrentDay ? 'black' : 'transparent',
@@ -110,12 +127,15 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 
       if (i === 0 && j < firstDay) {
         const prevMonthDay = prevMonthDays - (firstDay - j - 1)
-        const currentDate = `${prevMonthYear}-${String(prevMonth).padStart(2, '0')}-${String(prevMonthDay).padStart(2, '0')}`
-        const places =
-          schedule.find(item => item.date === currentDate)?.info || []
+        const prevDate = `${prevMonthYear}-${String(prevMonth).padStart(2, '0')}-${String(prevMonthDay).padStart(2, '0')}`
+        const places = schedule.find(item => item.date === prevDate)?.info || []
 
         week.push(
-          <L.Day key={`${i}-${j}`}>
+          <L.Day
+            key={`${i}-${j}`}
+            style={dayStyle}
+            onClick={() => handleDayClick(prevDate)}
+          >
             <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
               {prevMonthDay}
             </L.DayText>
@@ -130,7 +150,11 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
           schedule.find(item => item.date === currentDate)?.info || []
 
         week.push(
-          <L.Day key={`${i}-${j}`}>
+          <L.Day
+            key={`${i}-${j}`}
+            style={dayStyle}
+            onClick={() => handleDayClick(currentDate)}
+          >
             <L.DayText style={dayTextStyle}>{day}</L.DayText>
             {places.map(place => (
               <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
@@ -140,12 +164,15 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
         day++
       } else {
         const nextMonthDay = day - daysInMonth
-        const currentDate = `${nextMonthYear}-${String(nextMonth).padStart(2, '0')}-${String(nextMonthDay).padStart(2, '0')}`
-        const places =
-          schedule.find(item => item.date === currentDate)?.info || []
+        const nextDate = `${nextMonthYear}-${String(nextMonth).padStart(2, '0')}-${String(nextMonthDay).padStart(2, '0')}`
+        const places = schedule.find(item => item.date === nextDate)?.info || []
 
         week.push(
-          <L.Day key={`${i}-${j}`}>
+          <L.Day
+            key={`${i}-${j}`}
+            style={dayStyle}
+            onClick={() => handleDayClick(nextDate)}
+          >
             <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
               {nextMonthDay}
             </L.DayText>
@@ -172,18 +199,21 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   }
 
   return (
-    <L.CalendarSection ref={calendarRef}>
-      <L.WeekSection ref={weekSectionRef}>
-        <L.HeaderText>일</L.HeaderText>
-        <L.HeaderText>월</L.HeaderText>
-        <L.HeaderText>화</L.HeaderText>
-        <L.HeaderText>수</L.HeaderText>
-        <L.HeaderText>목</L.HeaderText>
-        <L.HeaderText>금</L.HeaderText>
-        <L.HeaderText>토</L.HeaderText>
-      </L.WeekSection>
-      {calendarDays}
-    </L.CalendarSection>
+    <>
+      <L.CalendarSection ref={calendarRef}>
+        <L.WeekSection ref={weekSectionRef}>
+          <L.HeaderText>일</L.HeaderText>
+          <L.HeaderText>월</L.HeaderText>
+          <L.HeaderText>화</L.HeaderText>
+          <L.HeaderText>수</L.HeaderText>
+          <L.HeaderText>목</L.HeaderText>
+          <L.HeaderText>금</L.HeaderText>
+          <L.HeaderText>토</L.HeaderText>
+        </L.WeekSection>
+        {calendarDays}
+        {drawerOpen && <DateDrawer date={selectedDay} />}
+      </L.CalendarSection>
+    </>
   )
 }
 
