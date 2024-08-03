@@ -12,9 +12,7 @@ export const profileUpdate = async (
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
     'profile/profile-update',
-    {
-      formData,
-    },
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,

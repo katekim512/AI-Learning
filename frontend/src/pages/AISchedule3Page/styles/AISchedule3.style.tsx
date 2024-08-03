@@ -12,13 +12,65 @@ export const Container = styled.div`
 `
 
 export const Title = styled.div`
-  line-height: 2rem;
-  margin-bottom: 2rem;
+  line-height: 1.8rem;
+  margin-bottom: 1rem;
 `
 
 export const Text = styled.p`
   font-size: 1.3rem;
   font-weight: 700;
+`
+
+export const AdditionText = styled.p`
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  line-height: 1.3rem;
+`
+
+export const ScheduleContainer = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  position: relative;
+  margin-bottom: 0.7rem;
+`
+
+export const DateBox = styled.p`
+  background-color: #bfddff;
+  width: 7rem;
+  border-radius: 15px;
+  padding: 0.6rem;
+  color: #545454;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-right: 0.5rem;
+`
+
+export const PlaceBox = styled.button`
+  background-color: #f4f4f4;
+  position: relative;
+  width: 100%;
+  border-radius: 15px;
+  border: none;
+  padding: 0.6rem;
+  color: #545454;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+`
+
+export const CityBox = styled.p`
+  position: absolute;
+  left: 1rem;
+  top: 0.3rem;
+  background-color: #525fd4;
+  border-radius: 8px;
+  padding: 0.3rem;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
 `
 
 export const BottomButton = styled.button`
