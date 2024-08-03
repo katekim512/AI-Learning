@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
+import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
@@ -54,8 +55,31 @@ const Calendar = () => {
     return months
   }
 
+  const handleSwipeLeft = () => {
+    if (currentDate.month === 12) {
+      setCurrentDate({ year: currentDate.year + 1, month: 1 })
+    } else {
+      setCurrentDate({ year: currentDate.year, month: currentDate.month + 1 })
+    }
+  }
+
+  const handleSwipeRight = () => {
+    if (currentDate.month === 1) {
+      setCurrentDate({ year: currentDate.year - 1, month: 12 })
+    } else {
+      setCurrentDate({ year: currentDate.year, month: currentDate.month - 1 })
+    }
+  }
+
+  const handlers = useSwipeable({
+    onSwipedLeft: handleSwipeLeft,
+    onSwipedRight: handleSwipeRight,
+    trackMouse: true,
+    delta: 10,
+  })
+
   return (
-    <>
+    <div {...handlers}>
       <L.HeaderSection>
         <L.HeaderTitle>
           <L.CalendarSelect
@@ -80,7 +104,7 @@ const Calendar = () => {
       </L.HeaderSection>
       <MainCalendar year={currentDate.year} month={currentDate.month} />
       <BottomMenuBar />
-    </>
+    </div>
   )
 }
 

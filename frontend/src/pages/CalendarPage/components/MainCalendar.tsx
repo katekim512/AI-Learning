@@ -26,7 +26,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
-  const [schedule, setSchedule] = useState<CalendarSchedule[]>([]) // 스케줄 상태를 추가합니다.
+  const [schedule, setSchedule] = useState<CalendarSchedule[]>([])
 
   const fetchSchedule = async () => {
     if (token) {
