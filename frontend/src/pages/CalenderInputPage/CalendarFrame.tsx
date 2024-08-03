@@ -5,21 +5,16 @@ import * as L from './styles/CalendarFrame.style'
 
 interface CalendarFrameProps {
   year: number
-  month: number
+  selectedDate: string
+  setSelectedDate: (date: string) => void
 }
 
-const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
-  const today = new Date()
-
-  const isToday = (day: number, monthToCheck: number) => {
-    return (
-      year === today.getFullYear() &&
-      monthToCheck === today.getMonth() + 1 &&
-      day === today.getDate()
-    )
-  }
-
-  const currentDayRef = useRef<HTMLDivElement>(null)
+const CalendarFrame: React.FC<CalendarFrameProps> = ({
+  year,
+  selectedDate,
+  setSelectedDate,
+}) => {
+  const currentDayRef = useRef<HTMLButtonElement>(null)
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
 
@@ -29,6 +24,18 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
 
   const getFirstDayOfMonth = (year: number, month: number) => {
     return new Date(year, month - 1, 1).getDay()
+  }
+
+  const formatDate = (year: number, month: number, day: number): string => {
+    const formattedMonth = month < 10 ? `0${month}` : `${month}`
+    const formattedDay = day < 10 ? `0${day}` : `${day}`
+    return `${year}-${formattedMonth}-${formattedDay}`
+  }
+
+  const handleDayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const title = event.currentTarget.title
+    setSelectedDate(title)
+    console.log(`Clicked date: ${title}`)
   }
 
   const generateCalendarDays = (year: number, month: number) => {
@@ -41,50 +48,57 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
       const week = []
       for (let j = 0; j < 7; j++) {
         if (i === 0 && j < firstDay) {
-          week.push(<L.Day key={`${i}-${j}`} />)
+          week.push(
+            <L.CalendarButton
+              key={`${i}-${j}`}
+              style={{ visibility: 'hidden' }}
+            >
+              N/A
+            </L.CalendarButton>,
+          )
         } else if (day <= daysInMonth) {
-          const isCurrentDay = isToday(day, month)
-          const dayStyle = {
-            backgroundColor: isCurrentDay ? '#525FD4' : 'transparent', // 현재 날짜 배경색
-            color: isCurrentDay
-              ? 'white'
-              : j === 0
-                ? '#D63535'
-                : j === 6
-                  ? '#525FD4'
-                  : 'black',
-            clipPath: isCurrentDay ? 'circle(40%)' : 'none', // 현재 날짜를 둥글게 변경
-            borderRadius: isCurrentDay ? '50%' : '0%', // 현재 날짜를 둥글게 변경
-          }
+          const isSunday = j === 0
+          const isSaturday = j === 6
+          const formattedDate = formatDate(year, month, day)
+          const isSelectedDay = selectedDate === formattedDate
 
           week.push(
-            <L.Day
+            <L.CalendarButton
               key={`${i}-${j}`}
-              style={dayStyle}
-              ref={isCurrentDay ? currentDayRef : null}
+              ref={isSelectedDay ? currentDayRef : null}
+              isSunday={isSunday}
+              isSaturday={isSaturday}
+              isSelectedDay={isSelectedDay}
+              onClick={handleDayClick}
+              title={formattedDate}
             >
               {day}
-            </L.Day>,
+            </L.CalendarButton>,
           )
           day++
         } else {
-          week.push(<L.Day key={`${i}-${j}`} />)
+          week.push(
+            <L.CalendarButton
+              key={`${i}-${j}`}
+              style={{ visibility: 'hidden' }}
+            >
+              N/A
+            </L.CalendarButton>,
+          )
         }
       }
       calendarDays.push(<L.DaySection key={i}>{week}</L.DaySection>)
     }
 
-    return calendarDays
+    return <div>{calendarDays}</div>
   }
 
-  // 컴포넌트가 마운트될 때 현재 날짜로 스크롤하기 위한 useEffect 추가
   useEffect(() => {
     if (currentDayRef.current && calendarRef.current) {
       const currentDayElement = currentDayRef.current
       const calendarElement = calendarRef.current
 
-      // DOM이 완전히 렌더링된 후 스크롤하기 위해 setTimeout 사용
-      setTimeout(() => {
+      const scrollIntoView = () => {
         calendarElement.scrollTo({
           top:
             currentDayElement.offsetTop -
@@ -92,14 +106,15 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
             currentDayElement.clientHeight / 2,
           behavior: 'smooth',
         })
-        // scrollIntoView를 사용하여 현재 날짜로 스크롤
         currentDayElement.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
         })
-      }, 0)
+      }
+
+      requestAnimationFrame(scrollIntoView)
     }
-  }, [])
+  }, [selectedDate])
 
   const calendarMonths = []
   for (let m = 1; m <= 12; m++) {
@@ -119,6 +134,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
       </div>,
     )
   }
+
   return (
     <L.ScrollableCalendarSection ref={calendarRef}>
       {calendarMonths}
@@ -128,7 +144,8 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({ year }) => {
 
 CalendarFrame.propTypes = {
   year: PropTypes.number.isRequired,
-  month: PropTypes.number.isRequired,
+  selectedDate: PropTypes.string.isRequired,
+  setSelectedDate: PropTypes.func.isRequired,
 }
 
 export default CalendarFrame

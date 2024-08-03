@@ -6,7 +6,7 @@ import CalendarFrame from './CalendarFrame'
 import * as L from './styles/CalendarFrame.style'
 import { useScheduleStore } from '../../stores/useScheduleStore' // 경로를 실제 store 파일로 변경하세요
 
-const CalendarInput = () => {
+const CalendarInput2 = () => {
   const navigate = useNavigate()
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
@@ -17,7 +17,7 @@ const CalendarInput = () => {
     `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
   )
 
-  const setStartDate = useScheduleStore(state => state.setStartDate)
+  const setEndDate = useScheduleStore(state => state.setEndDate)
 
   useEffect(() => {
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
@@ -28,8 +28,8 @@ const CalendarInput = () => {
   }
 
   const handleApplyDate = () => {
-    setStartDate(selectedDate)
-    console.log(`Applied start date: ${selectedDate}`)
+    setEndDate(selectedDate)
+    console.log(`Applied end date: ${selectedDate}`)
     navigate('/ai-schedule-step1')
   }
 
@@ -38,7 +38,7 @@ const CalendarInput = () => {
     const [year, month, day] = selectedDate.split('-').map(Number)
     const date = new Date(year, month - 1, day)
     const dayNames = ['일', '월', '화', '수', '목', '금', '토']
-    return `시작일 ${month}.${day} (${dayNames[date.getDay()]}) 적용`
+    return `종료일 ${month}.${day} (${dayNames[date.getDay()]}) 적용`
   }
 
   return (
@@ -64,5 +64,4 @@ const CalendarInput = () => {
     </>
   )
 }
-
-export default CalendarInput
+export default CalendarInput2

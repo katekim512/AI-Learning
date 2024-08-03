@@ -6,6 +6,7 @@ import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
 import Calendar from './pages/CalendarPage/Calendar'
 import CalendarInput from './pages/CalenderInputPage/CalendarInput'
+import CalendarInput2 from './pages/CalenderInputPage/CalendarInput2'
 import Login from './pages/LoginPage/Login'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: 'calendarInput',
         element: <CalendarInput />,
+      },
+      {
+        path: 'calendarInput2',
+        element: <CalendarInput2 />,
       },
       {
         path: 'profile',

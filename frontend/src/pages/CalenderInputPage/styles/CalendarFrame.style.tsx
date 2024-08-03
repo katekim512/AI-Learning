@@ -3,14 +3,13 @@ import styled from 'styled-components'
 export const HeaderSection = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Distribute space between items */
+  justify-content: space-between;
   padding: 2rem;
-  //position: fixed; /* 추가된 부분 */
-  top: 0; /* 추가된 부분 */
-  left: 0; /* 추가된 부분 */
-  right: 0; /* 추가된 부분 */
-  background: white; /* 추가된 부분 */
-  z-index: 1000; /* 추가된 부분 */
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
   border-bottom: 1.5px solid #f1f1f1;
 `
 
@@ -18,15 +17,15 @@ export const HeaderTitle = styled.h1`
   font-weight: 600;
   font-size: 20px;
   flex-grow: 1;
-  text-align: center; /* Censter text */
-  margin-left: -1.5rem; /* Adjust to align with the center */
+  text-align: center;
+  margin-left: -1.5rem;
 `
 
 export const MonthTitle = styled.h1`
   font-weight: 600;
   font-size: 15px;
   flex-grow: 1;
-  text-align: center; /* Censter text */
+  text-align: center;
   margin-bottom: 25px;
 `
 
@@ -47,15 +46,15 @@ export const CalendarSelect = styled.select`
 
 export const CalendarWrapper = styled.div`
   flex-grow: 1;
-  height: calc(100vh - 11rem); /* BackButton 높이만큼 빼기 */
-  overflow-y: auto; /* 스크롤 가능하도록 설정 */
-  padding-top: 6rem; /* 추가된 부분: 헤더 높이만큼 패딩 추가 */
-  padding-bottom: 4rem; /* 추가된 부분: 버튼 높이만큼 패딩 추가 */
+  height: calc(100vh - 11rem);
+  overflow-y: auto;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
 `
 
 export const ScrollableCalendarSection = styled.div`
   align-items: center;
-  padding: 1rem; /* 추가된 부분: 상하 여백 */
+  padding: 1rem;
 `
 
 export const WeekSection = styled.div`
@@ -71,41 +70,96 @@ export const HeaderText = styled.p`
   font-size: 0.8rem;
 `
 
+// export const DaySection = styled.div`
+//   display: grid;
+//   grid-template-columns: repeat(7, 1fr);
+//   gap: 1rem;
+//   justify-items: center;
+//   margin-top: 0.5rem;
+// `
+
+// export const CalendarButton = styled.button<{
+//   isSunday?: boolean
+//   isSaturday?: boolean
+//   isSelectedDay?: boolean
+// }>`
+//   font-size: 0.8rem;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 0.5rem;
+//   width: 100%;
+//   height: 40px;
+//   border: none;
+//   border-radius: 50%;
+//   background-color: ${({ isSelectedDay }) =>
+//     isSelectedDay ? '#525FD4' : 'transparent'};
+//   color: ${({ isSelectedDay, isSunday, isSaturday }) =>
+//     isSelectedDay
+//       ? 'white'
+//       : isSunday
+//         ? '#D63535'
+//         : isSaturday
+//           ? '#525FD4'
+//           : 'black'};
+//   clip-path: ${({ isSelectedDay }) => (isSelectedDay ? 'circle(40%)' : 'none')};
+//   cursor: pointer;
+//   margin: 5px;
+// `
 export const DaySection = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center; /* Center align items vertically */
-  height: 40px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+  gap: 0; /* 그리드 간격 제거 */
+  margin-top: 0.5rem;
 `
 
-export const Day = styled.div`
+export const CalendarButton = styled.button<{
+  isSunday?: boolean
+  isSaturday?: boolean
+  isSelectedDay?: boolean
+}>`
   font-size: 0.8rem;
   display: flex;
-  align-items: center; /* Center align text vertically */
-  justify-content: center; /* Center align text horizontally */
-  padding: 0.5rem;
-  width: 100%;
-  height: 100%;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* 부모 그리드 셀의 크기에 맞춤 */
+  height: 40px; /* 고정 높이 */
+  border: none;
+  border-radius: 50%;
+  background-color: ${({ isSelectedDay }) =>
+    isSelectedDay ? '#525FD4' : 'transparent'};
+  color: ${({ isSelectedDay, isSunday, isSaturday }) =>
+    isSelectedDay
+      ? 'white'
+      : isSunday
+        ? '#D63535'
+        : isSaturday
+          ? '#525FD4'
+          : 'black'};
+  clip-path: ${({ isSelectedDay }) => (isSelectedDay ? 'circle(40%)' : 'none')};
+  cursor: pointer;
+  margin: 0; /* 버튼 간격 제거 */
+  box-sizing: border-box; /* 박스 크기 계산 방식 설정 */
 `
 
 export const BottomSection = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center; /* Distribute space between items */
+  justify-content: center;
   padding: 1.5rem;
-  //position: fixed; /* 추가된 부분 */
-  bottom: 0; /* 추가된 부분 */
-  left: 0; /* 추가된 부분 */
-  right: 0; /* 추가된 부분 */
-  background: white; /* 추가된 부분 */
-  z-index: 1000; /* 추가된 부분 */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
   border-top: 1.5px solid #f1f1f1;
 `
 
 export const FixedBottomButton = styled.div`
-  display: flex; /* 추가된 부분 */
-  justify-content: center; /* 추가된 부분 */
-  align-items: center; /* 추가된 부분 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 400px;
   height: 46px;

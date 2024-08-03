@@ -14,11 +14,16 @@ export const Button = styled.button`
     color: white;
   }
 `
-
+export const DateInputContainer = styled.div`
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  padding: 7px;
+`
 export const DateInput = styled.input.attrs({ type: 'date' })`
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-top: 7px;
+  // margin-top: 7px;
   padding: 6px;
   font-size: 14px;
   background-color: #fafafa;
@@ -33,8 +38,7 @@ export const DateInput = styled.input.attrs({ type: 'date' })`
   }
 
   &::-webkit-calendar-picker-indicator {
-    color: #007bff;
-    opacity: 0.8;
+    display: none; /* 기본 달력 아이콘 숨기기 */
   }
 `
 
