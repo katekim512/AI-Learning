@@ -48,7 +48,7 @@ export const CalendarWrapper = styled.div`
   flex-grow: 1;
   height: calc(100vh - 11rem);
   overflow-y: auto;
-  padding-top: 6rem;
+  padding-top: 0.5rem;
   padding-bottom: 4rem;
 `
 

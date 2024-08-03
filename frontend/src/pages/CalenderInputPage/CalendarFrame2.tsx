@@ -11,7 +11,7 @@ interface CalendarFrameProps {
 }
 
 const CalendarFrame2: React.FC<CalendarFrameProps> = ({
-  year,
+  //year,
   selectedDate,
   setSelectedDate,
   startDate,
@@ -158,10 +158,13 @@ const CalendarFrame2: React.FC<CalendarFrameProps> = ({
   }, [selectedDate])
 
   const calendarMonths = []
-  for (let m = 1; m <= 12; m++) {
+  for (let i = 0; i < 13; i++) {
+    const month = ((today.getMonth() + i) % 12) + 1
+    const displayYear =
+      today.getFullYear() + Math.floor((today.getMonth() + i) / 12)
     calendarMonths.push(
-      <div key={m}>
-        <L.MonthTitle>{`${year}년 ${m}월`}</L.MonthTitle>
+      <div key={month}>
+        <L.MonthTitle>{`${displayYear}년 ${month}월`}</L.MonthTitle>
         <L.WeekSection ref={weekSectionRef}>
           <L.HeaderText>일</L.HeaderText>
           <L.HeaderText>월</L.HeaderText>
@@ -171,7 +174,7 @@ const CalendarFrame2: React.FC<CalendarFrameProps> = ({
           <L.HeaderText>금</L.HeaderText>
           <L.HeaderText>토</L.HeaderText>
         </L.WeekSection>
-        {generateCalendarDays(year, m)}
+        {generateCalendarDays(displayYear, month)}
       </div>,
     )
   }

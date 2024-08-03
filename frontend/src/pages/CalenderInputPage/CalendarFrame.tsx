@@ -19,6 +19,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   const today = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
   )
+  const currentMonth = today.getMonth() + 1
   const currentDayRef = useRef<HTMLButtonElement>(null)
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
@@ -149,10 +150,12 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   }, [selectedDate])
 
   const calendarMonths = []
-  for (let m = 1; m <= 12; m++) {
+  for (let m = currentMonth; m < currentMonth + 4; m++) {
+    const displayMonth = m % 12 === 0 ? 12 : m % 12
+    const displayYear = year + Math.floor((m - 1) / 12)
     calendarMonths.push(
       <div key={m}>
-        <L.MonthTitle>{`${year}년 ${m}월`}</L.MonthTitle>
+        <L.MonthTitle>{`${displayYear}년 ${displayMonth}월`}</L.MonthTitle>
         <L.WeekSection ref={weekSectionRef}>
           <L.HeaderText>일</L.HeaderText>
           <L.HeaderText>월</L.HeaderText>
@@ -162,7 +165,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
           <L.HeaderText>금</L.HeaderText>
           <L.HeaderText>토</L.HeaderText>
         </L.WeekSection>
-        {generateCalendarDays(year, m)}
+        {generateCalendarDays(displayYear, displayMonth)}
       </div>,
     )
   }
@@ -178,6 +181,7 @@ CalendarFrame.propTypes = {
   year: PropTypes.number.isRequired,
   selectedDate: PropTypes.string.isRequired,
   setSelectedDate: PropTypes.func.isRequired,
+  startDate: PropTypes.string,
 }
 
 export default CalendarFrame
