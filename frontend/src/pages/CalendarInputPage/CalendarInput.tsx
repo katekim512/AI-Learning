@@ -1,9 +1,9 @@
-import { Icon } from '@iconify/react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import CalendarFrame from './components/CalendarFrame'
 import * as L from './styles/CalendarFrame.style'
+import CloseButton from '../../components/CloseButton/CloseButton'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const CalendarInput = () => {
@@ -26,10 +26,6 @@ const CalendarInput = () => {
     console.log(`Initial selected date: ${today.toISOString().split('T')[0]}`)
   }, [])
 
-  const handleClose = () => {
-    navigate('/ai-schedule-step1')
-  }
-
   const handleApplyDate = () => {
     setStartDate(selectedDate)
     console.log(`Applied start date: ${selectedDate}`)
@@ -47,9 +43,7 @@ const CalendarInput = () => {
   return (
     <>
       <L.HeaderSection>
-        <L.CloseButton onClick={handleClose}>
-          <Icon icon='ei:close' />
-        </L.CloseButton>
+        <CloseButton />
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
       <L.CalendarWrapper>

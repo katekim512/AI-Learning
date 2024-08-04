@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { FaTimes } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import CalendarFrame2 from './components/CalendarFrame2'
 import * as L from './styles/CalendarFrame.style'
+import { CloseButton } from './styles/CalendarFrame.style'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const CalendarInput2 = () => {
@@ -34,10 +34,6 @@ const CalendarInput2 = () => {
     console.log(`Initial selected date: ${initialEndDate}`)
   }, [initialEndDate])
 
-  const handleClose = () => {
-    navigate('/ai-schedule-step1')
-  }
-
   const handleApplyDate = () => {
     setEndDate(selectedDate)
     console.log(`Applied end date: ${selectedDate}`)
@@ -55,9 +51,7 @@ const CalendarInput2 = () => {
   return (
     <>
       <L.HeaderSection>
-        <L.CloseButton onClick={handleClose}>
-          <FaTimes />
-        </L.CloseButton>
+        <CloseButton />
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
       <L.CalendarWrapper>
