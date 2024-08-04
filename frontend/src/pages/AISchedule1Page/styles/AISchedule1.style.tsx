@@ -2,6 +2,7 @@
 import styled from 'styled-components'
 
 export const Button = styled.button`
+  color: black;
   background-color: #f0f0f0;
   border: none;
   padding: 9px 20px;
@@ -21,6 +22,7 @@ export const DateInputContainer = styled.div`
   padding: 7px;
 `
 export const DateInput = styled.input.attrs({ type: 'date' })`
+  color: black;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 6px;
@@ -53,6 +55,7 @@ export const Section = styled.div`
 `
 
 export const Label = styled.label`
+  color: black;
   display: block;
   margin-bottom: 5px;
   font-size: 1.1rem;
@@ -72,6 +75,7 @@ export const Container = styled.div`
 `
 
 export const Title = styled.div`
+  color: black;
   line-height: 2rem;
   margin-bottom: 1rem;
 `
