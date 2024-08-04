@@ -4,7 +4,7 @@ export const HeaderSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem;
+  padding: 1.5rem;
   top: 0;
   left: 0;
   right: 0;
@@ -32,7 +32,7 @@ export const MonthTitle = styled.h1`
 export const CloseButton = styled.button`
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
   cursor: pointer;
   display: flex;
   align-items: center;

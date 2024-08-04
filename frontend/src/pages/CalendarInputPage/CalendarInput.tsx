@@ -1,5 +1,5 @@
+import { Icon } from '@iconify/react'
 import React, { useState, useEffect } from 'react'
-import { FaTimes } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import CalendarFrame from './components/CalendarFrame'
@@ -48,7 +48,7 @@ const CalendarInput = () => {
     <>
       <L.HeaderSection>
         <L.CloseButton onClick={handleClose}>
-          <FaTimes />
+          <Icon icon='ei:close' />
         </L.CloseButton>
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
