@@ -65,12 +65,12 @@ export const Label = styled.label`
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 5rem); /* BackButton 높이만큼 빼기 */
+  height: calc(100vh - 3rem); /* BackButton 높이만큼 빼기 */
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   padding: 2rem;
-  padding-top: 6rem; /* BackButton 높이만큼 추가 */
+  padding-top: 4rem; /* BackButton 높이만큼 추가 */
   overflow-y: auto;
 `
 
