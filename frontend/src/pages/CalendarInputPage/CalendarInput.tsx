@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
-import CalendarFrame from './CalendarFrame'
-import { useScheduleStore } from '../../../stores/useScheduleStore'
-import * as L from '../styles/CalendarFrame.style'
+import CalendarFrame from './components/CalendarFrame'
+import * as L from './styles/CalendarFrame.style'
+import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const CalendarInput = () => {
   const navigate = useNavigate()
