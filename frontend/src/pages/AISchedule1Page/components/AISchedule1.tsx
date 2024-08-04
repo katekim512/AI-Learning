@@ -4,8 +4,8 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackButton from './BackButton/BackButton'
-import * as S from './styles/AISchedule1.style'
-import { useScheduleStore } from '../../stores/useScheduleStore'
+import { useScheduleStore } from '../../../stores/useScheduleStore'
+import * as S from '../styles/AISchedule1.style'
 
 const AISchedule1: React.FC = () => {
   const navigate = useNavigate()

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useEffect } from 'react'
 
-import * as L from './styles/CalendarFrame.style'
+import * as L from '../styles/CalendarFrame.style'
 
 interface CalendarFrameProps {
   year: number

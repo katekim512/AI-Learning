@@ -3,8 +3,8 @@ import { FaTimes } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import CalendarFrame2 from './CalendarFrame2'
-import * as L from './styles/CalendarFrame.style'
-import { useScheduleStore } from '../../stores/useScheduleStore' // 경로를 실제 store 파일로 변경하세요
+import { useScheduleStore } from '../../../stores/useScheduleStore'
+import * as L from '../styles/CalendarFrame.style'
 
 const CalendarInput2 = () => {
   const navigate = useNavigate()
