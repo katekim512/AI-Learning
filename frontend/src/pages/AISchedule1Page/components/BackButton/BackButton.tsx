@@ -8,7 +8,7 @@ const BackButton = () => {
   const navigate = useNavigate()
   return (
     <Container>
-      <StyledButton onClick={() => navigate(-1)}>
+      <StyledButton onClick={() => navigate('/calendar')}>
         <StyledIcon>
           <Icon icon={arrowIcon} />
         </StyledIcon>

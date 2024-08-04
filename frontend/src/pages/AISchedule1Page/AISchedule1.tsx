@@ -1,8 +1,10 @@
+import calendarIcon from '@iconify/icons-mdi/calendar'
+import { Icon } from '@iconify/react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import BackButton from './components/BackButton/BackButton'
 import * as S from './styles/AISchedule1.style'
-import BackButton from '../../components/BackButton/BackButton'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule1: React.FC = () => {
@@ -98,6 +100,12 @@ const AISchedule1: React.FC = () => {
 
     navigate('/ai-schedule-step2')
   }
+  const handleCalendarIconClick = () => {
+    navigate('../calendarInput') // 페이지 경로를 적절히 변경하세요
+  }
+  const handleCalendarIcon2Click = () => {
+    navigate('../calendarInput2') // 페이지 경로를 적절히 변경하세요
+  }
 
   return (
     <>
@@ -111,17 +119,31 @@ const AISchedule1: React.FC = () => {
         </S.Title>
         <S.Section>
           <S.Label>얼마나</S.Label>
-          <S.DateInput
-            type='date'
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          />
-          <S.Separator>~</S.Separator>
-          <S.DateInput
-            type='date'
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          />
+          <S.DateInputContainer>
+            <S.DateInput
+              value={startDate}
+              onChange={e => setStartDate(e.target.value)}
+              onClick={handleCalendarIconClick} // 클릭 시 페이지 이동
+              readOnly // 기본 달력 팝업을 비활성화
+            />
+            <Icon
+              icon={calendarIcon}
+              onClick={handleCalendarIconClick}
+              style={{ cursor: 'pointer', marginLeft: '10px' }}
+            />
+            <S.Separator>~</S.Separator>
+            <S.DateInput
+              value={endDate}
+              onChange={e => setEndDate(e.target.value)}
+              onClick={handleCalendarIcon2Click} // 클릭 시 페이지 이동
+              readOnly // 기본 달력 팝업을 비활성화
+            />
+            <Icon
+              icon={calendarIcon}
+              onClick={handleCalendarIcon2Click}
+              style={{ cursor: 'pointer', marginLeft: '10px' }}
+            />
+          </S.DateInputContainer>
         </S.Section>
         <S.Section>
           <S.Label>어느 주기로</S.Label>

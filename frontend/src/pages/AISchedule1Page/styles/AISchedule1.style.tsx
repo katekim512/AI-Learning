@@ -2,6 +2,7 @@
 import styled from 'styled-components'
 
 export const Button = styled.button`
+  color: black;
   background-color: #f0f0f0;
   border: none;
   padding: 9px 20px;
@@ -14,11 +15,16 @@ export const Button = styled.button`
     color: white;
   }
 `
-
+export const DateInputContainer = styled.div`
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  padding: 7px;
+`
 export const DateInput = styled.input.attrs({ type: 'date' })`
+  color: black;
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-top: 7px;
   padding: 6px;
   font-size: 14px;
   background-color: #fafafa;
@@ -33,8 +39,7 @@ export const DateInput = styled.input.attrs({ type: 'date' })`
   }
 
   &::-webkit-calendar-picker-indicator {
-    color: #007bff;
-    opacity: 0.8;
+    display: none; /* 기본 달력 아이콘 숨기기 */
   }
 `
 
@@ -50,6 +55,7 @@ export const Section = styled.div`
 `
 
 export const Label = styled.label`
+  color: black;
   display: block;
   margin-bottom: 5px;
   font-size: 1.1rem;
@@ -59,16 +65,17 @@ export const Label = styled.label`
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 5rem); /* BackButton 높이만큼 빼기 */
+  height: calc(100vh - 3rem); /* BackButton 높이만큼 빼기 */
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   padding: 2rem;
-  padding-top: 6rem; /* BackButton 높이만큼 추가 */
+  padding-top: 4rem; /* BackButton 높이만큼 추가 */
   overflow-y: auto;
 `
 
 export const Title = styled.div`
+  color: black;
   line-height: 2rem;
   margin-bottom: 1rem;
 `

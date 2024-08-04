@@ -4,6 +4,8 @@ import App from './App'
 import AISchedule1 from './pages/AISchedule1Page/AISchedule1'
 import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
+import CalendarInput from './pages/CalendarInputPage/CalendarInput'
+import CalendarInput2 from './pages/CalendarInputPage/CalendarInput2'
 import Calendar from './pages/CalendarPage/Calendar'
 import Login from './pages/LoginPage/Login'
 import Profile from './pages/ProfilePage/Profile'
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: 'calendar',
         element: <Calendar />,
+      },
+      {
+        path: 'calendarInput',
+        element: <CalendarInput />,
+      },
+      {
+        path: 'calendarInput2',
+        element: <CalendarInput2 />,
       },
       {
         path: 'profile',
