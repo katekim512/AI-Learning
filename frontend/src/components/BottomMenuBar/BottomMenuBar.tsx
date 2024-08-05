@@ -56,7 +56,7 @@ const BottomNav: React.FC = () => {
           <MenuIcon className='menu-icon'>
             <Icon
               icon={icon.icon}
-              style={{ fontSize: '24px', color: 'currentColor' }}
+              style={{ fontSize: '20px', color: 'currentColor' }}
             />
             <span>{icon.label}</span>
           </MenuIcon>

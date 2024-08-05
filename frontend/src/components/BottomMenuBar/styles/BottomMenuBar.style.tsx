@@ -17,6 +17,7 @@ export const MenuIcon = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 0.3rem;
   color: #333;
 
   span {
