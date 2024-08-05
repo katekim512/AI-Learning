@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 
-import BottomMenuBar from '../../components/BottomMenuBar/BottomMenuBar'
-
 const Rank = () => {
   const navigate = useNavigate()
 
@@ -13,7 +11,6 @@ const Rank = () => {
     <>
       Rank Page
       <button onClick={handleComplete}>완료</button>
-      <BottomMenuBar />
     </>
   )
 }
