@@ -20,11 +20,17 @@ interface Level {
   modern: number
 }
 
-export const getMyInfo = async (
-  token: string,
-): Promise<AxiosResponse<User> | null> => {
-  const response = await aiLearningAxios.get('members/member', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  return response
+export const getMyInfo = async (token: string): Promise<User | null> => {
+  try {
+    const response: AxiosResponse<User> = await aiLearningAxios.get(
+      'members/member',
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch user info:', error)
+    return null
+  }
 }
