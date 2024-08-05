@@ -62,6 +62,15 @@ const CalendarInput = () => {
         <CloseButton />
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
+      <L.WeekSection>
+        <L.HeaderText>일</L.HeaderText>
+        <L.HeaderText>월</L.HeaderText>
+        <L.HeaderText>화</L.HeaderText>
+        <L.HeaderText>수</L.HeaderText>
+        <L.HeaderText>목</L.HeaderText>
+        <L.HeaderText>금</L.HeaderText>
+        <L.HeaderText>토</L.HeaderText>
+      </L.WeekSection>
       <L.CalendarWrapper>
         <CalendarFrame
           selectedDate={selectedDate}
