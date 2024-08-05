@@ -152,8 +152,22 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
     }
   }, [selectedDate])
 
+  const calculateTotalMonths = (startDate: Date, endDate: Date): number => {
+    const startYear = startDate.getFullYear()
+    const startMonth = startDate.getMonth() + 1
+    const endYear = endDate.getFullYear()
+    const endMonth = endDate.getMonth() + 1
+
+    const yearDifference = endYear - startYear
+    const monthDifference = endMonth - startMonth
+
+    return yearDifference * 12 + monthDifference
+  }
+
   const calendarMonths = []
-  for (let i = 0; i < 12; i++) {
+  const totalMonth = calculateTotalMonths(startDateObj, endDateObj)
+
+  for (let i = 0; i <= totalMonth; i++) {
     const month = ((startDateObj.getMonth() + i) % 12) + 1
     const displayYear =
       startDateObj.getFullYear() +
