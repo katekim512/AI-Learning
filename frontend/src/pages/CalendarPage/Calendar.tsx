@@ -5,7 +5,6 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
-import BottomMenuBar from '../../components/BottomMenuBar/BottomMenuBar'
 
 const Calendar = () => {
   const navigate = useNavigate()
@@ -103,7 +102,6 @@ const Calendar = () => {
         </L.AIScheduleButton>
       </L.HeaderSection>
       <MainCalendar year={currentDate.year} month={currentDate.month} />
-      <BottomMenuBar />
     </div>
   )
 }

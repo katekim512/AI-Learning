@@ -1,12 +1,5 @@
-import BottomMenuBar from '../../components/BottomMenuBar/BottomMenuBar'
-
 const Recommend = () => {
-  return (
-    <>
-      Recommend Page
-      <BottomMenuBar />
-    </>
-  )
+  return <>Recommend Page</>
 }
 
 export default Recommend
