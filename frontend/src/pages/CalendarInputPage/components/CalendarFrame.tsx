@@ -1,35 +1,37 @@
 import PropTypes from 'prop-types'
 import React, { useRef, useEffect } from 'react'
 
+import {
+  useScheduleStore,
+  calculateEndDate,
+} from '../../../stores/useScheduleStore'
 import * as L from '../styles/CalendarFrame.style'
 
 interface CalendarFrameProps {
-  year: number
   selectedDate: string
   setSelectedDate: (date: string) => void
-  startDate: string | null
+  type: 'start' | 'end'
 }
 
 const CalendarFrame: React.FC<CalendarFrameProps> = ({
-  year,
   selectedDate,
   setSelectedDate,
-  //startDate,
+  type,
 }) => {
   const today = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
   )
-  const yesterday = new Date(today)
-  yesterday.setDate(today.getDate() - 1)
-  const currentMonth = today.getMonth() + 1
   const currentDayRef = useRef<HTMLButtonElement>(null)
   const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
 
-  const endDateObj = new Date(today)
-  endDateObj.setDate(today.getDate() + 100)
-  console.log(`Start Date: ${today.toISOString().split('T')[0]}`)
-  console.log(`End Date: ${endDateObj.toISOString().split('T')[0]}`)
+  const { startDate } = useScheduleStore.getState()
+  const startDateObj =
+    type === 'start'
+      ? today
+      : new Date(calculateEndDate(startDate!, 29) || today)
+  const endDateObj = new Date(startDateObj)
+  endDateObj.setDate(startDateObj.getDate() + (type === 'start' ? 180 : 336))
 
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate()
@@ -46,9 +48,8 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   }
 
   const handleDayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const title = event.currentTarget.title
-    setSelectedDate(title)
-    console.log(`Clicked date: ${title}`)
+    const clickedDay = event.currentTarget.title
+    setSelectedDate(clickedDay)
   }
 
   const generateCalendarDays = (year: number, month: number) => {
@@ -75,7 +76,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
           const formattedDate = formatDate(year, month, day)
           const isSelectedDay = selectedDate === formattedDate
           const dateObj = new Date(year, month - 1, day)
-          const isWithinRange = dateObj >= yesterday && dateObj <= endDateObj
+          const isWithinRange = dateObj >= startDateObj && dateObj <= endDateObj
 
           week.push(
             <L.CalendarButton
@@ -110,7 +111,6 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   }
 
   useEffect(() => {
-    console.log(`Initial selected date in CalendarFrame: ${selectedDate}`) // 초기 선택된 날짜 출력
     if (currentDayRef.current && calendarRef.current) {
       const currentDayElement = currentDayRef.current
       const calendarElement = calendarRef.current
@@ -153,12 +153,14 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
   }, [selectedDate])
 
   const calendarMonths = []
-  for (let m = currentMonth; m < currentMonth + 4; m++) {
-    const displayMonth = m % 12 === 0 ? 12 : m % 12
-    const displayYear = year + Math.floor((m - 1) / 12)
+  for (let i = 0; i < 12; i++) {
+    const month = ((startDateObj.getMonth() + i) % 12) + 1
+    const displayYear =
+      startDateObj.getFullYear() +
+      Math.floor((startDateObj.getMonth() + i) / 12)
     calendarMonths.push(
-      <div key={m}>
-        <L.MonthTitle>{`${displayYear}년 ${displayMonth}월`}</L.MonthTitle>
+      <div key={month}>
+        <L.MonthTitle>{`${displayYear}년 ${month}월`}</L.MonthTitle>
         <L.WeekSection ref={weekSectionRef}>
           <L.HeaderText>일</L.HeaderText>
           <L.HeaderText>월</L.HeaderText>
@@ -168,7 +170,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
           <L.HeaderText>금</L.HeaderText>
           <L.HeaderText>토</L.HeaderText>
         </L.WeekSection>
-        {generateCalendarDays(displayYear, displayMonth)}
+        {generateCalendarDays(displayYear, month)}
       </div>,
     )
   }
@@ -181,10 +183,11 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
 }
 
 CalendarFrame.propTypes = {
-  year: PropTypes.number.isRequired,
   selectedDate: PropTypes.string.isRequired,
   setSelectedDate: PropTypes.func.isRequired,
-  startDate: PropTypes.string,
+  type: PropTypes.oneOf(['start', 'end']).isRequired as PropTypes.Validator<
+    'start' | 'end'
+  >,
 }
 
 export default CalendarFrame

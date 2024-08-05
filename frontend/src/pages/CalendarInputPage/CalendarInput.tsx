@@ -1,34 +1,50 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import CalendarFrame from './components/CalendarFrame'
 import * as L from './styles/CalendarFrame.style'
 import CloseButton from '../../components/CloseButton/CloseButton'
-import { useScheduleStore } from '../../stores/useScheduleStore'
+import {
+  useScheduleStore,
+  calculateEndDate,
+} from '../../stores/useScheduleStore'
 
 const CalendarInput = () => {
   const navigate = useNavigate()
+  const { search } = useLocation()
+  const params = new URLSearchParams(search)
+  const type = params.get('type') as 'start' | 'end'
+
   const today = new Date()
-  const startDate = useScheduleStore(state => state.startDate)
-  const [currentDate, setCurrentDate] = useState({
+  const { startDate, endDate, setStartDate, setEndDate } = useScheduleStore()
+  const [, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
   const [selectedDate, setSelectedDate] = useState<string>(
-    today.toISOString().split('T')[0],
+    type === 'start'
+      ? startDate || today.toISOString().split('T')[0]
+      : startDate
+        ? calculateEndDate(startDate, 29) // 시작일 + 29일
+        : today.toISOString().split('T')[0],
   )
-
-  const setStartDate = useScheduleStore(state => state.setStartDate)
 
   useEffect(() => {
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
-    setSelectedDate(today.toISOString().split('T')[0])
-    console.log(`Initial selected date: ${today.toISOString().split('T')[0]}`)
-  }, [])
+    setSelectedDate(
+      type === 'start'
+        ? startDate || today.toISOString().split('T')[0]
+        : endDate || today.toISOString().split('T')[0],
+    )
+  }, [type, startDate, endDate])
 
   const handleApplyDate = () => {
-    setStartDate(selectedDate)
-    console.log(`Applied start date: ${selectedDate}`)
+    if (type === 'start') {
+      setStartDate(selectedDate)
+    } else {
+      setEndDate(selectedDate)
+    }
+    console.log(`Applied ${type} date: ${selectedDate}`)
     navigate('/ai-schedule-step1')
   }
 
@@ -37,7 +53,7 @@ const CalendarInput = () => {
     const [year, month, day] = selectedDate.split('-').map(Number)
     const date = new Date(year, month - 1, day)
     const dayNames = ['일', '월', '화', '수', '목', '금', '토']
-    return `시작일 ${month}.${day} (${dayNames[date.getDay()]}) 적용`
+    return `${type === 'start' ? '시작일' : '종료일'} ${month}.${day} (${dayNames[date.getDay()]}) 적용`
   }
 
   return (
@@ -48,10 +64,9 @@ const CalendarInput = () => {
       </L.HeaderSection>
       <L.CalendarWrapper>
         <CalendarFrame
-          year={currentDate.year}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          startDate={startDate}
+          type={type}
         />
       </L.CalendarWrapper>
       <L.BottomSection>

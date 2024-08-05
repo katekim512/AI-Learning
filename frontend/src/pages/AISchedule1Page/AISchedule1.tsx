@@ -38,10 +38,14 @@ const AISchedule1: React.FC = () => {
     setDescription: state.setDescription,
   }))
 
-  //useEffect 사용 부분
   useEffect(() => {
-    updateDates() // 빈도가 변경될 때마다 날짜를 업데이트
-  }, [frequency, updateDates])
+    if (startDate && !endDate) {
+      const newEndDate = new Date(startDate)
+      newEndDate.setDate(newEndDate.getDate() + 29)
+      setEndDate(newEndDate.toISOString().split('T')[0])
+    }
+    updateDates()
+  }, [startDate, endDate, frequency, updateDates])
 
   const handleLocationClick = (loc: string) => {
     if (loc === '전국') {
@@ -100,11 +104,9 @@ const AISchedule1: React.FC = () => {
 
     navigate('/ai-schedule-step2')
   }
-  const handleCalendarIconClick = () => {
-    navigate('../calendarInput') // 페이지 경로를 적절히 변경하세요
-  }
-  const handleCalendarIcon2Click = () => {
-    navigate('../calendarInput2') // 페이지 경로를 적절히 변경하세요
+
+  const handleCalendarIconClick = (type: 'start' | 'end') => {
+    navigate(`/calendarInput?type=${type}`)
   }
 
   return (
@@ -121,26 +123,26 @@ const AISchedule1: React.FC = () => {
           <S.Label>얼마나</S.Label>
           <S.DateInputContainer>
             <S.DateInput
-              value={startDate}
+              value={startDate || ''}
               onChange={e => setStartDate(e.target.value)}
-              onClick={handleCalendarIconClick} // 클릭 시 페이지 이동
+              onClick={() => handleCalendarIconClick('start')} // 클릭 시 페이지 이동
               readOnly // 기본 달력 팝업을 비활성화
             />
             <Icon
               icon={calendarIcon}
-              onClick={handleCalendarIconClick}
+              onClick={() => handleCalendarIconClick('start')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
             <S.Separator>~</S.Separator>
             <S.DateInput
-              value={endDate}
+              value={endDate || ''}
               onChange={e => setEndDate(e.target.value)}
-              onClick={handleCalendarIcon2Click} // 클릭 시 페이지 이동
+              onClick={() => handleCalendarIconClick('end')} // 클릭 시 페이지 이동
               readOnly // 기본 달력 팝업을 비활성화
             />
             <Icon
               icon={calendarIcon}
-              onClick={handleCalendarIcon2Click}
+              onClick={() => handleCalendarIconClick('end')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
           </S.DateInputContainer>
