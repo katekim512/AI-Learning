@@ -27,8 +27,8 @@ const AISchedule2 = () => {
       description,
     })
 
-    const duration = [startDate, endDate]
-    if (token) {
+    if (token && startDate && endDate) {
+      const duration = [startDate, endDate]
       const successResponse = await makeSchedule(
         token,
         duration,

@@ -1,14 +1,20 @@
-import { create } from 'zustand'
+import create from 'zustand'
 
 const getCurrentDate = () => {
   const today = new Date()
   return today.toISOString().split('T')[0]
 }
 
-const getFutureDate = (days: number): string => {
+export const getFutureDate = (days: number): string => {
   const today = new Date()
   today.setDate(today.getDate() + days)
   return today.toISOString().split('T')[0]
+}
+
+export const calculateEndDate = (startDate: string, days: number): string => {
+  const date = new Date(startDate)
+  date.setDate(date.getDate() + days)
+  return date.toISOString().split('T')[0]
 }
 
 const getDatesArray = (
@@ -47,8 +53,8 @@ const getDatesArray = (
 }
 
 interface ScheduleState {
-  startDate: string
-  endDate: string
+  startDate: string | null
+  endDate: string | null
   dates: string[]
   location: string[]
   travelStyle: string[]
@@ -72,17 +78,21 @@ export const useScheduleStore = create<ScheduleState>(set => ({
   travelStyle: [],
   description: '',
   frequency: '1주에 1번', // 초기 빈도 설정
-  setStartDate: date => set({ startDate: date }),
+  setStartDate: date =>
+    set(() => {
+      const newEndDate = calculateEndDate(date, 29) // 시작일 + 29일
+      return { startDate: date, endDate: newEndDate }
+    }),
   setEndDate: date => set({ endDate: date }),
   setFrequency: frequency =>
     set(state => {
-      const dates = getDatesArray(state.startDate, state.endDate, frequency)
+      const dates = getDatesArray(state.startDate!, state.endDate!, frequency)
       return { frequency, dates } // 빈도 변경과 함께 날짜도 업데이트
     }),
   updateDates: () =>
     set(state => {
       const { startDate, endDate, frequency } = state
-      const dates = getDatesArray(startDate, endDate, frequency)
+      const dates = getDatesArray(startDate!, endDate!, frequency)
       return { dates }
     }),
   setLocation: location => set({ location }),
