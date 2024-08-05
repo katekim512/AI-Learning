@@ -1,4 +1,3 @@
-// BottomMenuBar.style.tsx
 import styled from 'styled-components'
 
 export const MenuBar = styled.div`
@@ -14,28 +13,19 @@ export const MenuBar = styled.div`
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 `
 
-export const MenuIcon = styled.div<{ isActive: boolean }>`
+export const MenuIcon = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: ${({ isActive }) =>
-    isActive ? '#525FD4' : '#333'}; // Active color vs Inactive color
+  padding-bottom: 0.3rem;
+  color: #333;
 
   span {
     margin-top: 4px;
     font-size: 12px;
   }
 
-  .active {
-    color: #007bff; // Define the active icon color
+  .active & {
+    color: #525fd4;
   }
 `
-
-// interface MenuIconProps {
-//   src: string // SVG URL
-//   alt: string
-// }
-// export const MenuIcon = styled.img<MenuIconProps>`
-//   width: 2rem;
-//   height: 2rem;
-// `

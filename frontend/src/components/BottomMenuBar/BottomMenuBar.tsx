@@ -1,5 +1,3 @@
-// BottomMenuBar.tsx
-
 import calendarIcon from '@iconify/icons-heroicons/calendar-solid'
 import profileIcon from '@iconify/icons-heroicons/user-20-solid'
 import rankingIcon from '@iconify/icons-icon-park-solid/five-star-badge'
@@ -55,15 +53,13 @@ const BottomNav: React.FC = () => {
           className={({ isActive }) => (isActive ? 'active' : '')}
           end
         >
-          {({ isActive }) => (
-            <MenuIcon isActive={isActive}>
-              <Icon
-                icon={icon.icon}
-                style={{ fontSize: '24px', color: 'currentColor' }}
-              />
-              <span>{icon.label}</span>
-            </MenuIcon>
-          )}
+          <MenuIcon className='menu-icon'>
+            <Icon
+              icon={icon.icon}
+              style={{ fontSize: '20px', color: 'currentColor' }}
+            />
+            <span>{icon.label}</span>
+          </MenuIcon>
         </NavLink>
       ))}
     </MenuBar>
