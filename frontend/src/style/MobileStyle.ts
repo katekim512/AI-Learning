@@ -7,9 +7,9 @@ export const MobileContainer = styled.div`
   margin-right: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
-  padding-top: env(safe-area-inset-top);
-  padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
+  // padding-top: env(safe-area-inset-top);
+  // padding-right: env(safe-area-inset-right);
+  // padding-bottom: env(safe-area-inset-bottom);
+  // padding-left: env(safe-area-inset-left);
   overflow-y: auto;
 `
