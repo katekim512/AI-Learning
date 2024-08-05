@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { getMyInfo, User } from '../../../api/auth/getMyInfo'
 import { profileUpdate } from '../../../api/profile/postProfileUpdate'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Profile.style'
 
 const ProfileSection = () => {
-  const token = localStorage.getItem('token')
+  const token = authToken.getAccessToken()
   const [userInfo, setUserInfo] = useState<User>()
   const [, setSelectedFile] = useState<File | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string>(

@@ -6,6 +6,7 @@ import {
   CalendarSchedule,
   getTimelineAll,
 } from '../../../api/calendar/getTimelineAll'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Calendar.style'
 
 interface MainCalendarProps {
@@ -14,7 +15,7 @@ interface MainCalendarProps {
 }
 
 const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
-  const token = localStorage.getItem('token')
+  const token = authToken.getAccessToken()
   const today = new Date()
 
   const isToday = (day: number, month: number, year: number) => {

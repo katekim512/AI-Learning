@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import SocialLogin from './SocialLogin'
 import { login } from '../../../api/auth/postLogin'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Login.style'
 
 const LoginForm = () => {
@@ -23,7 +24,7 @@ const LoginForm = () => {
       if (loginResult) {
         navigate('/calendar')
         console.log('token: ', loginResult.data.token)
-        localStorage.setItem('token', loginResult.data.token)
+        authToken.setAccessToken(loginResult.data.token)
       } else {
         console.error('login fail')
       }

@@ -5,9 +5,10 @@ import Schedule from './components/Schedule'
 import * as L from './styles/AISchedule3.style'
 import { getSchedule, AISchedule } from '../../api/schedule/getSchedule'
 import BackButton from '../../components/BackButton/BackButton'
+import authToken from '../../stores/authToken'
 
 const AISchedule3 = () => {
-  const token = localStorage.getItem('token')
+  const token = authToken.getAccessToken()
   const navigate = useNavigate()
   const [scheduleInfo, setScheduleInfo] = useState<AISchedule[]>([
     {
