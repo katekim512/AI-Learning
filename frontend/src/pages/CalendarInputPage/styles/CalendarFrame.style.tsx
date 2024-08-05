@@ -18,7 +18,6 @@ export const HeaderTitle = styled.h1`
   font-size: 20px;
   flex-grow: 1;
   text-align: center;
-  margin-left: -1.5rem;
 `
 
 export const MonthTitle = styled.h1`
