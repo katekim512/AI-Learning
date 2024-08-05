@@ -20,7 +20,7 @@ interface DrawerCenterProps {
 export const DrawerContainer = styled.div<DrawerContainerProps>`
   width: 100%;
   max-width: 400px;
-  height: ${({ isExpanded }) => (isExpanded ? 'calc(100vh - 8rem)' : '17rem')};
+  height: ${({ isExpanded }) => (isExpanded ? 'calc(100vh - 9rem)' : '17rem')};
   background-color: white;
   position: fixed;
   bottom: 5rem;
