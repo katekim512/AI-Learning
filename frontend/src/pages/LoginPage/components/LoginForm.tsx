@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom'
 
 import SocialLogin from './SocialLogin'
 import { login } from '../../../api/auth/postLogin'
+import { useUser } from '../../../hooks/useUser'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Login.style'
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const navigate = useNavigate()
+
+  const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value)
@@ -21,9 +25,9 @@ const LoginForm = () => {
       const loginResult = await login(email, password)
 
       if (loginResult) {
+        authToken.setAccessToken(loginResult.data.token)
+        await refetchUser()
         navigate('/calendar')
-        console.log('token: ', loginResult.data.token)
-        localStorage.setItem('token', loginResult.data.token)
       } else {
         console.error('login fail')
       }

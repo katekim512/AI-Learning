@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import * as L from './styles/AISchedule2.style'
 import { makeSchedule } from '../../api/schedule/postMakeSchedule'
 import BackButton from '../../components/BackButton/BackButton'
+import authToken from '../../stores/authToken'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 
 const AISchedule2 = () => {
-  const token = localStorage.getItem('token')
+  const token = authToken.getAccessToken()
   const navigate = useNavigate()
 
   const { startDate, endDate, dates, location, travelStyle } =

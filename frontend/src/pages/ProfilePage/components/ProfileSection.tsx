@@ -1,31 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useQueryClient } from 'react-query'
 
-import { getMyInfo, User } from '../../../api/auth/getMyInfo'
 import { profileUpdate } from '../../../api/profile/postProfileUpdate'
+import { useUser } from '../../../hooks/useUser'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Profile.style'
 
 const ProfileSection = () => {
-  const token = localStorage.getItem('token')
-  const [userInfo, setUserInfo] = useState<User>()
+  const { data: userInfo, refetch } = useUser()
+  const queryClient = useQueryClient()
   const [, setSelectedFile] = useState<File | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string>(
     userInfo ? userInfo.profile : '/img/profile-default.png',
   )
-
-  const getMyInfoData = async () => {
-    if (token) {
-      const successResponse = await getMyInfo(token)
-
-      if (successResponse && successResponse.data) {
-        setUserInfo(successResponse.data)
-        setPreviewSrc(successResponse.data.profile)
-      }
-    }
-  }
-
-  useEffect(() => {
-    getMyInfoData()
-  }, [])
 
   const handleFileUpload = () => {
     const fileInput = document.createElement('input')
@@ -35,7 +22,6 @@ const ProfileSection = () => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
         setSelectedFile(file)
-
         await handleUploadPhoto(file)
       }
     }
@@ -43,6 +29,7 @@ const ProfileSection = () => {
   }
 
   const handleUploadPhoto = async (file: File) => {
+    const token = authToken.getAccessToken()
     if (token) {
       const formData = new FormData()
       formData.append('profile', file)
@@ -50,6 +37,9 @@ const ProfileSection = () => {
       const successResponse = await profileUpdate(token, formData)
       if (successResponse && successResponse.data) {
         setPreviewSrc(URL.createObjectURL(file))
+
+        await refetch()
+        queryClient.invalidateQueries('user')
       }
     }
   }

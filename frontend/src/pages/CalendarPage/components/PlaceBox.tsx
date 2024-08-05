@@ -5,6 +5,7 @@ import {
   DateSchedule,
   postTimelineDay,
 } from '../../../api/calendar/postTimelineDay'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxProps {
@@ -12,7 +13,7 @@ interface PlaceBoxProps {
 }
 
 const PlaceBox: React.FC<PlaceBoxProps> = ({ date }) => {
-  const token = localStorage.getItem('token')
+  const token = authToken.getAccessToken()
   const [daySchedule, setDaySchedule] = useState<DateSchedule>({
     memo: 'memo',
     date: date,
