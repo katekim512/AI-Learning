@@ -23,7 +23,7 @@ export const DrawerContainer = styled.div<DrawerContainerProps>`
   height: ${({ isExpanded }) => (isExpanded ? 'calc(100vh - 8rem)' : '17rem')};
   background-color: white;
   position: fixed;
-  bottom: 4rem;
+  bottom: 5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
@@ -52,7 +52,7 @@ export const DrawerBottom = styled.div`
   position: fixed;
   width: 100%;
   max-width: 400px;
-  bottom: 4rem;
+  bottom: 5rem;
   justify-content: space-between;
 `
 

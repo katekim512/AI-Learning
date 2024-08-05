@@ -6,7 +6,7 @@ export const MenuBar = styled.div`
   align-items: center;
   width: 100%;
   max-width: 400px;
-  height: 4rem;
+  height: 5rem;
   position: fixed;
   bottom: 0;
   background-color: #fff;
@@ -17,7 +17,7 @@ export const MenuIcon = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 0.3rem;
+  padding-bottom: 1rem;
   color: #333;
 
   span {
