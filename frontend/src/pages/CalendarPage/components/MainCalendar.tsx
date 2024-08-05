@@ -26,7 +26,6 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
     )
   }
 
-  const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
   const [schedule, setSchedule] = useState<CalendarSchedule[]>([])
@@ -47,11 +46,9 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   }, [year, month])
 
   useEffect(() => {
-    const weekSectionHeight = weekSectionRef.current?.offsetHeight || 0
     const calendarHeight = calendarRef.current?.offsetHeight || 0
-    const availableHeight = calendarHeight - weekSectionHeight
     const numWeeks = calculateNumberOfWeeks(year, month)
-    setDaySectionHeight(availableHeight / numWeeks)
+    setDaySectionHeight(calendarHeight / numWeeks)
   }, [year, month])
 
   const getDaysInMonth = (year: number, month: number) => {
@@ -201,16 +198,16 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 
   return (
     <>
+      <L.WeekSection>
+        <L.HeaderText>일</L.HeaderText>
+        <L.HeaderText>월</L.HeaderText>
+        <L.HeaderText>화</L.HeaderText>
+        <L.HeaderText>수</L.HeaderText>
+        <L.HeaderText>목</L.HeaderText>
+        <L.HeaderText>금</L.HeaderText>
+        <L.HeaderText>토</L.HeaderText>
+      </L.WeekSection>
       <L.CalendarSection ref={calendarRef}>
-        <L.WeekSection ref={weekSectionRef}>
-          <L.HeaderText>일</L.HeaderText>
-          <L.HeaderText>월</L.HeaderText>
-          <L.HeaderText>화</L.HeaderText>
-          <L.HeaderText>수</L.HeaderText>
-          <L.HeaderText>목</L.HeaderText>
-          <L.HeaderText>금</L.HeaderText>
-          <L.HeaderText>토</L.HeaderText>
-        </L.WeekSection>
         {calendarDays}
         {drawerOpen && <DateDrawer date={selectedDay} />}
       </L.CalendarSection>
