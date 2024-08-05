@@ -22,7 +22,6 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
   )
   const currentDayRef = useRef<HTMLButtonElement>(null)
-  const weekSectionRef = useRef<HTMLDivElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
 
   const { startDate } = useScheduleStore.getState()
@@ -175,15 +174,7 @@ const CalendarFrame: React.FC<CalendarFrameProps> = ({
     calendarMonths.push(
       <div key={month}>
         <L.MonthTitle>{`${displayYear}년 ${month}월`}</L.MonthTitle>
-        <L.WeekSection ref={weekSectionRef}>
-          <L.HeaderText>일</L.HeaderText>
-          <L.HeaderText>월</L.HeaderText>
-          <L.HeaderText>화</L.HeaderText>
-          <L.HeaderText>수</L.HeaderText>
-          <L.HeaderText>목</L.HeaderText>
-          <L.HeaderText>금</L.HeaderText>
-          <L.HeaderText>토</L.HeaderText>
-        </L.WeekSection>
+
         {generateCalendarDays(displayYear, month)}
       </div>,
     )
