@@ -23,7 +23,9 @@ export const StyledButton = styled.button`
 
 export const StyledIcon = styled.div`
   font-size: 2rem;
+  color: black;
   margin-left: 1rem;
   margin-top: 1rem;
+  cursor: pointer;
   transform: rotate(-90deg);
 `
