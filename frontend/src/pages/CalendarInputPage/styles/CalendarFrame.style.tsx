@@ -44,7 +44,7 @@ export const CalendarSelect = styled.select`
 
 export const CalendarWrapper = styled.div`
   flex-grow: 1;
-  height: calc(100vh - 11rem);
+  height: calc(100vh - 12rem);
   overflow-y: auto;
   padding-top: 1rem;
   padding-bottom: 4rem;
@@ -147,7 +147,9 @@ export const BottomSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
   bottom: 0;
   left: 0;
   right: 0;
