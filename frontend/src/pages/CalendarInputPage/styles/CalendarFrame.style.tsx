@@ -148,13 +148,14 @@ export const BottomSection = styled.div`
   position: fixed;
   width: 100%;
   max-width: 400px;
+  height: 5rem;
   align-items: center;
   justify-content: center;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-top: 1rem;
   background-color: white;
-  z-index: 1000;
+  z-index: 99;
   border-top: 1.5px solid #f1f1f1;
 `
 
