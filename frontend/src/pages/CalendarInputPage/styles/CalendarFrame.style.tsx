@@ -9,7 +9,8 @@ export const HeaderSection = styled.div`
   left: 0;
   right: 0;
   background: white;
-  z-index: 1000;
+  z-index: 99;
+  border-bottom: 1.5px solid #f1f1f1;
 `
 
 export const HeaderTitle = styled.h1`
@@ -44,7 +45,7 @@ export const CalendarSelect = styled.select`
 
 export const CalendarWrapper = styled.div`
   flex-grow: 1;
-  height: calc(100vh - 12rem);
+  height: calc(100vh - 11rem);
   overflow-y: auto;
   padding-top: 1rem;
   padding-bottom: 4rem;
@@ -59,10 +60,8 @@ export const WeekSection = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
   padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-bottom: 1.5px solid #f1f1f1;
 `
 
 export const HeaderText = styled.p`
@@ -145,17 +144,14 @@ export const CalendarButton2 = styled.button<{
 
 export const BottomSection = styled.div`
   display: flex;
-  position: fixed;
-  width: 100%;
-  max-width: 400px;
-  height: 5rem;
   align-items: center;
   justify-content: center;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  background-color: white;
-  z-index: 99;
+  padding: 1.5rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
   border-top: 1.5px solid #f1f1f1;
 `
 
