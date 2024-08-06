@@ -144,7 +144,7 @@ export const CalendarButton2 = styled.button<{
 `
 
 export const BottomSection = styled.div`
-  display: flex;
+  display: fixed;
   align-items: center;
   justify-content: center;
   padding-left: 1.5rem;
