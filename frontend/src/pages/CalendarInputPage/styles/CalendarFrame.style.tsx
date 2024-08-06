@@ -8,9 +8,8 @@ export const HeaderSection = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  background: white;
+  background-color: white;
   z-index: 99;
-  border-bottom: 1.5px solid #f1f1f1;
 `
 
 export const HeaderTitle = styled.h1`
@@ -45,23 +44,30 @@ export const CalendarSelect = styled.select`
 
 export const CalendarWrapper = styled.div`
   flex-grow: 1;
-  height: calc(100vh - 11rem);
-  overflow-y: auto;
-  padding-top: 1rem;
   padding-bottom: 4rem;
+  z-index: 0;
 `
 
 export const ScrollableCalendarSection = styled.div`
   align-items: center;
-  padding: 1rem;
+  height: calc(90vh - 5rem); /* BottomSection의 높이를 제외한 높이 설정 */
+  overflow-y: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2rem;
+  z-index: 0; /* 달력 영역의 z-index를 낮게 설정 */
 `
 
 export const WeekSection = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 0.5rem;
-  margin-bottom: 0.3rem;
   padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom: 1.5px solid #f1f1f1;
+  z-index: 99;
 `
 
 export const HeaderText = styled.p`
@@ -109,6 +115,7 @@ export const CalendarButton = styled.button<{
   cursor: ${({ $isPast }) => ($isPast ? 'default' : 'pointer')};
   margin: 5px;
 `
+
 export const CalendarButton2 = styled.button<{
   $isSunday?: boolean
   $isSaturday?: boolean
@@ -144,14 +151,16 @@ export const CalendarButton2 = styled.button<{
 
 export const BottomSection = styled.div`
   display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 5rem;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  z-index: 1000;
+  background-color: white;
+  z-index: 99;
   border-top: 1.5px solid #f1f1f1;
 `
 
