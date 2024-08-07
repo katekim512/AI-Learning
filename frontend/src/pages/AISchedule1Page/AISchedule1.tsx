@@ -113,7 +113,10 @@ const AISchedule1: React.FC = () => {
     navigate('/ai-schedule-step2')
   }
 
-  const handleCalendarIconClick = () => {
+  const handleCalendarIconClick = (type: 'start' | 'end') => {
+    navigate(`/calendarInput?type=${type}`)
+  }
+  const handleCalendarIconClick2 = () => {
     console.log('Current Schedule State:', {
       startDate,
       endDate,
@@ -141,24 +144,24 @@ const AISchedule1: React.FC = () => {
             <S.DateInput
               value={startDate || ''}
               onChange={e => setStartDate(e.target.value)}
-              onClick={() => handleCalendarIconClick()} // 클릭 시 페이지 이동
+              onClick={() => handleCalendarIconClick('start')} // 클릭 시 페이지 이동
               readOnly // 기본 달력 팝업을 비활성화
             />
             <Icon
               icon={calendarIcon}
-              onClick={() => handleCalendarIconClick()}
+              onClick={() => handleCalendarIconClick('start')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
             <S.Separator>~</S.Separator>
             <S.DateInput
               value={endDate || ''}
               onChange={e => setEndDate(e.target.value)}
-              onClick={() => handleCalendarIconClick()} // 클릭 시 페이지 이동
+              onClick={() => handleCalendarIconClick('end')} // 클릭 시 페이지 이동
               readOnly // 기본 달력 팝업을 비활성화
             />
             <Icon
               icon={calendarIcon}
-              onClick={() => handleCalendarIconClick()}
+              onClick={() => handleCalendarIconClick('end')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
           </S.DateInputContainer>
@@ -169,7 +172,7 @@ const AISchedule1: React.FC = () => {
             <Icon
               icon={calendarIcon}
               style={{ cursor: 'pointer' }}
-              onClick={handleCalendarIconClick}
+              onClick={handleCalendarIconClick2}
             />
           </S.Label>
           <S.SelectContainer>
@@ -195,7 +198,7 @@ const AISchedule1: React.FC = () => {
             </S.Select>
             <S.RepeatText>마다 가고 싶어요!</S.RepeatText>
           </S.SelectContainer>
-          <S.ChangeScheduleButton onClick={handleCalendarIconClick}>
+          <S.ChangeScheduleButton onClick={handleCalendarIconClick2}>
             내 일정 확인하고 변경하기!
           </S.ChangeScheduleButton>
         </S.Section>
