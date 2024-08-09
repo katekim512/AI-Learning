@@ -1,21 +1,32 @@
 import PropTypes from 'prop-types'
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 
+import { useScheduleStore } from '../../../stores/useScheduleStore'
 import * as L from '../styles/CalendarFrame.style'
 
 interface CalendarFrameProps {
   selectedDates: string[]
-  setSelectedDate: (date: string) => void
+  setSelectedDates: (date: string[]) => void
+  // setSelectedDate: (date: string) => void
   calendarRange: { start: Date; end: Date }
 }
 
 const CalendarFrame2: React.FC<CalendarFrameProps> = ({
   selectedDates,
-  setSelectedDate,
+  // setSelectedDate,
+  setSelectedDates,
   calendarRange,
 }) => {
+  const { dates: storedDates } = useScheduleStore() // Zustand에서 상태 가져오기
+  const [selectedDatesState, setSelectedDatesState] =
+    useState<string[]>(storedDates)
+
   const currentDayRef = useRef<HTMLButtonElement>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setSelectedDates(selectedDatesState)
+  }, [selectedDatesState])
 
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate()
@@ -31,9 +42,21 @@ const CalendarFrame2: React.FC<CalendarFrameProps> = ({
     return `${year}-${formattedMonth}-${formattedDay}`
   }
 
+  // const handleDayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   const clickedDay = event.currentTarget.title
+  //   setSelectedDates(clickedDay)
+  // }
   const handleDayClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const clickedDay = event.currentTarget.title
-    setSelectedDate(clickedDay)
+    setSelectedDatesState(prevDates => {
+      if (prevDates.includes(clickedDay)) {
+        // 클릭된 날짜가 이미 선택된 상태라면, 그 날짜를 선택 해제
+        return prevDates.filter(date => date !== clickedDay)
+      } else {
+        // 클릭된 날짜가 선택되지 않은 상태라면, 그 날짜를 선택
+        return [...prevDates, clickedDay]
+      }
+    })
   }
 
   const generateCalendarDays = (year: number, month: number) => {
@@ -58,7 +81,8 @@ const CalendarFrame2: React.FC<CalendarFrameProps> = ({
           const isSunday = j === 0
           const isSaturday = j === 6
           const formattedDate = formatDate(year, month, day)
-          const isSelectedDay = selectedDates.includes(formattedDate)
+          // const isSelectedDay = selectedDates.includes(formattedDate)
+          const isSelectedDay = selectedDatesState.includes(formattedDate)
           const dateObj = new Date(year, month - 1, day)
           const isWithinRange =
             dateObj >= calendarRange.start && dateObj <= calendarRange.end
@@ -178,7 +202,7 @@ const CalendarFrame2: React.FC<CalendarFrameProps> = ({
 
 CalendarFrame2.propTypes = {
   selectedDates: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  setSelectedDate: PropTypes.func.isRequired,
+  // setSelectedDate: PropTypes.func.isRequired,
   calendarRange: PropTypes.shape({
     start: PropTypes.instanceOf(Date).isRequired,
     end: PropTypes.instanceOf(Date).isRequired,

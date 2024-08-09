@@ -83,6 +83,7 @@ interface ScheduleState {
   dayOfWeek: string
   setStartDate: (date: string) => void
   setEndDate: (date: string) => void
+  setDates: (newDates: string[]) => void
   updateDates: () => void // 빈도에 따라 날짜 배열을 업데이트하는 함수
   setFrequency: (frequency: string) => void
   setDayOfWeek: (dayOfWeek: string) => void
@@ -107,6 +108,7 @@ export const useScheduleStore = create<ScheduleState>(set => ({
       return { startDate: date, endDate: newEndDate }
     }),
   setEndDate: date => set({ endDate: date }),
+  setDates: newDates => set({ dates: newDates }),
   setFrequency: frequency =>
     set(state => {
       const dates = getDatesArray(

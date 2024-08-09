@@ -126,7 +126,7 @@ const AISchedule1: React.FC = () => {
       location,
       travelStyle,
     })
-    navigate('/calendarCycle')
+    navigate(`/calendarCycle?type=cycle`)
   }
   return (
     <>
@@ -172,7 +172,7 @@ const AISchedule1: React.FC = () => {
             <Icon
               icon={calendarIcon}
               style={{ cursor: 'pointer' }}
-              onClick={handleCalendarIconClick2}
+              onClick={() => handleCalendarIconClick2()}
             />
           </S.Label>
           <S.SelectContainer>
@@ -198,7 +198,7 @@ const AISchedule1: React.FC = () => {
             </S.Select>
             <S.RepeatText>마다 가고 싶어요!</S.RepeatText>
           </S.SelectContainer>
-          <S.ChangeScheduleButton onClick={handleCalendarIconClick2}>
+          <S.ChangeScheduleButton onClick={() => handleCalendarIconClick2()}>
             내 일정 확인하고 변경하기!
           </S.ChangeScheduleButton>
         </S.Section>

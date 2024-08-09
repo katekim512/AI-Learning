@@ -13,10 +13,10 @@ const CalendarCycle = () => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const params = new URLSearchParams(search)
-  const type = params.get('type') as 'start' | 'end' | null
+  const type = params.get('type') as 'start' | 'end' | 'cycle' | null
 
   const today = new Date()
-  const { startDate, endDate, dates, setStartDate, setEndDate } =
+  const { startDate, endDate, dates, setStartDate, setEndDate, setDates } =
     useScheduleStore()
   const [, setCurrentDate] = useState({
     year: today.getFullYear(),
@@ -31,8 +31,10 @@ const CalendarCycle = () => {
   )
   const [loadedDates, setLoadedDates] = useState<string[]>([])
 
-  let startDateObj: Date
-  let endDateObj: Date
+  // let startDateObj: Date
+  // let endDateObj: Date
+  let startDateObj: Date = today
+  let endDateObj: Date = today
 
   if (type === 'start') {
     startDateObj = today
@@ -42,11 +44,11 @@ const CalendarCycle = () => {
     startDateObj = new Date(startDate || today.toISOString().split('T')[0])
     endDateObj = new Date(startDateObj)
     endDateObj.setDate(startDateObj.getDate() + 336)
-  } else {
+  } else if (type === 'cycle') {
     startDateObj = new Date(startDate || today.toISOString().split('T')[0])
-    endDateObj = new Date(endDate || today)
+    endDateObj = new Date(endDate || startDateObj) // endDate가 없으면 startDate 기반으로 초기화
     if (!endDate) {
-      endDateObj.setFullYear(startDateObj.getFullYear() + 1)
+      endDateObj.setFullYear(startDateObj.getFullYear() + 1) // endDate가 없는 경우 1년 뒤로 설정
     }
   }
 
@@ -60,19 +62,25 @@ const CalendarCycle = () => {
   }, [type, startDate, endDate])
 
   useEffect(() => {
-    console.log(dates)
-    setLoadedDates(dates)
+    const currentDates = useScheduleStore.getState().dates
+    setLoadedDates(currentDates)
+    console.log(currentDates)
   }, [dates])
 
   const handleApplyDate = () => {
     if (type === 'start') {
       setStartDate(selectedDate)
+      console.log(`Applied ${type} date: ${selectedDate}`)
     } else if (type === 'end') {
       setEndDate(selectedDate)
-    } else {
-      // Handle other types or default case
+      console.log(`Applied ${type} date: ${selectedDate}`)
+    } else if (type === 'cycle') {
+      setDates(loadedDates)
+      const currentDates = useScheduleStore.getState().dates
+      console.log('Current dates in Zustand:', currentDates)
+
+      console.log(`Applied ${type} date: ${loadedDates}`)
     }
-    console.log(`Applied ${type} date: ${selectedDate}`)
     navigate('/ai-schedule-step1')
   }
 
@@ -81,7 +89,16 @@ const CalendarCycle = () => {
     const [year, month, day] = selectedDate.split('-').map(Number)
     const date = new Date(year, month - 1, day)
     const dayNames = ['일', '월', '화', '수', '목', '금', '토']
+    if (type === 'cycle') {
+      return '해당 날짜들에 가고 싶어요!'
+    }
     return `${type === 'start' ? '시작일' : '종료일'} ${month}.${day} (${dayNames[date.getDay()]}) 적용`
+  }
+
+  const setSelectedDates = (newDates: string[]) => {
+    // Update the loadedDates and also manage Zustand state or any other side effects
+    setLoadedDates(newDates)
+    // Add more logic here if needed to sync with Zustand or other states
   }
 
   return (
@@ -102,7 +119,7 @@ const CalendarCycle = () => {
       <L.CalendarWrapper>
         <CalendarFrame2
           selectedDates={loadedDates}
-          setSelectedDate={setSelectedDate}
+          setSelectedDates={setSelectedDates}
           calendarRange={{ start: startDateObj, end: endDateObj }} // Add calendarRange here
         />
       </L.CalendarWrapper>
