@@ -31,8 +31,6 @@ const CalendarCycle = () => {
   )
   const [loadedDates, setLoadedDates] = useState<string[]>([])
 
-  // let startDateObj: Date
-  // let endDateObj: Date
   let startDateObj: Date = today
   let endDateObj: Date = today
 
@@ -95,10 +93,10 @@ const CalendarCycle = () => {
     return `${type === 'start' ? '시작일' : '종료일'} ${month}.${day} (${dayNames[date.getDay()]}) 적용`
   }
 
+  //날짜 선택이나 해제 시 - 각 상태 반영
   const setSelectedDates = (newDates: string[]) => {
-    // Update the loadedDates and also manage Zustand state or any other side effects
     setLoadedDates(newDates)
-    // Add more logic here if needed to sync with Zustand or other states
+    //console.log('함수 setSelectedDates:', { newDates })
   }
 
   return (

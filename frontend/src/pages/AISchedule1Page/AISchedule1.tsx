@@ -17,6 +17,7 @@ const AISchedule1: React.FC = () => {
     travelStyle,
     frequency,
     dayOfWeek,
+    isScheduleConfirmed,
     setStartDate,
     setEndDate,
     updateDates,
@@ -24,6 +25,7 @@ const AISchedule1: React.FC = () => {
     setDayOfWeek,
     setLocation,
     setTravelStyle,
+    setIsScheduleConfirmed,
   } = useScheduleStore(state => ({
     startDate: state.startDate,
     endDate: state.endDate,
@@ -32,6 +34,7 @@ const AISchedule1: React.FC = () => {
     travelStyle: state.travelStyle,
     frequency: state.frequency,
     dayOfWeek: state.dayOfWeek,
+    isScheduleConfirmed: state.isScheduleConfirmed,
     updateDates: state.updateDates,
     setFrequency: state.setFrequency,
     setDayOfWeek: state.setDayOfWeek,
@@ -39,6 +42,7 @@ const AISchedule1: React.FC = () => {
     setEndDate: state.setEndDate,
     setLocation: state.setLocation,
     setTravelStyle: state.setTravelStyle,
+    setIsScheduleConfirmed: state.setIsScheduleConfirmed,
   }))
 
   useEffect(() => {
@@ -47,7 +51,9 @@ const AISchedule1: React.FC = () => {
       newEndDate.setDate(newEndDate.getDate() + 29)
       setEndDate(newEndDate.toISOString().split('T')[0])
     }
-    updateDates()
+    if (!isScheduleConfirmed) {
+      updateDates() // isScheduleConfirmed가 false일 때만 dates를 업데이트
+    }
   }, [startDate, endDate, frequency, updateDates])
 
   const handleLocationClick = (loc: string) => {
@@ -101,6 +107,8 @@ const AISchedule1: React.FC = () => {
   }
 
   const handleComplete = () => {
+    const { startDate, endDate, frequency, dates, location, travelStyle } =
+      useScheduleStore.getState()
     console.log('Current Schedule State:', {
       startDate,
       endDate,
@@ -126,6 +134,7 @@ const AISchedule1: React.FC = () => {
       location,
       travelStyle,
     })
+    setIsScheduleConfirmed()
     navigate(`/calendarCycle?type=cycle`)
   }
   return (
@@ -166,6 +175,7 @@ const AISchedule1: React.FC = () => {
             />
           </S.DateInputContainer>
         </S.Section>
+
         <S.Section>
           <S.Label>
             어느 주기로{' '}
@@ -175,33 +185,44 @@ const AISchedule1: React.FC = () => {
               onClick={() => handleCalendarIconClick2()}
             />
           </S.Label>
-          <S.SelectContainer>
-            <S.Select
-              value={frequency}
-              onChange={e => handleFrequencyChange(e.target.value)}
-            >
-              <option value='매주'>매주</option>
-              <option value='격주'>격주</option>
-              <option value='매일'>매일</option>
-            </S.Select>
-            <S.Select
-              value={dayOfWeek}
-              onChange={e => handleDayOfWeekChange(e.target.value)}
-            >
-              <option value='월요일'>월요일</option>
-              <option value='화요일'>화요일</option>
-              <option value='수요일'>수요일</option>
-              <option value='목요일'>목요일</option>
-              <option value='금요일'>금요일</option>
-              <option value='토요일'>토요일</option>
-              <option value='일요일'>일요일</option>
-            </S.Select>
-            <S.RepeatText>마다 가고 싶어요!</S.RepeatText>
-          </S.SelectContainer>
-          <S.ChangeScheduleButton onClick={() => handleCalendarIconClick2()}>
-            내 일정 확인하고 변경하기!
-          </S.ChangeScheduleButton>
+          {!isScheduleConfirmed && (
+            <S.SelectContainer>
+              <S.Select
+                value={frequency}
+                onChange={e => handleFrequencyChange(e.target.value)}
+              >
+                <option value='매주'>매주</option>
+                <option value='격주'>격주</option>
+                <option value='매일'>매일</option>
+              </S.Select>
+              <S.Select
+                value={dayOfWeek}
+                onChange={e => handleDayOfWeekChange(e.target.value)}
+              >
+                <option value='월요일'>월요일</option>
+                <option value='화요일'>화요일</option>
+                <option value='수요일'>수요일</option>
+                <option value='목요일'>목요일</option>
+                <option value='금요일'>금요일</option>
+                <option value='토요일'>토요일</option>
+                <option value='일요일'>일요일</option>
+              </S.Select>
+              <S.RepeatText>마다 가고 싶어요!</S.RepeatText>
+            </S.SelectContainer>
+          )}
         </S.Section>
+
+        <S.ChangeScheduleButton
+          onClick={handleCalendarIconClick2}
+          disabled={isScheduleConfirmed}
+          style={{
+            marginTop: isScheduleConfirmed ? '-30px' : '-20px', // Adjust '20px' and '40px' as needed
+          }}
+        >
+          {isScheduleConfirmed
+            ? '일정 확정을 완료했습니다!'
+            : '내 일정 확인하고 변경하기'}
+        </S.ChangeScheduleButton>
         <S.Section>
           <S.Label>어디로</S.Label>
           <S.Button
