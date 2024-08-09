@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import CalendarFrame2 from './components/CalenderFrame2'
 import * as L from './styles/CalendarFrame.style'
 import CloseButton from '../../components/CloseButton/CloseButton'
+import InfoBanner from '../../components/InfoBanner/InfoBanner'
 import {
   useScheduleStore,
   calculateEndDate,
@@ -22,6 +23,8 @@ const CalendarCycle = () => {
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
+
+  const [showBanner, setShowBanner] = useState(true) // 배너를 보여줄지 여부를 결정하는 상태
   const [selectedDate, setSelectedDate] = useState<string>(
     type === 'start'
       ? startDate || today.toISOString().split('T')[0]
@@ -99,12 +102,18 @@ const CalendarCycle = () => {
     //console.log('함수 setSelectedDates:', { newDates })
   }
 
+  //배너 문구
+  const bannerText =
+    '원하는 날짜를 선택하세요! 이미 선택된 날짜를 다시 누르면 해제됩니다!'
   return (
     <>
       <L.HeaderSection>
         <CloseButton />
         <L.HeaderTitle>날짜 선택</L.HeaderTitle>
       </L.HeaderSection>
+      {showBanner && (
+        <InfoBanner text={bannerText} onClose={() => setShowBanner(false)} />
+      )}
       <L.WeekSection>
         <L.HeaderText>일</L.HeaderText>
         <L.HeaderText>월</L.HeaderText>
