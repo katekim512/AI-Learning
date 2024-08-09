@@ -1,4 +1,3 @@
-// src/AISchedule1Page/AISchedule1.style.tsx
 import styled from 'styled-components'
 
 export const Button = styled.button`
@@ -17,8 +16,8 @@ export const Button = styled.button`
 `
 export const DateInputContainer = styled.div`
   display: flex;
-  align-items: center; /* 수직 중앙 정렬 */
-  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center;
+  justify-content: center;
   padding: 7px;
 `
 export const DateInput = styled.input.attrs({ type: 'date' })`
@@ -39,7 +38,7 @@ export const DateInput = styled.input.attrs({ type: 'date' })`
   }
 
   &::-webkit-calendar-picker-indicator {
-    display: none; /* 기본 달력 아이콘 숨기기 */
+    display: none;
   }
 `
 
@@ -65,12 +64,12 @@ export const Label = styled.label`
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 3rem); /* BackButton 높이만큼 빼기 */
+  height: calc(100vh - 3rem);
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   padding: 2rem;
-  padding-top: 4rem; /* BackButton 높이만큼 추가 */
+  padding-top: 4rem;
   overflow-y: auto;
 `
 
@@ -107,5 +106,60 @@ export const BottomButton = styled.button`
   box-sizing: border-box;
   &:hover {
     background-color: #434cb1;
+  }
+`
+export const SelectContainer = styled.div`
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: flex-start; /* 수평 왼쪽 정렬 */
+  gap: 10px; /* 요소 간의 간격 */
+  margin-top: 11px;
+`
+
+export const Select = styled.select`
+  padding: 8px 16px;
+  padding-right: 32px; /* 글자와 화살표 사이의 간격을 늘리기 위해 추가 */
+  margin-right: 10px;
+  border: none;
+  border-bottom: 2px solid black;
+  background-color: transparent;
+  font-size: 14px;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 8px); /* 화살표 위치 조정 */
+  background-position-y: 50%;
+
+  &:focus {
+    outline: none;
+    //border-bottom: 2px solid #007bff;
+  }
+`
+
+export const RepeatText = styled.p`
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+`
+export const ChangeScheduleButton = styled.button`
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  padding: 8px 20px;
+  background-color: #eff1ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  &:hover {
+    background-color: #e0e0e0;
   }
 `
