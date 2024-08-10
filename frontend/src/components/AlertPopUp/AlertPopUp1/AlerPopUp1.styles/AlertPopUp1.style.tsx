@@ -53,8 +53,4 @@ export const ConfirmButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   width: 100%;
-
-  &:hover {
-    background-color: #0056b3;
-  }
 `
