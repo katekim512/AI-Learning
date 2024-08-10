@@ -48,21 +48,6 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   const monthBackgroundColor = monthColors[month]
 
   return (
-    // <L.ScheduleContainer
-    //   ref={ref}
-    //   style={{ opacity: isDragging ? 0.5 : 1 }}
-    //   key={index}
-    // >
-    //   <L.DateBox style={{ backgroundColor: monthBackgroundColor }}>
-    //     {`${month}월 ${date.getDate()}일`}
-    //   </L.DateBox>
-    //   <L.PlaceBox>
-    //     <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
-    //       {item.city}
-    //     </L.CityBox>
-    //     {item.place}
-    //   </L.PlaceBox>
-    // </L.ScheduleContainer>
     <L.ScheduleContainer key={index}>
       <L.DateBox style={{ backgroundColor: monthBackgroundColor }}>
         {`${month}월 ${date.getDate()}일`}

@@ -36,11 +36,6 @@ export const ScheduleContainer = styled.div`
   margin-bottom: 0.7rem;
 `
 
-// export const OpacityContainer = styled.div`
-//   position: relative;
-//   width: 100%;
-// `
-
 export const DateBox = styled.p`
   background-color: #bfddff;
   width: 7rem;
