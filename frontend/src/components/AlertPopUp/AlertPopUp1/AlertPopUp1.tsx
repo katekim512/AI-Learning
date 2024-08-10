@@ -1,4 +1,5 @@
 import React from 'react'
+
 import * as L from './AlerPopUp1.styles/AlertPopUp1.style'
 
 // 1. 메세지와 2. 확인 버튼 눌렀을 때 실행 함수 넣으면 작동

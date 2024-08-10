@@ -1,4 +1,5 @@
 import React from 'react'
+
 import * as L from './AlertPopUp2.styles/AlerPopUp2.style' // 스타일 컴포넌트 임포트
 
 // Props 타입 정의
