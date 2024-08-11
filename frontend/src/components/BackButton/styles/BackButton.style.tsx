@@ -9,6 +9,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center; /* 필요에 따라 추가 */
+  z-index: 1;
 `
 
 export const StyledButton = styled.button`

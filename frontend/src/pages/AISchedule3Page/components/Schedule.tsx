@@ -1,45 +1,51 @@
 import React from 'react'
+//import { isMobile } from 'react-device-detect'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 
+import ScheduleItem from './ScheduleItem'
 import { AISchedule } from '../../../api/schedule/getSchedule'
-import { cityColors } from '../../../style/CityColor'
-import { monthColors } from '../../../style/MonthColor'
-import * as L from '../styles/AISchedule3.style'
 
 interface ScheduleProps {
   scheduleInfo: AISchedule[]
+  moveSchedule: (dragIndex: number, hoverIndex: number) => void
 }
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString)
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  return `${month}월 ${day}일`
-}
+const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo, moveSchedule }) => {
+  // 모바일 장치에서는 TouchBackend를, 그렇지 않으면 HTML5Backend를 사용
+  const isMobile = () => {
+    const ua = navigator.userAgent
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        ua,
+      ) ||
+      (navigator.maxTouchPoints && navigator.maxTouchPoints > 2)
+    )
+  }
 
-const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo }) => {
+  // Backend 선택
+  const backendForDND = isMobile() ? TouchBackend : HTML5Backend
+
+  // Backend 옵션
+  const backendOptions = {
+    enableMouseEvents: true,
+    delay: 50,
+    delayTouchStart: 100,
+  }
   return (
-    <div>
-      {scheduleInfo?.map((item, index) => {
-        const cityBackgroundColor = cityColors[item.city]
-        const date = new Date(item.date)
-        const month = date.getMonth() + 1
-        const monthBackgroundColor = monthColors[month]
-
-        return (
-          <L.ScheduleContainer key={index}>
-            <L.DateBox style={{ backgroundColor: monthBackgroundColor }}>
-              {formatDate(item.date)}
-            </L.DateBox>
-            <L.PlaceBox>
-              <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
-                {item.city}
-              </L.CityBox>
-              {item.place}
-            </L.PlaceBox>
-          </L.ScheduleContainer>
-        )
-      })}
-    </div>
+    <DndProvider backend={backendForDND} options={backendOptions}>
+      <div>
+        {scheduleInfo?.map((item, index) => (
+          <ScheduleItem
+            key={index}
+            index={index}
+            item={item}
+            moveSchedule={moveSchedule}
+          />
+        ))}
+      </div>
+    </DndProvider>
   )
 }
 
