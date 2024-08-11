@@ -112,7 +112,7 @@ const AISchedule3 = () => {
           <L.Text>완성된 플랜이에요!</L.Text>
           <L.Text>전체 일정을 확인해보세요!</L.Text>
           <L.AdditionText>
-            수정을 원하는 주를 눌러 원하는 일정으로 바꿀 수 있습니다
+            수정을 원하는 일정을 움직여 변경할 수 있습니다
           </L.AdditionText>
         </L.Title>
         <Schedule scheduleInfo={scheduleInfo} moveSchedule={moveSchedule} />

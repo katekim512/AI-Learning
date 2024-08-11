@@ -1,3 +1,5 @@
+import { Icon } from '@iconify/react'
+import menuIcon from '@iconify-icons/tabler/menu'
 import React from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -20,7 +22,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   index,
   moveSchedule,
 }) => {
-  const ref = React.useRef<HTMLButtonElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   const [, drop] = useDrop({
     accept: ItemType,
@@ -52,11 +54,16 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
       <L.DateBox style={{ backgroundColor: monthBackgroundColor }}>
         {`${month}월 ${date.getDate()}일`}
       </L.DateBox>
-      <L.PlaceBox ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }}>
+      <L.PlaceBox style={{ opacity: isDragging ? 0.5 : 1 }}>
         <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
           {item.city}
         </L.CityBox>
-        {item.place}
+        <L.PlaceName>{item.place}</L.PlaceName>
+        <L.IconContainer>
+          <div ref={ref} style={{ display: 'inline-block', cursor: 'move' }}>
+            <Icon icon={menuIcon} width='18' height='18' />
+          </div>
+        </L.IconContainer>
       </L.PlaceBox>
     </L.ScheduleContainer>
   )

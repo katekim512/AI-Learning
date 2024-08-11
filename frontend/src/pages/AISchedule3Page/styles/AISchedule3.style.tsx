@@ -48,9 +48,37 @@ export const DateBox = styled.p`
   margin-right: 0.5rem;
 `
 
+// export const PlaceBox = styled.button`
+//   background-color: #f4f4f4;
+//   position: relative;
+//   width: 100%;
+//   border-radius: 15px;
+//   border: none;
+//   padding: 0.6rem;
+//   color: #545454;
+//   font-size: 0.8rem;
+//   font-weight: 600;
+//   cursor: pointer;
+// `
+
+// export const CityBox = styled.p`
+//   position: absolute;
+//   left: 1rem;
+//   top: 0.3rem;
+//   background-color: #525fd4;
+//   border-radius: 8px;
+//   padding: 0.3rem;
+//   color: white;
+//   font-size: 0.7rem;
+//   font-weight: 600;
+// `
+
 export const PlaceBox = styled.button`
   background-color: #f4f4f4;
   position: relative;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 정렬 */
+  justify-content: flex-start;
   width: 100%;
   border-radius: 15px;
   border: none;
@@ -62,17 +90,32 @@ export const PlaceBox = styled.button`
 `
 
 export const CityBox = styled.p`
-  position: absolute;
-  left: 1rem;
-  top: 0.3rem;
   background-color: #525fd4;
   border-radius: 8px;
   padding: 0.3rem;
   color: white;
   font-size: 0.7rem;
   font-weight: 600;
+  margin-right: 0rem; /* 오른쪽 여백 추가 */
 `
 
+export const PlaceName = styled.span`
+  //flex-grow: 1; /* 남은 공간을 차지 */
+  margin-left: 20px;
+  color: #545454;
+  justify-content: flex-start;
+  font-size: 0.8rem;
+  font-weight: 600;
+  //width: 100px;
+`
+
+export const IconContainer = styled.span`
+  color: #545454;
+  justify-content: flex-start;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: auto;
+`
 export const BottomButton = styled.button`
   position: absolute;
   bottom: 1.5rem;
