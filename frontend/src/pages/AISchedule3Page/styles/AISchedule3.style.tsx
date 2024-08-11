@@ -1,55 +1,5 @@
 import styled from 'styled-components'
 
-// export const ContainerTotal = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center; /* 수직 정렬 */
-//   justify-content: center; /* 수평 정렬 */
-//   position: fixed;
-//   width: 100%;
-// `
-// export const Container1 = styled.div`
-//   position: fixed;
-//   box-sizing: border-box;
-//   width: 100%;
-//   height: 10rem;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.6rem;
-//   padding: 2rem;
-//   padding-top: 5rem;
-//   margin-bottom: 1rem;
-// `
-
-// export const Divider = styled.div`
-//   max-width: 400px;
-//   top: 10.5rem; /* Container1 높이만큼 위로 설정 */
-//   width: 90%;
-//   height: 1px;
-//   margin-top: 0.5rem;
-//   margin-bottom: 0.5rem;
-//   margin-left: auto;
-//   margin-right: auto;
-//   background-color: #d9d9d9; /* 구분선 색상 */
-//   z-index: 1;
-// `
-
-// export const Container = styled.div`
-//   position: fixed;
-//   max-width: 400px;
-//   top: 11rem;
-//   box-sizing: border-box;
-//   width: 100%;
-//   //margin-top: 11rem;
-//   height: calc(100vh - 16rem); /* BackButton 높이만큼 빼기 */
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1.6rem;
-//   padding: 2rem;
-//   padding-top: 1rem; /* BackButton 높이만큼 추가 */
-//   overflow-y: auto;
-// `
-
 export const ContainerTotal = styled.div`
   display: flex;
   flex-direction: column;
