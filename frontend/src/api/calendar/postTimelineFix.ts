@@ -1,22 +1,7 @@
 import { AxiosResponse } from 'axios'
 
+import { DateSchedule } from './postTimelineDay'
 import { aiLearningAxios } from '../axiosInstance'
-
-export interface DateSchedule {
-  memo: string
-  date: string
-  distance: number[]
-  info: PlacePreviewInfo[]
-}
-
-export interface PlacePreviewInfo {
-  city: string
-  place: string
-  order: number
-  pic: string
-  lon: number
-  lat: number
-}
 
 interface SuccessResponse {
   message: string
