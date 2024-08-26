@@ -6,6 +6,10 @@ interface PlaceBoxContainerProps {
   isSliding: boolean
 }
 
+interface PlaceBoxTextProps {
+  isEditing: boolean
+}
+
 interface DeleteIconProps {
   isVisible: boolean
 }
@@ -17,7 +21,9 @@ export const PlaceBoxWrapper = styled.div`
   margin-bottom: 5rem;
 `
 
-export const PlaceBoxContainer = styled.div<PlaceBoxContainerProps>`
+export const PlaceBoxContainer = styled.div<
+  PlaceBoxContainerProps & { isEditing: boolean }
+>`
   width: 100%;
   height: 4.5rem;
   background-color: white;
@@ -25,7 +31,8 @@ export const PlaceBoxContainer = styled.div<PlaceBoxContainerProps>`
   padding: 1rem;
   display: flex;
   position: relative;
-  justify-content: space-between;
+  justify-content: ${({ isEditing }) =>
+    isEditing ? 'flex-start' : 'space-between'};
   align-items: center;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
@@ -34,10 +41,12 @@ export const PlaceBoxContainer = styled.div<PlaceBoxContainerProps>`
     isSliding ? 'translateX(-60px)' : 'translateX(0)'};
 `
 
-export const PlaceBoxText = styled.div`
+export const PlaceBoxText = styled.div<PlaceBoxTextProps>`
   line-height: 1.5rem;
   justify-content: center;
   align-items: center;
+  margin-left: ${({ isEditing }) =>
+    isEditing ? '0' : '0.5rem'}; // isEditing 상태일 때 margin 제거
 `
 
 export const PlaceBoxTitle = styled.p`
@@ -59,6 +68,16 @@ export const PlaceBoxPic = styled.img`
   position: relative;
   object-fit: cover;
   border-radius: 10px;
+`
+
+export const DragEditIcon = styled.div`
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const VerticalLine = styled.div`
@@ -118,4 +137,11 @@ export const DeleteIcon = styled.div<DeleteIconProps>`
   font-size: 0.9rem;
   cursor: pointer;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+`
+
+export const CheckboxWrapper = styled.div`
+  position: relative;
+  margin-right: 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
 `

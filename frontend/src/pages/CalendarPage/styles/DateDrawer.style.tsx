@@ -42,10 +42,23 @@ export const DrawerHeaderText = styled.p`
   font-weight: 600;
 `
 
-export const DrawerHeaderEditText = styled.p`
+export const DrawerEditOption = styled.div`
+  display: flex;
+`
+
+export const DrawerHeaderEditText = styled.p<{ isEditing: boolean }>`
   font-weight: 400;
   font-size: 0.9rem;
-  color: #717171;
+  color: ${({ isEditing }) => (isEditing ? '#525FD4' : '#717171')};
+  cursor: pointer;
+`
+
+export const DeleteText = styled.p`
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #f31c1c;
+  cursor: pointer;
+  margin-right: 1rem;
 `
 
 export const DrawerBottom = styled.div`

@@ -29,6 +29,8 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isRotated, setIsRotated] = useState<boolean>(false)
   const [isMemoPopUpOpen, setIsMemoPopUpOpen] = useState<boolean>(false)
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([])
   const [currentMemo, setCurrentMemo] = useState<string>()
   const [startY, setStartY] = useState<number | null>(null)
   const [daySchedule, setDaySchedule] = useState<DateSchedule | undefined>(
@@ -58,6 +60,19 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       const updatedSchedule = { ...daySchedule, info: updatedInfo }
       setDaySchedule(updatedSchedule)
       mutation.mutate(updatedSchedule)
+    }
+  }
+
+  const handleBatchDelete = () => {
+    if (daySchedule) {
+      const updatedInfo = daySchedule.info.filter(
+        (_, i) => !selectedIndexes.includes(i),
+      )
+      const updatedSchedule = { ...daySchedule, info: updatedInfo }
+      setDaySchedule(updatedSchedule)
+      mutation.mutate(updatedSchedule)
+      setSelectedIndexes([])
+      setIsEditing(false)
     }
   }
 
@@ -92,7 +107,6 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
     const currentY = e.touches[0].clientY
     const diffY = startY - currentY
 
-    // 슬라이드 방향에 따라 Drawer의 상태 변경 및 버튼 회전 상태 업데이트
     if (diffY > 50 && !isExpanded) {
       setIsExpanded(true)
       setIsRotated(true)
@@ -106,6 +120,17 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
     setStartY(null)
   }
 
+  const handleEditToggle = () => {
+    setIsEditing(prev => !prev)
+    setSelectedIndexes([])
+  }
+
+  const handleToggleSelect = (index: number) => {
+    setSelectedIndexes(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index],
+    )
+  }
+
   return (
     <L.DrawerContainer
       isExpanded={isExpanded}
@@ -116,13 +141,26 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       <DrawerButton onToggleHeight={toggleHeight} isRotated={isRotated} />
       <L.DrawerHeader>
         <L.DrawerHeaderText>{formatDate(date)}</L.DrawerHeaderText>
-        <L.DrawerHeaderEditText>편집</L.DrawerHeaderEditText>
+        <L.DrawerEditOption>
+          {isEditing && selectedIndexes.length > 0 && (
+            <L.DeleteText onClick={handleBatchDelete}>삭제</L.DeleteText>
+          )}
+          <L.DrawerHeaderEditText
+            isEditing={isEditing}
+            onClick={handleEditToggle}
+          >
+            {isEditing ? '완료' : '편집'}
+          </L.DrawerHeaderEditText>
+        </L.DrawerEditOption>
       </L.DrawerHeader>
       <L.DrawerCenter isExpanded={isExpanded}>
         <PlaceBox
           date={date}
           daySchedule={daySchedule}
           onDelete={handleDelete}
+          onToggleSelect={handleToggleSelect}
+          selectedIndexes={selectedIndexes}
+          isEditing={isEditing}
         />
       </L.DrawerCenter>
       <L.DrawerBottom>

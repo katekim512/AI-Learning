@@ -1,5 +1,8 @@
+import { Icon } from '@iconify/react'
+import menuIcon from '@iconify-icons/tabler/menu'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { FaCheckCircle, FaRegCircle } from 'react-icons/fa'
 
 import { DateSchedule } from '../../../api/calendar/postTimelineDay'
 import * as L from '../styles/PlaceBox.style'
@@ -8,9 +11,18 @@ interface PlaceBoxProps {
   date: string
   daySchedule: DateSchedule | undefined
   onDelete: (index: number) => void
+  isEditing: boolean
+  onToggleSelect: (index: number) => void
+  selectedIndexes: number[]
 }
 
-const PlaceBox: React.FC<PlaceBoxProps> = ({ daySchedule, onDelete }) => {
+const PlaceBox: React.FC<PlaceBoxProps> = ({
+  daySchedule,
+  onDelete,
+  isEditing,
+  onToggleSelect,
+  selectedIndexes,
+}) => {
   const [isSliding, setIsSliding] = useState<number | null>(null)
   const [startX, setStartX] = useState<number | null>(null)
 
@@ -24,7 +36,6 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({ daySchedule, onDelete }) => {
     const currentX = e.touches[0].clientX
     const diffX = startX - currentX
 
-    // 슬라이드 조건 설정
     if (diffX > 50) {
       setIsSliding(index)
     } else if (diffX < -50) {
@@ -38,7 +49,11 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({ daySchedule, onDelete }) => {
 
   const handleDelete = (index: number) => {
     onDelete(index)
-    setIsSliding(null) // 삭제 후 isSliding 상태 초기화
+    setIsSliding(null)
+  }
+
+  const handleToggleSelect = (index: number) => {
+    onToggleSelect(index)
   }
 
   return (
@@ -52,21 +67,40 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({ daySchedule, onDelete }) => {
           )}
           <L.PlaceBoxContainer
             isSliding={isSliding === index}
+            isEditing={isEditing}
             onTouchStart={e => handleTouchStart(e)}
             onTouchMove={e => handleTouchMove(e, index)}
             onTouchEnd={handleTouchEnd}
           >
-            <L.PlaceBoxText>
+            {isEditing && (
+              <L.CheckboxWrapper onClick={() => handleToggleSelect(index)}>
+                {selectedIndexes.includes(index) ? (
+                  <FaCheckCircle />
+                ) : (
+                  <FaRegCircle />
+                )}
+              </L.CheckboxWrapper>
+            )}
+            <L.PlaceBoxText isEditing={isEditing}>
               <L.PlaceBoxTitle>{item.place}</L.PlaceBoxTitle>
               <L.PlaceBoxCity>{item.city}</L.PlaceBoxCity>
             </L.PlaceBoxText>
-            <L.PlaceBoxPic alt='placePreview' src={item.pic} />
-            <L.DeleteIcon
-              isVisible={isSliding === index}
-              onClick={() => handleDelete(index)}
-            >
-              삭제
-            </L.DeleteIcon>
+            {isEditing && (
+              <L.DragEditIcon>
+                <Icon icon={menuIcon} width='18' height='18' />
+              </L.DragEditIcon>
+            )}
+            {!isEditing && (
+              <>
+                <L.PlaceBoxPic alt='placePreview' src={item.pic} />
+                <L.DeleteIcon
+                  isVisible={isSliding === index}
+                  onClick={() => handleDelete(index)}
+                >
+                  삭제
+                </L.DeleteIcon>
+              </>
+            )}
           </L.PlaceBoxContainer>
         </React.Fragment>
       ))}
@@ -92,6 +126,9 @@ PlaceBox.propTypes = {
     ).isRequired,
   }),
   onDelete: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  onToggleSelect: PropTypes.func.isRequired,
+  selectedIndexes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
 }
 
 export default PlaceBox
