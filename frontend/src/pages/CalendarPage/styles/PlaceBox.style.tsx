@@ -1,7 +1,12 @@
 import styled from 'styled-components'
 
+import distancePlaceholderSvg from '../../../assets/distance_placeholder.svg'
+
 export const PlaceBoxWrapper = styled.div`
   width: 100%;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 5rem;
 `
 
 export const PlaceBoxContainer = styled.div`
@@ -43,4 +48,45 @@ export const PlaceBoxPic = styled.img`
   position: relative;
   object-fit: cover;
   border-radius: 10px;
+`
+
+export const VerticalLine = styled.div`
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: rgba(217, 217, 217, 0.8);
+  box-shadow: 0 0 8px rgba(217, 217, 217, 0.6);
+`
+
+export const NumberCircle = styled.div`
+  position: absolute;
+  left: 0;
+  margin-top: 1.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: #dd176a;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: white;
+`
+
+export const DistancePlaceholder = styled.div`
+  left: -10px;
+  margin-top: 4.5rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+  width: 40px;
+  height: 20px;
+  padding: 0.2rem 0.4rem 0.2rem 0.2rem;
+  background-image: url(${distancePlaceholderSvg});
+  color: #626262;
 `

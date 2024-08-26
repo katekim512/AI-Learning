@@ -11,19 +11,26 @@ interface PlaceBoxProps {
 
 const PlaceBox: React.FC<PlaceBoxProps> = ({ daySchedule }) => {
   return (
-    <>
-      <L.PlaceBoxWrapper>
-        {daySchedule?.info.map((item, index) => (
-          <L.PlaceBoxContainer key={index}>
+    <L.PlaceBoxWrapper>
+      <L.VerticalLine />
+      {daySchedule?.info.map((item, index) => (
+        <React.Fragment key={index}>
+          <L.NumberCircle>{index + 1}</L.NumberCircle>
+          {index < daySchedule.info.length - 1 && (
+            <L.DistancePlaceholder>
+              {/* 거리 계산을 위한 자리 */}123m
+            </L.DistancePlaceholder>
+          )}
+          <L.PlaceBoxContainer>
             <L.PlaceBoxText>
               <L.PlaceBoxTitle>{item.place}</L.PlaceBoxTitle>
               <L.PlaceBoxCity>{item.city}</L.PlaceBoxCity>
             </L.PlaceBoxText>
             <L.PlaceBoxPic alt='placePreview' src={item.pic} />
           </L.PlaceBoxContainer>
-        ))}
-      </L.PlaceBoxWrapper>
-    </>
+        </React.Fragment>
+      ))}
+    </L.PlaceBoxWrapper>
   )
 }
 
