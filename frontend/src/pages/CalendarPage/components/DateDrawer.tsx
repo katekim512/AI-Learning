@@ -31,17 +31,17 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   const [isMemoPopUpOpen, setIsMemoPopUpOpen] = useState<boolean>(false)
   const [currentMemo, setCurrentMemo] = useState<string>()
   const [startY, setStartY] = useState<number | null>(null)
+  const [daySchedule, setDaySchedule] = useState<DateSchedule | undefined>(
+    undefined,
+  )
   const token = authToken.getAccessToken()
   const queryClient = useQueryClient()
 
-  const { data: daySchedule } = useQuery(
-    ['daySchedule', date],
-    () => postTimelineDay(token, date),
-    {
-      enabled: !!token,
-      select: response => response?.data,
-    },
-  )
+  useQuery(['daySchedule', date], () => postTimelineDay(token, date), {
+    enabled: !!token,
+    select: response => response?.data,
+    onSuccess: data => setDaySchedule(data),
+  })
 
   const mutation = useMutation(
     (newSchedule: DateSchedule) => postTimelineFix(token, newSchedule),
@@ -51,6 +51,15 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       },
     },
   )
+
+  const handleDelete = (index: number) => {
+    if (daySchedule) {
+      const updatedInfo = daySchedule.info.filter((_, i) => i !== index)
+      const updatedSchedule = { ...daySchedule, info: updatedInfo }
+      setDaySchedule(updatedSchedule)
+      mutation.mutate(updatedSchedule)
+    }
+  }
 
   const toggleHeight = () => {
     setIsExpanded(prev => {
@@ -110,7 +119,11 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
         <L.DrawerHeaderEditText>편집</L.DrawerHeaderEditText>
       </L.DrawerHeader>
       <L.DrawerCenter isExpanded={isExpanded}>
-        <PlaceBox date={date} daySchedule={daySchedule} />
+        <PlaceBox
+          date={date}
+          daySchedule={daySchedule}
+          onDelete={handleDelete}
+        />
       </L.DrawerCenter>
       <L.DrawerBottom>
         <L.DrawerBottomBox>

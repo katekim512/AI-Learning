@@ -2,6 +2,14 @@ import styled from 'styled-components'
 
 import distancePlaceholderSvg from '../../../assets/distance_placeholder.svg'
 
+interface PlaceBoxContainerProps {
+  isSliding: boolean
+}
+
+interface DeleteIconProps {
+  isVisible: boolean
+}
+
 export const PlaceBoxWrapper = styled.div`
   width: 100%;
   position: relative;
@@ -9,7 +17,7 @@ export const PlaceBoxWrapper = styled.div`
   margin-bottom: 5rem;
 `
 
-export const PlaceBoxContainer = styled.div`
+export const PlaceBoxContainer = styled.div<PlaceBoxContainerProps>`
   width: 100%;
   height: 4.5rem;
   background-color: white;
@@ -21,6 +29,9 @@ export const PlaceBoxContainer = styled.div`
   align-items: center;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+  transform: ${({ isSliding }) =>
+    isSliding ? 'translateX(-60px)' : 'translateX(0)'};
 `
 
 export const PlaceBoxText = styled.div`
@@ -89,4 +100,22 @@ export const DistancePlaceholder = styled.div`
   padding: 0.2rem 0.4rem 0.2rem 0.2rem;
   background-image: url(${distancePlaceholderSvg});
   color: #626262;
+`
+
+export const DeleteIcon = styled.div<DeleteIconProps>`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f31c1c;
+  color: white;
+  border-radius: 0px 15px 15px 0px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
 `
