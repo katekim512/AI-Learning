@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import DrawerButton from './DrawerButton'
+import MemoPopUp from './MemoPopUp'
 import PlaceBox from './PlaceBox'
 import {
   DateSchedule,
@@ -26,12 +26,14 @@ const formatDate = (dateString: string): string => {
 }
 
 const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isMemoPopUpOpen, setIsMemoPopUpOpen] = useState<boolean>(false)
+  const [currentMemo, setCurrentMemo] = useState<string>()
   const token = authToken.getAccessToken()
   const queryClient = useQueryClient()
 
   const { data: daySchedule } = useQuery(
-    ['daySchedule', date], // ['daySchedule', date]로 키를 고정
+    ['daySchedule', date],
     () => postTimelineDay(token, date),
     {
       enabled: !!token,
@@ -43,7 +45,7 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
     (newSchedule: DateSchedule) => postTimelineFix(token, newSchedule),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['daySchedule', date]) // 성공 시 데이터 리패칭
+        queryClient.invalidateQueries(['daySchedule', date])
       },
     },
   )
@@ -53,9 +55,15 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   }
 
   const handleMemoAdd = () => {
+    setCurrentMemo(daySchedule?.memo || '')
+    setIsMemoPopUpOpen(true)
+  }
+
+  const handleMemoSave = (memo: string) => {
     if (daySchedule) {
-      const updatedSchedule = { ...daySchedule, memo: '수정된 메모 내용' }
+      const updatedSchedule = { ...daySchedule, memo }
       mutation.mutate(updatedSchedule)
+      setIsMemoPopUpOpen(false)
     }
   }
 
@@ -77,12 +85,15 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
           </L.DrawerBottomButton>
         </L.DrawerBottomBox>
       </L.DrawerBottom>
+      {isMemoPopUpOpen && (
+        <MemoPopUp
+          initialMemo={currentMemo}
+          onSave={handleMemoSave}
+          onClose={() => setIsMemoPopUpOpen(false)}
+        />
+      )}
     </L.DrawerContainer>
   )
-}
-
-DateDrawer.propTypes = {
-  date: PropTypes.string.isRequired,
 }
 
 export default DateDrawer
