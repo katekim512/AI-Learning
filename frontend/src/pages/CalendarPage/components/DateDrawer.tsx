@@ -27,8 +27,10 @@ const formatDate = (dateString: string): string => {
 
 const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isRotated, setIsRotated] = useState<boolean>(false)
   const [isMemoPopUpOpen, setIsMemoPopUpOpen] = useState<boolean>(false)
   const [currentMemo, setCurrentMemo] = useState<string>()
+  const [startY, setStartY] = useState<number | null>(null)
   const token = authToken.getAccessToken()
   const queryClient = useQueryClient()
 
@@ -51,7 +53,11 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   )
 
   const toggleHeight = () => {
-    setIsExpanded(!isExpanded)
+    setIsExpanded(prev => {
+      const newState = !prev
+      setIsRotated(newState)
+      return newState
+    })
   }
 
   const handleMemoAdd = () => {
@@ -67,9 +73,38 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
     }
   }
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartY(e.touches[0].clientY)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!startY) return
+
+    const currentY = e.touches[0].clientY
+    const diffY = startY - currentY
+
+    // 슬라이드 방향에 따라 Drawer의 상태 변경 및 버튼 회전 상태 업데이트
+    if (diffY > 50 && !isExpanded) {
+      setIsExpanded(true)
+      setIsRotated(true)
+    } else if (diffY < -50 && isExpanded) {
+      setIsExpanded(false)
+      setIsRotated(false)
+    }
+  }
+
+  const handleTouchEnd = () => {
+    setStartY(null)
+  }
+
   return (
-    <L.DrawerContainer isExpanded={isExpanded}>
-      <DrawerButton onToggleHeight={toggleHeight} />
+    <L.DrawerContainer
+      isExpanded={isExpanded}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <DrawerButton onToggleHeight={toggleHeight} isRotated={isRotated} />
       <L.DrawerHeader>
         <L.DrawerHeaderText>{formatDate(date)}</L.DrawerHeaderText>
         <L.DrawerHeaderEditText>편집</L.DrawerHeaderEditText>

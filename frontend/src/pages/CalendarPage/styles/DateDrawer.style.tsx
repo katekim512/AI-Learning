@@ -59,6 +59,9 @@ export const DrawerBottom = styled.div`
 export const DrawerBottomBox = styled.div`
   display: flex;
   background-color: white;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 1rem;
 `
 
 export const DrawerBottomButton = styled.button`
@@ -69,9 +72,8 @@ export const DrawerBottomButton = styled.button`
   color: black;
   font-size: 0.8rem;
   font-weight: 600;
-  margin-left: 0.7rem;
-  margin-right: 0.7rem;
-  margin-bottom: 0.7rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
   background-color: white;
 `
 
