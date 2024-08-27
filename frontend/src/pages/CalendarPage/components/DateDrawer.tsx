@@ -10,6 +10,7 @@ import {
 } from '../../../api/calendar/postTimelineDay'
 import { postTimelineFix } from '../../../api/calendar/postTimelineFix'
 import authToken from '../../../stores/authToken'
+import { useDayScheduleStore } from '../../../stores/useDayScheduleStore'
 import * as L from '../styles/DateDrawer.style'
 
 interface DateDrawerProps {
@@ -26,6 +27,7 @@ const formatDate = (dateString: string): string => {
 }
 
 const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
+  const { daySchedule, setDaySchedule } = useDayScheduleStore()
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isRotated, setIsRotated] = useState<boolean>(false)
   const [isMemoPopUpOpen, setIsMemoPopUpOpen] = useState<boolean>(false)
@@ -33,9 +35,6 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([])
   const [currentMemo, setCurrentMemo] = useState<string>()
   const [startY, setStartY] = useState<number | null>(null)
-  const [daySchedule, setDaySchedule] = useState<DateSchedule | undefined>(
-    undefined,
-  )
   const token = authToken.getAccessToken()
   const queryClient = useQueryClient()
 
@@ -120,6 +119,11 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   }
 
   const handleEditToggle = () => {
+    if (isEditing) {
+      if (daySchedule) {
+        mutation.mutate(daySchedule)
+      }
+    }
     setIsEditing(prev => !prev)
     setSelectedIndexes([])
   }

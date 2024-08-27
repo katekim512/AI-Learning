@@ -6,6 +6,7 @@ import { TouchBackend } from 'react-dnd-touch-backend'
 
 import PlaceBoxItem from './PlaceBoxItem'
 import { DateSchedule } from '../../../api/calendar/postTimelineDay'
+import { useDayScheduleStore } from '../../../stores/useDayScheduleStore'
 import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxProps {
@@ -18,15 +19,12 @@ interface PlaceBoxProps {
 }
 
 const PlaceBox: React.FC<PlaceBoxProps> = ({
-  daySchedule: initialDaySchedule,
-  onDelete,
   isEditing,
+  onDelete,
   onToggleSelect,
   selectedIndexes,
 }) => {
-  const [daySchedule, setDaySchedule] = useState<DateSchedule | undefined>(
-    initialDaySchedule,
-  )
+  const { daySchedule, updateInfo } = useDayScheduleStore()
   const [isSliding, setIsSliding] = useState<number | null>(null)
   const [startX, setStartX] = useState<number | null>(null)
 
@@ -37,7 +35,7 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({
     const [removed] = updatedInfo.splice(dragIndex, 1)
     updatedInfo.splice(hoverIndex, 0, removed)
 
-    setDaySchedule({ ...daySchedule, info: updatedInfo })
+    updateInfo(updatedInfo)
     console.log('Updated Info:', updatedInfo)
   }
 
