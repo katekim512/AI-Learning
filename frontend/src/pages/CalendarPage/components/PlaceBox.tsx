@@ -1,9 +1,10 @@
-import { Icon } from '@iconify/react'
-import menuIcon from '@iconify-icons/tabler/menu'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { FaCheckCircle, FaRegCircle } from 'react-icons/fa'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 
+import PlaceBoxItem from './PlaceBoxItem'
 import { DateSchedule } from '../../../api/calendar/postTimelineDay'
 import * as L from '../styles/PlaceBox.style'
 
@@ -17,14 +18,28 @@ interface PlaceBoxProps {
 }
 
 const PlaceBox: React.FC<PlaceBoxProps> = ({
-  daySchedule,
+  daySchedule: initialDaySchedule,
   onDelete,
   isEditing,
   onToggleSelect,
   selectedIndexes,
 }) => {
+  const [daySchedule, setDaySchedule] = useState<DateSchedule | undefined>(
+    initialDaySchedule,
+  )
   const [isSliding, setIsSliding] = useState<number | null>(null)
   const [startX, setStartX] = useState<number | null>(null)
+
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    if (!daySchedule) return
+
+    const updatedInfo = [...daySchedule.info]
+    const [removed] = updatedInfo.splice(dragIndex, 1)
+    updatedInfo.splice(hoverIndex, 0, removed)
+
+    setDaySchedule({ ...daySchedule, info: updatedInfo })
+    console.log('Updated Info:', updatedInfo)
+  }
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setStartX(e.touches[0].clientX)
@@ -56,54 +71,50 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({
     onToggleSelect(index)
   }
 
+  // 모바일 장치에서는 TouchBackend를, 그렇지 않으면 HTML5Backend를 사용
+  const isMobile = () => {
+    const ua = navigator.userAgent
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        ua,
+      ) ||
+      (navigator.maxTouchPoints && navigator.maxTouchPoints > 2)
+    )
+  }
+
+  // Backend 선택
+  const backendForDND = isMobile() ? TouchBackend : HTML5Backend
+
+  // Backend 옵션
+  const backendOptions = {
+    enableMouseEvents: true,
+    delay: 50,
+    delayTouchStart: 100,
+  }
+
   return (
     <L.PlaceBoxWrapper>
       <L.VerticalLine />
-      {daySchedule?.info.map((item, index) => (
-        <React.Fragment key={index}>
-          <L.NumberCircle>{index + 1}</L.NumberCircle>
-          {index < daySchedule.info.length - 1 && (
-            <L.DistancePlaceholder>123m</L.DistancePlaceholder>
-          )}
-          <L.PlaceBoxContainer
-            isSliding={isSliding === index}
+      <DndProvider backend={backendForDND} options={backendOptions}>
+        {daySchedule?.info.map((item, index) => (
+          <PlaceBoxItem
+            key={index}
+            item={item}
+            index={index}
+            totalItems={daySchedule.info.length}
+            moveCard={moveCard}
             isEditing={isEditing}
-            onTouchStart={e => handleTouchStart(e)}
-            onTouchMove={e => handleTouchMove(e, index)}
-            onTouchEnd={handleTouchEnd}
-          >
-            {isEditing && (
-              <L.CheckboxWrapper onClick={() => handleToggleSelect(index)}>
-                {selectedIndexes.includes(index) ? (
-                  <FaCheckCircle />
-                ) : (
-                  <FaRegCircle />
-                )}
-              </L.CheckboxWrapper>
-            )}
-            <L.PlaceBoxText isEditing={isEditing}>
-              <L.PlaceBoxTitle>{item.place}</L.PlaceBoxTitle>
-              <L.PlaceBoxCity>{item.city}</L.PlaceBoxCity>
-            </L.PlaceBoxText>
-            {isEditing && (
-              <L.DragEditIcon>
-                <Icon icon={menuIcon} width='18' height='18' />
-              </L.DragEditIcon>
-            )}
-            {!isEditing && (
-              <>
-                <L.PlaceBoxPic alt='placePreview' src={item.pic} />
-                <L.DeleteIcon
-                  isVisible={isSliding === index}
-                  onClick={() => handleDelete(index)}
-                >
-                  삭제
-                </L.DeleteIcon>
-              </>
-            )}
-          </L.PlaceBoxContainer>
-        </React.Fragment>
-      ))}
+            isSliding={isSliding}
+            setIsSliding={setIsSliding}
+            handleTouchStart={handleTouchStart}
+            handleTouchMove={handleTouchMove}
+            handleTouchEnd={handleTouchEnd}
+            handleToggleSelect={handleToggleSelect}
+            selectedIndexes={selectedIndexes}
+            onDelete={handleDelete}
+          />
+        ))}
+      </DndProvider>
     </L.PlaceBoxWrapper>
   )
 }

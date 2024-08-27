@@ -72,7 +72,6 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       setDaySchedule(updatedSchedule)
       mutation.mutate(updatedSchedule)
       setSelectedIndexes([])
-      setIsEditing(false)
     }
   }
 
