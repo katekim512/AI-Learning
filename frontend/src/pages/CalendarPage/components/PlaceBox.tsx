@@ -1,107 +1,143 @@
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 
-import {
-  DateSchedule,
-  postTimelineDay,
-} from '../../../api/calendar/postTimelineDay'
-import authToken from '../../../stores/authToken'
+import PlaceBoxItem from './PlaceBoxItem'
+import { DateSchedule } from '../../../api/calendar/postTimelineDay'
+import { useDayScheduleStore } from '../../../stores/useDayScheduleStore'
 import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxProps {
   date: string
+  daySchedule: DateSchedule | undefined
+  onDelete: (index: number) => void
+  isEditing: boolean
+  onToggleSelect: (index: number) => void
+  selectedIndexes: number[]
 }
 
-const PlaceBox: React.FC<PlaceBoxProps> = ({ date }) => {
-  const token = authToken.getAccessToken()
-  const [daySchedule, setDaySchedule] = useState<DateSchedule>({
-    memo: 'memo',
-    date: date,
-    distance: [191, 232],
-    info: [
-      {
-        city: '경주',
-        place: '첨성대',
-        order: 0,
-        pic: 'https://www.cha.go.kr/unisearch/images/national_treasure/1612759.jpg',
-        lon: 0,
-        lat: 0,
-      },
-      {
-        city: '경주',
-        place: '석굴암',
-        order: 1,
-        pic: 'https://www.heritage.go.kr/unisearch/images/national_treasure/thumb/2021042208550900.jpg',
-        lon: 0,
-        lat: 0,
-      },
-      {
-        city: '경주',
-        place: '동궁과 월지',
-        order: 2,
-        pic: 'https://www.gyeongju.go.kr/upload/content/thumb/20200317/5F92275758614941B3EB69A32A12CA4E.jpg',
-        lon: 0,
-        lat: 0,
-      },
-      {
-        city: '경주',
-        place: '첨성대',
-        order: 3,
-        pic: 'https://www.cha.go.kr/unisearch/images/national_treasure/1612759.jpg',
-        lon: 0,
-        lat: 0,
-      },
-      {
-        city: '경주',
-        place: '석굴암',
-        order: 4,
-        pic: 'https://www.heritage.go.kr/unisearch/images/national_treasure/thumb/2021042208550900.jpg',
-        lon: 0,
-        lat: 0,
-      },
-      {
-        city: '경주',
-        place: '동궁과 월지',
-        order: 5,
-        pic: 'https://www.gyeongju.go.kr/upload/content/thumb/20200317/5F92275758614941B3EB69A32A12CA4E.jpg',
-        lon: 0,
-        lat: 0,
-      },
-    ],
-  })
+const PlaceBox: React.FC<PlaceBoxProps> = ({
+  isEditing,
+  onDelete,
+  onToggleSelect,
+  selectedIndexes,
+}) => {
+  const { daySchedule, updateInfo } = useDayScheduleStore()
+  const [isSliding, setIsSliding] = useState<number | null>(null)
+  const [startX, setStartX] = useState<number | null>(null)
 
-  const fetchDaySchedule = async () => {
-    if (token) {
-      const successResponse = await postTimelineDay(token, date)
-      if (successResponse && successResponse.data) {
-        setDaySchedule(successResponse.data)
-      }
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    if (!daySchedule) return
+
+    const updatedInfo = [...daySchedule.info]
+    const [removed] = updatedInfo.splice(dragIndex, 1)
+    updatedInfo.splice(hoverIndex, 0, removed)
+
+    updateInfo(updatedInfo)
+    console.log('Updated Info:', updatedInfo)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent, index: number) => {
+    if (!startX) return
+
+    const currentX = e.touches[0].clientX
+    const diffX = startX - currentX
+
+    if (diffX > 50) {
+      setIsSliding(index)
+    } else if (diffX < -50) {
+      setIsSliding(null)
     }
   }
 
-  useEffect(() => {
-    fetchDaySchedule()
-  }, [token])
+  const handleTouchEnd = () => {
+    setStartX(null)
+  }
+
+  const handleDelete = (index: number) => {
+    onDelete(index)
+    setIsSliding(null)
+  }
+
+  const handleToggleSelect = (index: number) => {
+    onToggleSelect(index)
+  }
+
+  // 모바일 장치에서는 TouchBackend를, 그렇지 않으면 HTML5Backend를 사용
+  const isMobile = () => {
+    const ua = navigator.userAgent
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        ua,
+      ) ||
+      (navigator.maxTouchPoints && navigator.maxTouchPoints > 2)
+    )
+  }
+
+  // Backend 선택
+  const backendForDND = isMobile() ? TouchBackend : HTML5Backend
+
+  // Backend 옵션
+  const backendOptions = {
+    enableMouseEvents: true,
+    delay: 50,
+    delayTouchStart: 100,
+  }
 
   return (
-    <>
-      <L.PlaceBoxWrapper>
-        {daySchedule.info.map((item, index) => (
-          <L.PlaceBoxContainer key={index}>
-            <L.PlaceBoxText>
-              <L.PlaceBoxTitle>{item.place}</L.PlaceBoxTitle>
-              <L.PlaceBoxCity>{item.city}</L.PlaceBoxCity>
-            </L.PlaceBoxText>
-            <L.PlaceBoxPic alt='placePreview' src={item.pic} />
-          </L.PlaceBoxContainer>
+    <L.PlaceBoxWrapper>
+      <L.VerticalLine />
+      <DndProvider backend={backendForDND} options={backendOptions}>
+        {daySchedule?.info.map((item, index) => (
+          <PlaceBoxItem
+            key={index}
+            item={item}
+            index={index}
+            totalItems={daySchedule.info.length}
+            moveCard={moveCard}
+            isEditing={isEditing}
+            isSliding={isSliding}
+            setIsSliding={setIsSliding}
+            handleTouchStart={handleTouchStart}
+            handleTouchMove={handleTouchMove}
+            handleTouchEnd={handleTouchEnd}
+            handleToggleSelect={handleToggleSelect}
+            selectedIndexes={selectedIndexes}
+            onDelete={handleDelete}
+          />
         ))}
-      </L.PlaceBoxWrapper>
-    </>
+      </DndProvider>
+    </L.PlaceBoxWrapper>
   )
 }
 
 PlaceBox.propTypes = {
   date: PropTypes.string.isRequired,
+  daySchedule: PropTypes.shape({
+    memo: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    distance: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    info: PropTypes.arrayOf(
+      PropTypes.shape({
+        city: PropTypes.string.isRequired,
+        place: PropTypes.string.isRequired,
+        order: PropTypes.number.isRequired,
+        pic: PropTypes.string.isRequired,
+        lon: PropTypes.number.isRequired,
+        lat: PropTypes.number.isRequired,
+      }).isRequired,
+    ).isRequired,
+  }),
+  onDelete: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  onToggleSelect: PropTypes.func.isRequired,
+  selectedIndexes: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
 }
 
 export default PlaceBox
