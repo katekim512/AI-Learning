@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios'
 import { aiLearningAxios } from '../axiosInstance'
 
 export interface PlaceAllPreviewInfo {
+  contentid: number
+  contenttypeid: number
   city: string
   place: string
-  pic: string
-  lon: number
-  lat: number
+  firstimage: string
 }
 
 export const getAllPlace = async (

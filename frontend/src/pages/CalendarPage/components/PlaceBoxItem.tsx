@@ -9,12 +9,14 @@ import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxItemProps {
   item: {
+    contentid: number
+    contenttypeid: number
     city: string
     place: string
     order: number
-    pic: string
-    lon: number
-    lat: number
+    firstimage: string
+    mapx: number
+    mapy: number
   }
   index: number
   totalItems: number
@@ -117,7 +119,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
         )}
         {!isEditing && (
           <>
-            <L.PlaceBoxPic alt='placePreview' src={item.pic} />
+            <L.PlaceBoxPic alt='placePreview' src={item.firstimage} />
             <L.DeleteIcon
               isVisible={isSliding === index}
               onClick={() => onDelete(index)}

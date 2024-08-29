@@ -10,12 +10,14 @@ export interface DateSchedule {
 }
 
 export interface PlacePreviewInfo {
+  contentid: number
+  contenttypeid: number
   city: string
   place: string
   order: number
-  pic: string
-  lon: number
-  lat: number
+  firstimage: string
+  mapx: number
+  mapy: number
 }
 
 export const postTimelineDay = async (
