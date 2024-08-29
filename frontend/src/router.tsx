@@ -8,6 +8,7 @@ import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
 import Login from './pages/LoginPage/Login'
+import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: 'calendarCycle',
         element: <CalendarCycle />,
+      },
+      {
+        path: 'place/:contentid',
+        element: <PlaceDetail />,
       },
       {
         path: 'profile',

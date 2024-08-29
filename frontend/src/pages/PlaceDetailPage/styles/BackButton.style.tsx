@@ -4,11 +4,11 @@ export const Container = styled.div`
   position: fixed;
   width: 100%;
   height: 4rem;
+  background: white;
   border: none;
   display: flex;
   justify-content: flex-start;
   align-items: center; /* 필요에 따라 추가 */
-  z-index: 1;
 `
 
 export const StyledButton = styled.button`

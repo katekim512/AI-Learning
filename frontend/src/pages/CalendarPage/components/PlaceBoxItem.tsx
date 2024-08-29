@@ -3,17 +3,20 @@ import menuIcon from '@iconify-icons/tabler/menu'
 import React from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import { FaCheckCircle, FaRegCircle } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
 import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxItemProps {
   item: {
+    contentid: number
+    contenttypeid: number
     city: string
     place: string
     order: number
-    pic: string
-    lon: number
-    lat: number
+    firstimage: string
+    mapx: number
+    mapy: number
   }
   index: number
   totalItems: number
@@ -49,6 +52,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
   onDelete,
 }) => {
   const ref = React.useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   const [, drop] = useDrop({
     accept: 'PLACE_BOX',
@@ -74,6 +78,12 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
 
   drag(drop(ref))
 
+  const handleClick = () => {
+    if (!isEditing) {
+      navigate(`/place/${encodeURIComponent(item.contentid)}`)
+    }
+  }
+
   return (
     <>
       <L.NumberCircle>{index + 1}</L.NumberCircle>
@@ -86,6 +96,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={e => handleTouchMove(e, index)}
         onTouchEnd={handleTouchEnd}
+        onClick={handleClick}
         style={{ opacity: isDragging ? 0.5 : 1 }}
       >
         {isEditing && (
@@ -108,7 +119,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
         )}
         {!isEditing && (
           <>
-            <L.PlaceBoxPic alt='placePreview' src={item.pic} />
+            <L.PlaceBoxPic alt='placePreview' src={item.firstimage} />
             <L.DeleteIcon
               isVisible={isSliding === index}
               onClick={() => onDelete(index)}

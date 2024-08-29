@@ -8,6 +8,7 @@ export interface CalendarSchedule {
 }
 
 export interface PlaceInfo {
+  contentid: number
   city: string
   place: string
   order: number

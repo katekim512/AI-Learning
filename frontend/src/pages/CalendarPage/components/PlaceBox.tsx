@@ -125,12 +125,14 @@ PlaceBox.propTypes = {
     distance: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
     info: PropTypes.arrayOf(
       PropTypes.shape({
+        contentid: PropTypes.number.isRequired,
+        contenttypeid: PropTypes.number.isRequired,
         city: PropTypes.string.isRequired,
         place: PropTypes.string.isRequired,
         order: PropTypes.number.isRequired,
-        pic: PropTypes.string.isRequired,
-        lon: PropTypes.number.isRequired,
-        lat: PropTypes.number.isRequired,
+        firstimage: PropTypes.string.isRequired,
+        mapx: PropTypes.number.isRequired,
+        mapy: PropTypes.number.isRequired,
       }).isRequired,
     ).isRequired,
   }),
