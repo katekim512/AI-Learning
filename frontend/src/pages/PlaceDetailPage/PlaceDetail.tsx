@@ -5,6 +5,7 @@ import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
+import PlaceMap from './components/PlaceMap'
 import * as L from './styles/PlaceDetail.style'
 import { postLike } from '../../api/calendar/postLike'
 // import { postTimelineDetail } from '../../api/calendar/postTimelineDetail'
@@ -32,7 +33,6 @@ const PlaceDetail = () => {
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
-  const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
 
@@ -102,57 +102,6 @@ const PlaceDetail = () => {
     setShowMap(prevState => !prevState)
   }
 
-  // 지도 컴포넌트 분리
-  const MapComponent = () => {
-    useEffect(() => {
-      if (mapContainerRef.current && placeDetail) {
-        const { mapx, mapy } = placeDetail
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const kakao = (window as any).kakao
-
-        if (!kakao.maps) {
-          const script = document.createElement('script')
-          script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false`
-          document.head.appendChild(script)
-
-          script.onload = () => {
-            kakao.maps.load(() => {
-              if (mapContainerRef.current) {
-                const container = mapContainerRef.current
-                const options = {
-                  center: new kakao.maps.LatLng(mapy, mapx),
-                  level: 3,
-                }
-                new kakao.maps.Map(container, options)
-              }
-            })
-          }
-        } else {
-          if (mapContainerRef.current) {
-            const container = mapContainerRef.current
-            const options = {
-              center: new kakao.maps.LatLng(mapy, mapx),
-              level: 3,
-            }
-            new kakao.maps.Map(container, options)
-          }
-        }
-      }
-    }, [placeDetail])
-
-    return (
-      <L.ImageContainer
-        ref={mapContainerRef}
-        style={{
-          minHeight: '200px',
-          height: `${imageHeight}px`,
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        }}
-      />
-    )
-  }
-
   const getContentTypeText = (contenttypeid: number) => {
     switch (contenttypeid) {
       case 12:
@@ -204,7 +153,11 @@ const PlaceDetail = () => {
         </L.SecondLineContainer>
 
         {showMap ? (
-          <MapComponent />
+          <PlaceMap
+            mapx={placeDetail?.mapx || 0}
+            mapy={placeDetail?.mapy || 0}
+            height={imageHeight}
+          />
         ) : (
           placeDetail?.firstimage && (
             <L.ImageContainer ref={imageContainerRef}>
