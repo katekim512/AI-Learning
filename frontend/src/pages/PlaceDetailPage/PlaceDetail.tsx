@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 import PlaceMap from './components/PlaceMap'
 import * as L from './styles/PlaceDetail.style'
 import { postLike } from '../../api/calendar/postLike'
-// import { postTimelineDetail } from '../../api/calendar/postTimelineDetail'
+import { postPlaceLike } from '../../api/calendar/postPlaceLike'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
 import authToken from '../../stores/authToken'
@@ -30,44 +30,16 @@ const PlaceDetail = () => {
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>()
+  const [like, setLike] = useState<number>(0)
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
 
-  // useEffect(() => {
-  //   const fetchPlaceDetail = async () => {
-  //     if (!token || !contentid) return
-
-  //     const response = await postTimelineDetail(token, Number(contentid))
-  //     if (response && response.data) {
-  //       setPlaceDetail(response.data)
-  //     }
-  //   }
-
-  //   fetchPlaceDetail()
-  // }, [token, contentid])
-
   useEffect(() => {
-    const fetchCommonPlaceInfo = async () => {
-      if (!token || !contentid) return
-
-      try {
-        const response = await fetch(
-          `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=N&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
-        )
-        const data = await response.json()
-        if (data.response.body.items.item[0]) {
-          const item = data.response.body.items.item[0]
-          setPlaceDetail(item)
-        }
-      } catch (error) {
-        console.error('Failed to fetch place details:', error)
-      }
-    }
-
     fetchCommonPlaceInfo()
+    fetchPlaceLikeTotal()
   }, [token, contentid])
 
   useEffect(() => {
@@ -86,6 +58,30 @@ const PlaceDetail = () => {
     }
   }, [likeList, contentid])
 
+  const fetchCommonPlaceInfo = async () => {
+    if (!token || !contentid) return
+
+    try {
+      const response = await fetch(
+        `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=N&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
+      )
+      const data = await response.json()
+      if (data.response.body.items.item[0]) {
+        const item = data.response.body.items.item[0]
+        setPlaceDetail(item)
+      }
+    } catch (error) {
+      console.error('Failed to fetch place details:', error)
+    }
+  }
+
+  const fetchPlaceLikeTotal = async () => {
+    if (!token || !contentid) return
+
+    const successResponse = await postPlaceLike(token, Number(contentid))
+    if (successResponse) setLike(successResponse.data.like)
+  }
+
   const handleLikeToggle = async () => {
     if (!token || !contentid) return
 
@@ -93,6 +89,7 @@ const PlaceDetail = () => {
       await postLike(token, Number(contentid))
       await refetchLikeList() // 좋아요 리스트 갱신
       setIsLiked(!isLiked) // 상태 변경
+      fetchPlaceLikeTotal()
     } catch (error) {
       console.error('Error toggling like:', error)
     }
@@ -126,7 +123,7 @@ const PlaceDetail = () => {
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
             <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
-            <L.SmText>{'like 수 반환값' || 0}</L.SmText>
+            <L.SmText>{like || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
         <L.SecondLineContainer>
