@@ -80,7 +80,9 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
 
   const handleClick = () => {
     if (!isEditing) {
-      navigate(`/place/${encodeURIComponent(item.contentid)}`)
+      navigate(
+        `/place/${encodeURIComponent(item.contenttypeid)}/${encodeURIComponent(item.contentid)}`,
+      )
     }
   }
 

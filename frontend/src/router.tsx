@@ -45,7 +45,7 @@ const router = createBrowserRouter([
         element: <CalendarCycle />,
       },
       {
-        path: 'place/:contentid',
+        path: 'place/:contenttypeid/:contentid',
         element: <PlaceDetail />,
       },
       {
