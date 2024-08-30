@@ -1,8 +1,10 @@
+// src/components/LoginForm.tsx
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import SocialLogin from './SocialLogin'
 import { login } from '../../../api/auth/postLogin'
+import useLikeList from '../../../hooks/useLikeList'
 import { useUser } from '../../../hooks/useUser'
 import authToken from '../../../stores/authToken'
 import * as L from '../styles/Login.style'
@@ -13,11 +15,13 @@ const LoginForm = () => {
   const navigate = useNavigate()
 
   const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
+  const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value)
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -27,6 +31,7 @@ const LoginForm = () => {
       if (loginResult) {
         authToken.setAccessToken(loginResult.data.token)
         await refetchUser()
+        await refetchLikeList()
         navigate('/calendar')
       } else {
         console.error('login fail')

@@ -1,14 +1,18 @@
+import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import mapOutline from '@iconify-icons/material-symbols/map-outline'
+import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import * as L from './styles/PlaceDetail.style'
+import { postLike } from '../../api/calendar/postLike'
 import {
   PlaceDetailInfo,
   postTimelineDetail,
 } from '../../api/calendar/postTimelineDetail'
 import BackButton from '../../components/BackButton/BackButton'
+import useLikeList from '../../hooks/useLikeList'
 import authToken from '../../stores/authToken'
 
 const PlaceDetail = () => {
@@ -28,6 +32,8 @@ const PlaceDetail = () => {
     mapx: 128.6866758144,
     mapy: 35.9074757619,
   })
+  const { likeList, refetch: refetchLikeList } = useLikeList()
+  const [isLiked, setIsLiked] = useState(false)
 
   useEffect(() => {
     const fetchPlaceDetail = async () => {
@@ -42,6 +48,38 @@ const PlaceDetail = () => {
     fetchPlaceDetail()
   }, [token, contentid])
 
+  // 좋아요 리스트에 현재 장소가 있는지 확인
+  useEffect(() => {
+    if (likeList && contentid) {
+      setIsLiked(likeList.some(place => place.contentid === Number(contentid)))
+    }
+  }, [likeList, contentid])
+
+  const handleLikeToggle = async () => {
+    if (!token || !contentid) return
+
+    try {
+      await postLike(token, Number(contentid))
+      await refetchLikeList() // 좋아요 리스트 갱신
+      setIsLiked(!isLiked) // 상태 변경
+    } catch (error) {
+      console.error('Error toggling like:', error)
+    }
+  }
+
+  const getContentTypeText = (contenttypeid: number) => {
+    switch (contenttypeid) {
+      case 12:
+        return '관광지'
+      case 14:
+        return '문화시설'
+      case 15:
+        return '축제공연행사'
+      default:
+        return ''
+    }
+  }
+
   return (
     <>
       <BackButton />
@@ -51,7 +89,31 @@ const PlaceDetail = () => {
       <L.Container>
         <L.Title>
           <L.Text>{placeDetail?.place || ''}</L.Text>
+          <L.LikeContatiner>
+            <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
+            <L.SmText>{placeDetail?.like || 0}</L.SmText>
+          </L.LikeContatiner>
         </L.Title>
+        <L.SecondLineContainer>
+          <L.Title>
+            <Icon
+              icon={mapMarker}
+              width='18'
+              height='18'
+              style={{ color: '#BCBCBC' }}
+            />
+            <L.LocationText>
+              {placeDetail?.city},&nbsp;
+              {getContentTypeText(placeDetail!.contenttypeid)}
+            </L.LocationText>
+          </L.Title>
+          <L.Title>
+            <L.SecondLineButton onClick={handleLikeToggle}>
+              {isLiked ? '저장됨' : '저장하기'}
+            </L.SecondLineButton>
+            <L.SecondLineButton>장소추가</L.SecondLineButton>
+          </L.Title>
+        </L.SecondLineContainer>
         {placeDetail?.firstimage && (
           <L.ImageContainer>
             <L.PlaceImage
