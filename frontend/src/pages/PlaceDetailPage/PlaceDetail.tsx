@@ -2,7 +2,7 @@ import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import mapOutline from '@iconify-icons/material-symbols/map-outline'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
 import * as L from './styles/PlaceDetail.style'
@@ -33,7 +33,11 @@ const PlaceDetail = () => {
     mapy: 35.9074757619,
   })
   const { likeList, refetch: refetchLikeList } = useLikeList()
-  const [isLiked, setIsLiked] = useState(false)
+  const [isLiked, setIsLiked] = useState<boolean>(false)
+  const [showMap, setShowMap] = useState<boolean>(false)
+  const mapContainerRef = useRef<HTMLDivElement | null>(null)
+  const imageContainerRef = useRef<HTMLDivElement | null>(null)
+  const [imageHeight, setImageHeight] = useState<number>(200)
 
   useEffect(() => {
     const fetchPlaceDetail = async () => {
@@ -47,6 +51,15 @@ const PlaceDetail = () => {
 
     fetchPlaceDetail()
   }, [token, contentid])
+
+  useEffect(() => {
+    if (imageContainerRef.current) {
+      const imageElement = imageContainerRef.current.querySelector('img')
+      if (imageElement) {
+        setImageHeight(imageElement.clientHeight)
+      }
+    }
+  }, [placeDetail?.firstimage])
 
   // 좋아요 리스트에 현재 장소가 있는지 확인
   useEffect(() => {
@@ -67,6 +80,44 @@ const PlaceDetail = () => {
     }
   }
 
+  const handleMapToggle = () => {
+    setShowMap(!showMap) // Toggle between map and image
+  }
+
+  // Kakao Map API initialization
+  useEffect(() => {
+    // 추후 showMap && 추가!
+    if (mapContainerRef.current && placeDetail) {
+      const { mapx, mapy } = placeDetail
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const kakao = (window as any).kakao
+
+      if (!kakao.maps) {
+        const script = document.createElement('script')
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false`
+        document.head.appendChild(script)
+
+        script.onload = () => {
+          kakao.maps.load(() => {
+            const container = mapContainerRef.current
+            const options = {
+              center: new kakao.maps.LatLng(mapy, mapx),
+              level: 3,
+            }
+            new kakao.maps.Map(container, options)
+          })
+        }
+      } else {
+        const container = mapContainerRef.current
+        const options = {
+          center: new kakao.maps.LatLng(mapy, mapx),
+          level: 3,
+        }
+        new kakao.maps.Map(container, options)
+      }
+    }
+  }, [showMap, placeDetail])
+
   const getContentTypeText = (contenttypeid: number) => {
     switch (contenttypeid) {
       case 12:
@@ -83,7 +134,7 @@ const PlaceDetail = () => {
   return (
     <>
       <BackButton />
-      <L.MapIconContainer>
+      <L.MapIconContainer onClick={handleMapToggle}>
         <Icon icon={mapOutline} width='28' height='28' />
       </L.MapIconContainer>
       <L.Container>
@@ -114,13 +165,32 @@ const PlaceDetail = () => {
             <L.SecondLineButton>장소추가</L.SecondLineButton>
           </L.Title>
         </L.SecondLineContainer>
-        {placeDetail?.firstimage && (
-          <L.ImageContainer>
-            <L.PlaceImage
-              src={placeDetail.firstimage}
-              alt={placeDetail.place}
-            />
-          </L.ImageContainer>
+        <L.ImageContainer
+          ref={mapContainerRef}
+          style={{
+            height: `${imageHeight}px`,
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        />
+        {showMap ? (
+          <L.ImageContainer
+            ref={mapContainerRef}
+            style={{
+              height: `${imageHeight}px`,
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            }}
+          />
+        ) : (
+          placeDetail?.firstimage && (
+            <L.ImageContainer>
+              <L.PlaceImage
+                src={placeDetail.firstimage}
+                alt={placeDetail.place}
+              />
+            </L.ImageContainer>
+          )
         )}
       </L.Container>
     </>
