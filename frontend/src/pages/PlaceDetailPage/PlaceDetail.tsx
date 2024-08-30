@@ -1,6 +1,5 @@
 import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
-import mapOutline from '@iconify-icons/material-symbols/map-outline'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
@@ -116,8 +115,17 @@ const PlaceDetail = () => {
     <>
       <BackButton />
       <L.MapIconContainer onClick={handleMapToggle}>
-        <Icon icon={mapOutline} width='28' height='28' />
+        {showMap ? (
+          <Icon icon='system-uicons:picture' width='28' height='28' />
+        ) : (
+          <Icon
+            icon='material-symbols-light:map-outline'
+            width='28'
+            height='28'
+          />
+        )}
       </L.MapIconContainer>
+
       <L.Container>
         <L.Title>
           <L.Text>{placeDetail?.title || ''}</L.Text>
