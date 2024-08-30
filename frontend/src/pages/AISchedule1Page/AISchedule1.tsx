@@ -25,7 +25,7 @@ const AISchedule1: React.FC = () => {
     setDayOfWeek,
     setLocation,
     setTravelStyle,
-    setIsScheduleConfirmed,
+    //setIsScheduleConfirmed,
   } = useScheduleStore(state => ({
     startDate: state.startDate,
     endDate: state.endDate,
@@ -42,7 +42,7 @@ const AISchedule1: React.FC = () => {
     setEndDate: state.setEndDate,
     setLocation: state.setLocation,
     setTravelStyle: state.setTravelStyle,
-    setIsScheduleConfirmed: state.setIsScheduleConfirmed,
+    //setIsScheduleConfirmed: state.setIsScheduleConfirmed,
   }))
 
   useEffect(() => {
@@ -55,6 +55,16 @@ const AISchedule1: React.FC = () => {
       updateDates() // isScheduleConfirmed가 false일 때만 dates를 업데이트
     }
   }, [startDate, endDate, frequency, updateDates])
+
+  useEffect(() => {
+    if (!isScheduleConfirmed) {
+      // 필요한 로직 실행
+      console.log('isScheduleConfirmed가 false 상태입니다.')
+      // 예: isScheduleConfirmed가 false일 때 추가로 가져오거나 업데이트할 데이터 처리
+    } else {
+      console.log('isScheduleConfirmed가 true 상태입니다.')
+    }
+  }, [isScheduleConfirmed]) // isScheduleConfirmed가 변경될 때마다 실행
 
   const handleLocationClick = (loc: string) => {
     if (loc === '전국') {
@@ -134,9 +144,10 @@ const AISchedule1: React.FC = () => {
       location,
       travelStyle,
     })
-    setIsScheduleConfirmed()
+    //setIsScheduleConfirmed(true)
     navigate(`/calendarCycle?type=cycle`)
   }
+
   return (
     <>
       <BackButton />

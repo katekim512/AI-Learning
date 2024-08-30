@@ -34,6 +34,10 @@ const CalendarCycle = () => {
   )
   const [loadedDates, setLoadedDates] = useState<string[]>([])
 
+  const { setIsScheduleConfirmed } = useScheduleStore(state => ({
+    setIsScheduleConfirmed: state.setIsScheduleConfirmed,
+  }))
+
   let startDateObj: Date = today
   let endDateObj: Date = today
 
@@ -82,6 +86,7 @@ const CalendarCycle = () => {
 
       console.log(`Applied ${type} date: ${loadedDates}`)
     }
+    setIsScheduleConfirmed(true)
     navigate('/ai-schedule-step1')
   }
 
