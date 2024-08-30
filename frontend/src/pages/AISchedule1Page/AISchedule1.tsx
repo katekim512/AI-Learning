@@ -18,7 +18,7 @@ const AISchedule1: React.FC = () => {
     frequency,
     dayOfWeek,
     isScheduleConfirmed,
-    setStartDate,
+    //setStartDate,
     setEndDate,
     updateDates,
     setFrequency,
@@ -42,7 +42,6 @@ const AISchedule1: React.FC = () => {
     setEndDate: state.setEndDate,
     setLocation: state.setLocation,
     setTravelStyle: state.setTravelStyle,
-    //setIsScheduleConfirmed: state.setIsScheduleConfirmed,
   }))
 
   useEffect(() => {
@@ -144,7 +143,6 @@ const AISchedule1: React.FC = () => {
       location,
       travelStyle,
     })
-    //setIsScheduleConfirmed(true)
     navigate(`/calendarCycle?type=cycle`)
   }
 
@@ -160,7 +158,7 @@ const AISchedule1: React.FC = () => {
         </S.Title>
         <S.Section>
           <S.Label>얼마나</S.Label>
-          <S.DateInputContainer>
+          {/* <S.DateInputContainer>
             <S.DateInput
               value={startDate || ''}
               onChange={e => setStartDate(e.target.value)}
@@ -179,6 +177,26 @@ const AISchedule1: React.FC = () => {
               onClick={() => handleCalendarIconClick('end')} // 클릭 시 페이지 이동
               readOnly // 기본 달력 팝업을 비활성화
             />
+            <Icon
+              icon={calendarIcon}
+              onClick={() => handleCalendarIconClick('end')}
+              style={{ cursor: 'pointer', marginLeft: '10px' }}
+            />
+          </S.DateInputContainer> */}
+
+          <S.DateInputContainer>
+            <S.DateButton onClick={() => handleCalendarIconClick('start')}>
+              {startDate || 'Select Start Date'}
+            </S.DateButton>
+            <Icon
+              icon={calendarIcon}
+              onClick={() => handleCalendarIconClick('start')}
+              style={{ cursor: 'pointer', marginLeft: '10px' }}
+            />
+            <S.Separator>~</S.Separator>
+            <S.DateButton onClick={() => handleCalendarIconClick('end')}>
+              {endDate || 'Select End Date'}
+            </S.DateButton>
             <Icon
               icon={calendarIcon}
               onClick={() => handleCalendarIconClick('end')}
