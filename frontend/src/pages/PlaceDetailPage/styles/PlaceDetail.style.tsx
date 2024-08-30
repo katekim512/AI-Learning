@@ -3,12 +3,13 @@ import { styled } from 'styled-components'
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 5rem); /* BackButton 높이만큼 빼기 */
+  height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   padding: 2rem;
-  padding-top: 5.5rem; /* BackButton 높이만큼 추가 */
+  padding-top: 5.5rem;
+  overflow-y: auto;
 `
 
 export const MapIconContainer = styled.div`
@@ -72,7 +73,6 @@ export const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
 `
 
 export const PlaceImage = styled.img`
@@ -80,4 +80,31 @@ export const PlaceImage = styled.img`
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`
+
+export const OverviewContainer = styled.div`
+  padding: 1rem 0;
+`
+
+export const OverviewTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+`
+
+export const OverviewText = styled.p`
+  font-size: 0.9rem;
+  line-height: 1.4;
+`
+
+export const HomepageLink = styled.div`
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #1a73e8;
+  word-break: break-word; /* 긴 URL을 잘 보이게 처리 */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 `

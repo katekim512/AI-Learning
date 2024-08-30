@@ -38,6 +38,8 @@ const PlaceDetail = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
+  const [homepage, setHomepage] = useState<string>('') // homepage 상태 추가
+  const [overview, setOverview] = useState<string>('') // overview 상태 추가
 
   useEffect(() => {
     const fetchPlaceDetail = async () => {
@@ -50,6 +52,28 @@ const PlaceDetail = () => {
     }
 
     fetchPlaceDetail()
+  }, [token, contentid])
+
+  useEffect(() => {
+    const fetchCommonPlaceInfo = async () => {
+      if (!token || !contentid) return
+
+      try {
+        const response = await fetch(
+          `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=12&defaultYN=Y&firstImageYN=N&areacodeYN=N&catcodeYN=N&addrinfoYN=N&mapinfoYN=N&overviewYN=Y&numOfRows=10&pageNo=1`,
+        )
+        const data = await response.json()
+        if (data.response.body.items.item[0]) {
+          const item = data.response.body.items.item[0]
+          setHomepage(item.homepage) // homepage 값 설정
+          setOverview(item.overview) // overview 값 설정
+        }
+      } catch (error) {
+        console.error('Failed to fetch place details:', error)
+      }
+    }
+
+    fetchCommonPlaceInfo()
   }, [token, contentid])
 
   useEffect(() => {
@@ -81,10 +105,9 @@ const PlaceDetail = () => {
   }
 
   const handleMapToggle = () => {
-    setShowMap(!showMap) // Toggle between map and image
+    setShowMap(!showMap)
   }
 
-  // Kakao Map API initialization
   useEffect(() => {
     // 추후 showMap && 추가!
     if (mapContainerRef.current && placeDetail) {
@@ -168,6 +191,7 @@ const PlaceDetail = () => {
         <L.ImageContainer
           ref={mapContainerRef}
           style={{
+            minHeight: '200px',
             height: `${imageHeight}px`,
             borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -177,6 +201,7 @@ const PlaceDetail = () => {
           <L.ImageContainer
             ref={mapContainerRef}
             style={{
+              minHeight: '200px',
               height: `${imageHeight}px`,
               borderRadius: '8px',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -191,6 +216,17 @@ const PlaceDetail = () => {
               />
             </L.ImageContainer>
           )
+        )}
+        {homepage && (
+          <L.OverviewContainer>
+            <L.OverviewTitle>홈페이지</L.OverviewTitle>
+            <L.HomepageLink dangerouslySetInnerHTML={{ __html: homepage }} />
+          </L.OverviewContainer>
+        )}
+        {overview && (
+          <L.OverviewContainer>
+            <L.OverviewText>{overview}</L.OverviewText>
+          </L.OverviewContainer>
         )}
       </L.Container>
     </>
