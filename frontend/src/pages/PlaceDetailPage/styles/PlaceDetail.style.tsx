@@ -22,6 +22,8 @@ export const MapIconContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  z-index: 10;
+  cursor: pointer;
 `
 
 export const Title = styled.div`

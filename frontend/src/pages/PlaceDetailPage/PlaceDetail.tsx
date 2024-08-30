@@ -7,52 +7,47 @@ import { useParams } from 'react-router-dom'
 
 import * as L from './styles/PlaceDetail.style'
 import { postLike } from '../../api/calendar/postLike'
-import {
-  PlaceDetailInfo,
-  postTimelineDetail,
-} from '../../api/calendar/postTimelineDetail'
+// import { postTimelineDetail } from '../../api/calendar/postTimelineDetail'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
 import authToken from '../../stores/authToken'
 
+interface PlaceDetail {
+  title: string
+  addr1: string
+  addr2: string
+  firstimage: string
+  firstimage2: string
+  mapx: number
+  mapy: number
+  homepage: string
+  overview: string
+}
+
 const PlaceDetail = () => {
   const token = authToken.getAccessToken()
   const { contentid } = useParams<{ contentid: string }>()
-  const [placeDetail, setPlaceDetail] = useState<PlaceDetailInfo | null>({
-    contenttypeid: 12,
-    place: '경극고택',
-    city: '대구',
-    addr1: '대구광역시 동구 옻골로 195-3',
-    addr2: '(둔산동)',
-    like: 99,
-    firstimage:
-      'http://tong.visitkorea.or.kr/cms/resource/32/2707032_image2_1.jpg',
-    firstimage2:
-      'http://tong.visitkorea.or.kr/cms/resource/32/2707032_image2_1.jpg',
-    mapx: 128.6866758144,
-    mapy: 35.9074757619,
-  })
+  const { contenttypeid } = useParams<{ contenttypeid: string }>()
+  const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>()
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
-  const [homepage, setHomepage] = useState<string>('') // homepage 상태 추가
-  const [overview, setOverview] = useState<string>('') // overview 상태 추가
 
-  useEffect(() => {
-    const fetchPlaceDetail = async () => {
-      if (!token || !contentid) return
+  // useEffect(() => {
+  //   const fetchPlaceDetail = async () => {
+  //     if (!token || !contentid) return
 
-      const response = await postTimelineDetail(token, Number(contentid))
-      if (response && response.data) {
-        setPlaceDetail(response.data)
-      }
-    }
+  //     const response = await postTimelineDetail(token, Number(contentid))
+  //     if (response && response.data) {
+  //       setPlaceDetail(response.data)
+  //     }
+  //   }
 
-    fetchPlaceDetail()
-  }, [token, contentid])
+  //   fetchPlaceDetail()
+  // }, [token, contentid])
 
   useEffect(() => {
     const fetchCommonPlaceInfo = async () => {
@@ -60,13 +55,12 @@ const PlaceDetail = () => {
 
       try {
         const response = await fetch(
-          `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=12&defaultYN=Y&firstImageYN=N&areacodeYN=N&catcodeYN=N&addrinfoYN=N&mapinfoYN=N&overviewYN=Y&numOfRows=10&pageNo=1`,
+          `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=N&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
         )
         const data = await response.json()
         if (data.response.body.items.item[0]) {
           const item = data.response.body.items.item[0]
-          setHomepage(item.homepage) // homepage 값 설정
-          setOverview(item.overview) // overview 값 설정
+          setPlaceDetail(item)
         }
       } catch (error) {
         console.error('Failed to fetch place details:', error)
@@ -105,41 +99,59 @@ const PlaceDetail = () => {
   }
 
   const handleMapToggle = () => {
-    setShowMap(!showMap)
+    setShowMap(prevState => !prevState)
   }
 
-  useEffect(() => {
-    // 추후 showMap && 추가!
-    if (mapContainerRef.current && placeDetail) {
-      const { mapx, mapy } = placeDetail
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const kakao = (window as any).kakao
+  // 지도 컴포넌트 분리
+  const MapComponent = () => {
+    useEffect(() => {
+      if (mapContainerRef.current && placeDetail) {
+        const { mapx, mapy } = placeDetail
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const kakao = (window as any).kakao
 
-      if (!kakao.maps) {
-        const script = document.createElement('script')
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false`
-        document.head.appendChild(script)
+        if (!kakao.maps) {
+          const script = document.createElement('script')
+          script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false`
+          document.head.appendChild(script)
 
-        script.onload = () => {
-          kakao.maps.load(() => {
+          script.onload = () => {
+            kakao.maps.load(() => {
+              if (mapContainerRef.current) {
+                const container = mapContainerRef.current
+                const options = {
+                  center: new kakao.maps.LatLng(mapy, mapx),
+                  level: 3,
+                }
+                new kakao.maps.Map(container, options)
+              }
+            })
+          }
+        } else {
+          if (mapContainerRef.current) {
             const container = mapContainerRef.current
             const options = {
               center: new kakao.maps.LatLng(mapy, mapx),
               level: 3,
             }
             new kakao.maps.Map(container, options)
-          })
+          }
         }
-      } else {
-        const container = mapContainerRef.current
-        const options = {
-          center: new kakao.maps.LatLng(mapy, mapx),
-          level: 3,
-        }
-        new kakao.maps.Map(container, options)
       }
-    }
-  }, [showMap, placeDetail])
+    }, [placeDetail])
+
+    return (
+      <L.ImageContainer
+        ref={mapContainerRef}
+        style={{
+          minHeight: '200px',
+          height: `${imageHeight}px`,
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+      />
+    )
+  }
 
   const getContentTypeText = (contenttypeid: number) => {
     switch (contenttypeid) {
@@ -162,10 +174,10 @@ const PlaceDetail = () => {
       </L.MapIconContainer>
       <L.Container>
         <L.Title>
-          <L.Text>{placeDetail?.place || ''}</L.Text>
+          <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
             <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
-            <L.SmText>{placeDetail?.like || 0}</L.SmText>
+            <L.SmText>{'like 수 반환값' || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
         <L.SecondLineContainer>
@@ -177,55 +189,44 @@ const PlaceDetail = () => {
               style={{ color: '#BCBCBC' }}
             />
             <L.LocationText>
-              {placeDetail?.city},&nbsp;
-              {getContentTypeText(placeDetail!.contenttypeid)}
+              {placeDetail?.addr1},&nbsp;
+              {getContentTypeText(Number(contenttypeid))}
             </L.LocationText>
           </L.Title>
           <L.Title>
             <L.SecondLineButton onClick={handleLikeToggle}>
               {isLiked ? '저장됨' : '저장하기'}
             </L.SecondLineButton>
-            <L.SecondLineButton>장소추가</L.SecondLineButton>
+            <L.SecondLineButton onClick={handleMapToggle}>
+              장소추가
+            </L.SecondLineButton>
           </L.Title>
         </L.SecondLineContainer>
-        <L.ImageContainer
-          ref={mapContainerRef}
-          style={{
-            minHeight: '200px',
-            height: `${imageHeight}px`,
-            borderRadius: '8px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          }}
-        />
+
         {showMap ? (
-          <L.ImageContainer
-            ref={mapContainerRef}
-            style={{
-              minHeight: '200px',
-              height: `${imageHeight}px`,
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}
-          />
+          <MapComponent />
         ) : (
           placeDetail?.firstimage && (
-            <L.ImageContainer>
+            <L.ImageContainer ref={imageContainerRef}>
               <L.PlaceImage
                 src={placeDetail.firstimage}
-                alt={placeDetail.place}
+                alt={placeDetail.title}
               />
             </L.ImageContainer>
           )
         )}
-        {homepage && (
+
+        {placeDetail?.homepage && (
           <L.OverviewContainer>
             <L.OverviewTitle>홈페이지</L.OverviewTitle>
-            <L.HomepageLink dangerouslySetInnerHTML={{ __html: homepage }} />
+            <L.HomepageLink
+              dangerouslySetInnerHTML={{ __html: placeDetail.homepage }}
+            />
           </L.OverviewContainer>
         )}
-        {overview && (
+        {placeDetail?.overview && (
           <L.OverviewContainer>
-            <L.OverviewText>{overview}</L.OverviewText>
+            <L.OverviewText>{placeDetail.overview}</L.OverviewText>
           </L.OverviewContainer>
         )}
       </L.Container>
