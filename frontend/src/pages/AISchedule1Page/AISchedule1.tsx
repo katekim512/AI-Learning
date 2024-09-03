@@ -18,14 +18,12 @@ const AISchedule1: React.FC = () => {
     frequency,
     dayOfWeek,
     isScheduleConfirmed,
-    //setStartDate,
     setEndDate,
     updateDates,
     setFrequency,
     setDayOfWeek,
     setLocation,
     setTravelStyle,
-    //setIsScheduleConfirmed,
   } = useScheduleStore(state => ({
     startDate: state.startDate,
     endDate: state.endDate,
@@ -57,11 +55,9 @@ const AISchedule1: React.FC = () => {
 
   useEffect(() => {
     if (!isScheduleConfirmed) {
-      // 필요한 로직 실행
-      console.log('isScheduleConfirmed가 false 상태입니다.')
-      // 예: isScheduleConfirmed가 false일 때 추가로 가져오거나 업데이트할 데이터 처리
+      console.log('isScheduleConfirmed = false ')
     } else {
-      console.log('isScheduleConfirmed가 true 상태입니다.')
+      console.log('isScheduleConfirmed = true')
     }
   }, [isScheduleConfirmed]) // isScheduleConfirmed가 변경될 때마다 실행
 
@@ -158,31 +154,6 @@ const AISchedule1: React.FC = () => {
         </S.Title>
         <S.Section>
           <S.Label>얼마나</S.Label>
-          {/* <S.DateInputContainer>
-            <S.DateInput
-              value={startDate || ''}
-              onChange={e => setStartDate(e.target.value)}
-              onClick={() => handleCalendarIconClick('start')} // 클릭 시 페이지 이동
-              readOnly // 기본 달력 팝업을 비활성화
-            />
-            <Icon
-              icon={calendarIcon}
-              onClick={() => handleCalendarIconClick('start')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
-            <S.Separator>~</S.Separator>
-            <S.DateInput
-              value={endDate || ''}
-              onChange={e => setEndDate(e.target.value)}
-              onClick={() => handleCalendarIconClick('end')} // 클릭 시 페이지 이동
-              readOnly // 기본 달력 팝업을 비활성화
-            />
-            <Icon
-              icon={calendarIcon}
-              onClick={() => handleCalendarIconClick('end')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
-          </S.DateInputContainer> */}
 
           <S.DateInputContainer>
             <S.DateButton onClick={() => handleCalendarIconClick('start')}>
