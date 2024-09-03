@@ -20,25 +20,44 @@ export const DateInputContainer = styled.div`
   justify-content: center;
   padding: 7px;
 `
-export const DateInput = styled.input.attrs({ type: 'date' })`
+// export const DateInput = styled.input.attrs({ type: 'date' })`
+//   color: black;
+//   border: 1px solid #ddd;
+//   border-radius: 8px;
+//   padding: 6px;
+//   font-size: 14px;
+//   background-color: #fafafa;
+//   transition:
+//     border-color 0.3s ease,
+//     box-shadow 0.3s ease;
+
+//   &:focus {
+//     border-color: #007bff;
+//     box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.25);
+//     outline: none;
+//   }
+
+//   &::-webkit-calendar-picker-indicator {
+//     display: none;
+//   }
+// `
+
+export const DateButton = styled.button`
   color: black;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 6px;
+  padding: 6px 16px;
   font-size: 14px;
   background-color: #fafafa;
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
+  cursor: pointer;
 
   &:focus {
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.25);
     outline: none;
-  }
-
-  &::-webkit-calendar-picker-indicator {
-    display: none;
   }
 `
 

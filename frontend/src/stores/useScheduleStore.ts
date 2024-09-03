@@ -85,7 +85,7 @@ interface ScheduleState {
   setStartDate: (date: string) => void
   setEndDate: (date: string) => void
   setDates: (newDates: string[]) => void
-  setIsScheduleConfirmed: () => void
+  setIsScheduleConfirmed: (confirmed: boolean) => void
   updateDates: () => void // 빈도에 따라 날짜 배열을 업데이트하는 함수
   setFrequency: (frequency: string) => void
   setDayOfWeek: (dayOfWeek: string) => void
@@ -112,7 +112,8 @@ export const useScheduleStore = create<ScheduleState>(set => ({
     }),
   setEndDate: date => set({ endDate: date }),
   setDates: newDates => set({ dates: newDates }),
-  setIsScheduleConfirmed: () => set({ isScheduleConfirmed: true }),
+  setIsScheduleConfirmed: (confirmed: boolean) =>
+    set({ isScheduleConfirmed: confirmed }),
   setFrequency: frequency =>
     set(state => {
       const dates = getDatesArray(

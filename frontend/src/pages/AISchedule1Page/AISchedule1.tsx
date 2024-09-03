@@ -18,14 +18,12 @@ const AISchedule1: React.FC = () => {
     frequency,
     dayOfWeek,
     isScheduleConfirmed,
-    setStartDate,
     setEndDate,
     updateDates,
     setFrequency,
     setDayOfWeek,
     setLocation,
     setTravelStyle,
-    setIsScheduleConfirmed,
   } = useScheduleStore(state => ({
     startDate: state.startDate,
     endDate: state.endDate,
@@ -42,7 +40,6 @@ const AISchedule1: React.FC = () => {
     setEndDate: state.setEndDate,
     setLocation: state.setLocation,
     setTravelStyle: state.setTravelStyle,
-    setIsScheduleConfirmed: state.setIsScheduleConfirmed,
   }))
 
   useEffect(() => {
@@ -55,6 +52,14 @@ const AISchedule1: React.FC = () => {
       updateDates() // isScheduleConfirmed가 false일 때만 dates를 업데이트
     }
   }, [startDate, endDate, frequency, updateDates])
+
+  useEffect(() => {
+    if (!isScheduleConfirmed) {
+      console.log('isScheduleConfirmed = false ')
+    } else {
+      console.log('isScheduleConfirmed = true')
+    }
+  }, [isScheduleConfirmed]) // isScheduleConfirmed가 변경될 때마다 실행
 
   const handleLocationClick = (loc: string) => {
     if (loc === '전국') {
@@ -134,9 +139,9 @@ const AISchedule1: React.FC = () => {
       location,
       travelStyle,
     })
-    setIsScheduleConfirmed()
     navigate(`/calendarCycle?type=cycle`)
   }
+
   return (
     <>
       <BackButton />
@@ -149,25 +154,20 @@ const AISchedule1: React.FC = () => {
         </S.Title>
         <S.Section>
           <S.Label>얼마나</S.Label>
+
           <S.DateInputContainer>
-            <S.DateInput
-              value={startDate || ''}
-              onChange={e => setStartDate(e.target.value)}
-              onClick={() => handleCalendarIconClick('start')} // 클릭 시 페이지 이동
-              readOnly // 기본 달력 팝업을 비활성화
-            />
+            <S.DateButton onClick={() => handleCalendarIconClick('start')}>
+              {startDate || 'Select Start Date'}
+            </S.DateButton>
             <Icon
               icon={calendarIcon}
               onClick={() => handleCalendarIconClick('start')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
             <S.Separator>~</S.Separator>
-            <S.DateInput
-              value={endDate || ''}
-              onChange={e => setEndDate(e.target.value)}
-              onClick={() => handleCalendarIconClick('end')} // 클릭 시 페이지 이동
-              readOnly // 기본 달력 팝업을 비활성화
-            />
+            <S.DateButton onClick={() => handleCalendarIconClick('end')}>
+              {endDate || 'Select End Date'}
+            </S.DateButton>
             <Icon
               icon={calendarIcon}
               onClick={() => handleCalendarIconClick('end')}
