@@ -127,7 +127,8 @@ PlaceBox.propTypes = {
       PropTypes.shape({
         contentid: PropTypes.number.isRequired,
         contenttypeid: PropTypes.number.isRequired,
-        city: PropTypes.string.isRequired,
+        areacode: PropTypes.number.isRequired,
+        sigungucode: PropTypes.number.isRequired,
         place: PropTypes.string.isRequired,
         order: PropTypes.number.isRequired,
         firstimage: PropTypes.string.isRequired,

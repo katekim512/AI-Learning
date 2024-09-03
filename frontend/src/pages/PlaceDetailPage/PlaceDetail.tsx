@@ -11,11 +11,14 @@ import { postPlaceLike } from '../../api/calendar/postPlaceLike'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
 import authToken from '../../stores/authToken'
+import { getCityName } from '../../style/CityMapper'
 
 interface PlaceDetail {
   title: string
   addr1: string
   addr2: string
+  areacode: number
+  sigungucode: number
   firstimage: string
   firstimage2: string
   mapx: number
@@ -28,13 +31,14 @@ const PlaceDetail = () => {
   const token = authToken.getAccessToken()
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
-  const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>()
+  const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
   const [like, setLike] = useState<number>(0)
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
+  const [city, setCity] = useState<string>('')
 
   useEffect(() => {
     fetchCommonPlaceInfo()
@@ -57,12 +61,23 @@ const PlaceDetail = () => {
     }
   }, [likeList, contentid])
 
+  // placeDetail이 업데이트될 때 city 설정
+  useEffect(() => {
+    if (placeDetail) {
+      const cityName = getCityName(
+        placeDetail.areacode,
+        placeDetail.sigungucode,
+      )
+      setCity(cityName)
+    }
+  }, [placeDetail])
+
   const fetchCommonPlaceInfo = async () => {
     if (!token || !contentid) return
 
     try {
       const response = await fetch(
-        `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=N&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
+        `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
       )
       const data = await response.json()
       if (data.response.body.items.item[0]) {
@@ -114,14 +129,20 @@ const PlaceDetail = () => {
   return (
     <>
       <BackButton />
-      <L.MapIconContainer onClick={handleMapToggle}>
+      <L.MapIconContainer>
         {showMap ? (
-          <Icon icon='system-uicons:picture' width='28' height='28' />
+          <Icon
+            icon='system-uicons:picture'
+            width='28'
+            height='28'
+            onClick={handleMapToggle}
+          />
         ) : (
           <Icon
             icon='material-symbols-light:map-outline'
             width='28'
             height='28'
+            onClick={handleMapToggle}
           />
         )}
       </L.MapIconContainer>
@@ -143,7 +164,7 @@ const PlaceDetail = () => {
               style={{ color: '#BCBCBC' }}
             />
             <L.LocationText>
-              {placeDetail?.addr1},&nbsp;
+              {city},&nbsp;
               {getContentTypeText(Number(contenttypeid))}
             </L.LocationText>
           </L.Title>

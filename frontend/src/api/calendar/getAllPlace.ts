@@ -5,9 +5,11 @@ import { aiLearningAxios } from '../axiosInstance'
 export interface PlaceAllPreviewInfo {
   contentid: number
   contenttypeid: number
-  city: string
+  areacode: number
+  sigungucode: number
   place: string
   firstimage: string
+  city?: string
 }
 
 export const getAllPlace = async (
