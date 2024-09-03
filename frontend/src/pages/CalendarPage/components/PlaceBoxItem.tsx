@@ -5,13 +5,15 @@ import { useDrag, useDrop } from 'react-dnd'
 import { FaCheckCircle, FaRegCircle } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
+import { getCityName } from '../../../style/CityMapper'
 import * as L from '../styles/PlaceBox.style'
 
 interface PlaceBoxItemProps {
   item: {
     contentid: number
     contenttypeid: number
-    city: string
+    areacode: number
+    sigungucode: number
     place: string
     order: number
     firstimage: string
@@ -53,6 +55,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
 }) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const city = getCityName(item.areacode, item.sigungucode)
 
   const [, drop] = useDrop({
     accept: 'PLACE_BOX',
@@ -112,7 +115,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
         )}
         <L.PlaceBoxText isEditing={isEditing}>
           <L.PlaceBoxTitle>{item.place}</L.PlaceBoxTitle>
-          <L.PlaceBoxCity>{item.city}</L.PlaceBoxCity>
+          <L.PlaceBoxCity>{city}</L.PlaceBoxCity>
         </L.PlaceBoxText>
         {isEditing && (
           <L.DragEditIcon ref={ref}>

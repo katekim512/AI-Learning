@@ -12,7 +12,8 @@ export interface DateSchedule {
 export interface PlacePreviewInfo {
   contentid: number
   contenttypeid: number
-  city: string
+  areacode: number
+  sigungucode: number
   place: string
   order: number
   firstimage: string

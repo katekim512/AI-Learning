@@ -4,8 +4,10 @@ import { aiLearningAxios } from '../axiosInstance'
 
 export interface AISchedule {
   date: string
-  city: string
+  areacode: number
+  sigungucode: number
   place: string
+  city?: string // city를 선택적 속성으로 추가
 }
 
 export const getSchedule = async (

@@ -5,7 +5,8 @@ import { aiLearningAxios } from '../axiosInstance'
 // Request 바디의 인터페이스
 interface EditRequest {
   date: string
-  city: string
+  areacode: number
+  sigungucode: number
   place: string
 }
 

@@ -9,7 +9,7 @@ export interface CalendarSchedule {
 
 export interface PlaceInfo {
   contentid: number
-  city: string
+  areacode: number
   place: string
   order: number
 }

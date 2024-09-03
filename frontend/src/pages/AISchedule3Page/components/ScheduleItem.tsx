@@ -5,6 +5,7 @@ import { useDrag, useDrop } from 'react-dnd'
 
 import { AISchedule } from '../../../api/schedule/getSchedule'
 import { cityColors } from '../../../style/CityColor'
+import { getCityName } from '../../../style/CityMapper'
 import { monthColors } from '../../../style/MonthColor'
 import * as L from '../styles/AISchedule3.style'
 
@@ -44,7 +45,8 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
 
   drag(drop(ref))
 
-  const cityBackgroundColor = cityColors[item.city]
+  const city = getCityName(item.areacode, item.sigungucode)
+  const cityBackgroundColor = cityColors[city] || '#006AA6'
   const date = new Date(item.date)
   const month = date.getMonth() + 1
   const monthBackgroundColor = monthColors[month]
@@ -56,7 +58,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
       </L.DateBox>
       <L.PlaceBox style={{ opacity: isDragging ? 0.5 : 1 }}>
         <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
-          {item.city}
+          {city}
         </L.CityBox>
         <L.PlaceName>{item.place}</L.PlaceName>
         <L.IconContainer>
