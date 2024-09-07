@@ -43,6 +43,7 @@ const CalendarCycle = () => {
 
   let startDateObj: Date = today
   let endDateObj: Date = today
+  const [message, setMessage] = useState<string>('')
 
   if (type === 'start') {
     startDateObj = today
@@ -91,6 +92,12 @@ const CalendarCycle = () => {
       // 특정 조건에 따라 팝업 띄우기
       if (!currentDates || currentDates.length === 0) {
         setIsAlertOpen(true)
+        setMessage('최소 한 개 이상의 날짜가 선택되어야 합니다.')
+        return // 페이지 이동을 막기 위해 함수 종료
+      }
+      if (currentDates.length >= 30) {
+        setIsAlertOpen(true)
+        setMessage('최대 30개까지 날짜를 선택할 수 있습니다.')
         return // 페이지 이동을 막기 위해 함수 종료
       }
     }
@@ -156,10 +163,7 @@ const CalendarCycle = () => {
         </L.BottomSection>
       </>
       {isAlertOpen && (
-        <AlertPopUp1
-          message='최소 한 개 이상의 날짜가 선택되어야 합니다.'
-          onConfirm={handleAlertConfirm}
-        />
+        <AlertPopUp1 message={message} onConfirm={handleAlertConfirm} />
       )}
     </div>
   )
