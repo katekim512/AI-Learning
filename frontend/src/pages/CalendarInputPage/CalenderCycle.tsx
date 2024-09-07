@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 import CalendarFrame2 from './components/CalenderFrame2'
 import * as L from './styles/CalendarFrame.style'
+import AlertPopUp1 from '../../components/AlertPopUp/AlertPopUp1/AlertPopUp1'
 import CloseButton from '../../components/CloseButton/CloseButton'
 import InfoBanner from '../../components/InfoBanner/InfoBanner'
 import {
@@ -37,6 +38,8 @@ const CalendarCycle = () => {
   const { setIsScheduleConfirmed } = useScheduleStore(state => ({
     setIsScheduleConfirmed: state.setIsScheduleConfirmed,
   }))
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
 
   let startDateObj: Date = today
   let endDateObj: Date = today
@@ -83,9 +86,15 @@ const CalendarCycle = () => {
       setDates(loadedDates)
       const currentDates = useScheduleStore.getState().dates
       console.log('Current dates in Zustand:', currentDates)
-
       console.log(`Applied ${type} date: ${loadedDates}`)
+
+      // 특정 조건에 따라 팝업 띄우기
+      if (!currentDates || currentDates.length === 0) {
+        setIsAlertOpen(true)
+        return // 페이지 이동을 막기 위해 함수 종료
+      }
     }
+
     setIsScheduleConfirmed(true)
     navigate('/ai-schedule-step1')
   }
@@ -107,40 +116,52 @@ const CalendarCycle = () => {
     //console.log('함수 setSelectedDates:', { newDates })
   }
 
+  const handleAlertConfirm = () => {
+    setIsAlertOpen(false) // 팝업을 닫음
+  }
+
   //배너 문구
   const bannerText =
     '원하는 날짜를 선택하세요! 이미 선택된 날짜를 다시 누르면 해제됩니다!'
   return (
-    <>
-      <L.HeaderSection>
-        <CloseButton />
-        <L.HeaderTitle>날짜 선택</L.HeaderTitle>
-      </L.HeaderSection>
-      {showBanner && (
-        <InfoBanner text={bannerText} onClose={() => setShowBanner(false)} />
-      )}
-      <L.WeekSection>
-        <L.HeaderText>일</L.HeaderText>
-        <L.HeaderText>월</L.HeaderText>
-        <L.HeaderText>화</L.HeaderText>
-        <L.HeaderText>수</L.HeaderText>
-        <L.HeaderText>목</L.HeaderText>
-        <L.HeaderText>금</L.HeaderText>
-        <L.HeaderText>토</L.HeaderText>
-      </L.WeekSection>
-      <L.CalendarWrapper>
-        <CalendarFrame2
-          selectedDates={loadedDates}
-          setSelectedDates={setSelectedDates}
-          calendarRange={{ start: startDateObj, end: endDateObj }} // Add calendarRange here
+    <div>
+      <>
+        <L.HeaderSection>
+          <CloseButton />
+          <L.HeaderTitle>날짜 선택</L.HeaderTitle>
+        </L.HeaderSection>
+        {showBanner && (
+          <InfoBanner text={bannerText} onClose={() => setShowBanner(false)} />
+        )}
+        <L.WeekSection>
+          <L.HeaderText>일</L.HeaderText>
+          <L.HeaderText>월</L.HeaderText>
+          <L.HeaderText>화</L.HeaderText>
+          <L.HeaderText>수</L.HeaderText>
+          <L.HeaderText>목</L.HeaderText>
+          <L.HeaderText>금</L.HeaderText>
+          <L.HeaderText>토</L.HeaderText>
+        </L.WeekSection>
+        <L.CalendarWrapper>
+          <CalendarFrame2
+            selectedDates={loadedDates}
+            setSelectedDates={setSelectedDates}
+            calendarRange={{ start: startDateObj, end: endDateObj }} // Add calendarRange here
+          />
+        </L.CalendarWrapper>
+        <L.BottomSection>
+          <L.FixedBottomButton onClick={handleApplyDate}>
+            {renderSelectedDate()}
+          </L.FixedBottomButton>
+        </L.BottomSection>
+      </>
+      {isAlertOpen && (
+        <AlertPopUp1
+          message='최소 한 개 이상의 날짜가 선택되어야 합니다.'
+          onConfirm={handleAlertConfirm}
         />
-      </L.CalendarWrapper>
-      <L.BottomSection>
-        <L.FixedBottomButton onClick={handleApplyDate}>
-          {renderSelectedDate()}
-        </L.FixedBottomButton>
-      </L.BottomSection>
-    </>
+      )}
+    </div>
   )
 }
 
