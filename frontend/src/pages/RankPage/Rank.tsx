@@ -1,9 +1,7 @@
-//import { useNavigate } from 'react-router-dom'
-
 import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
 import React from 'react'
-import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
 import img1 from './img/1.png'
 import img10 from './img/10.png'
@@ -37,92 +35,11 @@ import img6 from './img/6.png'
 import img7 from './img/7.png'
 import img8 from './img/8.png'
 import img9 from './img/9.png'
+import * as L from './styles/Rank.style'
 import { getVisited } from '../../api/profile/getVisited'
 import { getRank } from '../../api/rank/getRank'
 import authToken from '../../stores/authToken'
 
-// const StyledIcon = styled(Icon)`
-//   color: #4caf50; /* 색상 */
-//   font-size: 24px; /* 크기 */
-// `
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* 전체 화면 높이 */
-`
-
-const Title = styled.div`
-  display: flex;
-  justify-content: flex-start; /* 좌측 정렬 */
-  align-items: center;
-  color: black;
-  line-height: 2rem;
-  margin-top: 0.5rem;
-  height: 4.5rem;
-  padding-left: 2rem; /* 좌측 여백 추가 (필요에 따라 조정 가능) */
-  text-align: left; /* 텍스트를 좌측 정렬 */
-  font-size: 18px;
-`
-
-const PlacesContainer = styled.main`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
-  gap: 20px;
-  max-width: 1200px;
-  //margin: 0 auto;
-  padding-bottom: 6rem; //하단 메뉴 바 보다 조금 위에 위치
-  overflow-y: auto; /* 세로 스크롤 가능하게 설정 */
-`
-
-const PlaceCardContainer = styled.div<{ selected: boolean }>`
-  width: 20%;
-  height: 11%;
-  aspect-ratio: 1;
-  background-color: ${props => (props.selected ? '#b3d8c3' : '#f9f9f9')};
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.2s;
-  position: relative;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`
-
-const PlaceImage = styled.img`
-  width: 100%;
-  height: 70%;
-  object-fit: cover;
-  display: block;
-`
-
-const CheckMark = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); // 가운데 정렬
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-  background-color: rgba(76, 175, 80, 0.3);
-  color: white;
-`
-
-const PlaceName = styled.p`
-  margin: 0;
-  font-size: 8px;
-  padding: 5px;
-  //font-weight: bold;
-`
 interface Place {
   contentid: number
   contenttypeid: number
@@ -303,20 +220,34 @@ const mockVisitedPlaces: VisitedPlace[] = [
   },
 ]
 
-const PlaceCard: React.FC<{ place: Place; selected: boolean }> = ({
-  place,
-  selected,
-}) => {
+const PlaceCard: React.FC<{
+  place: Place
+  selected: boolean
+  index: number
+}> = ({ place, selected, index }) => {
+  const navigate = useNavigate() // useNavigate 사용
+
+  // 클릭 이벤트 핸들러 정의
+  const handleClick = () => {
+    navigate(
+      `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+    )
+  }
+
   return (
-    <PlaceCardContainer selected={selected}>
+    <L.PlaceCardContainer selected={selected} onClick={handleClick}>
+      {' '}
+      {/* 클릭 이벤트 할당 */}
+      {/* 왼쪽 상단에 번호 표시 */}
+      <L.NumberBadge>{index + 1}</L.NumberBadge>
       {selected && (
-        <CheckMark>
+        <L.CheckMark>
           <Icon icon='gravity-ui:check' width='40' height='40' />
-        </CheckMark>
+        </L.CheckMark>
       )}
-      <PlaceImage src={place.firstimage} alt={place.place} />
-      <PlaceName>{place.place}</PlaceName>
-    </PlaceCardContainer>
+      <L.PlaceImage src={place.firstimage} alt={place.place} />
+      <L.PlaceName>{place.place}</L.PlaceName>
+    </L.PlaceCardContainer>
   )
 }
 
@@ -366,20 +297,21 @@ const Rank: React.FC = () => {
   }, [])
 
   return (
-    <AppContainer>
-      <Title>
+    <L.AppContainer>
+      <L.Title>
         <h1>교육여행장소 TOP100</h1>
-      </Title>
-      <PlacesContainer>
-        {top100Places.map(place => (
+      </L.Title>
+      <L.PlacesContainer>
+        {top100Places.map((place, index) => (
           <PlaceCard
             key={place.contentid}
             place={place}
             selected={visitedPlaces.has(place.contentid)}
+            index={index}
           />
         ))}
-      </PlacesContainer>
-    </AppContainer>
+      </L.PlacesContainer>
+    </L.AppContainer>
   )
 }
 
