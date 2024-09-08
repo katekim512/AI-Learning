@@ -1,10 +1,9 @@
 //import { useNavigate } from 'react-router-dom'
 
-//import { useEffect, useState } from 'react'
+import { Icon } from '@iconify/react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import styled from 'styled-components'
-// import { getRank } from '../../api/rank/getRank'
-// import authToken from '../../stores/authToken'
 
 import img1 from './img/1.png'
 import img10 from './img/10.png'
@@ -38,6 +37,14 @@ import img6 from './img/6.png'
 import img7 from './img/7.png'
 import img8 from './img/8.png'
 import img9 from './img/9.png'
+import { getVisited } from '../../api/profile/getVisited'
+import { getRank } from '../../api/rank/getRank'
+import authToken from '../../stores/authToken'
+
+// const StyledIcon = styled(Icon)`
+//   color: #4caf50; /* 색상 */
+//   font-size: 24px; /* 크기 */
+// `
 
 const AppContainer = styled.div`
   display: flex;
@@ -70,17 +77,18 @@ const PlacesContainer = styled.main`
   overflow-y: auto; /* 세로 스크롤 가능하게 설정 */
 `
 
-const PlaceCardContainer = styled.div`
+const PlaceCardContainer = styled.div<{ selected: boolean }>`
   width: 20%;
   height: 11%;
   aspect-ratio: 1;
-  background-color: #f9f9f9;
+  background-color: ${props => (props.selected ? '#b3d8c3' : '#f9f9f9')};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
   text-align: center;
   transition: transform 0.2s;
+  position: relative;
 
   &:hover {
     transform: scale(1.05);
@@ -94,13 +102,27 @@ const PlaceImage = styled.img`
   display: block;
 `
 
+const CheckMark = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); // 가운데 정렬
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  background-color: rgba(76, 175, 80, 0.3);
+  color: white;
+`
+
 const PlaceName = styled.p`
   margin: 0;
   font-size: 8px;
   padding: 5px;
   //font-weight: bold;
 `
-
 interface Place {
   contentid: number
   contenttypeid: number
@@ -108,8 +130,17 @@ interface Place {
   firstimage: string
 }
 
+interface VisitedPlace {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  place: string
+  firstimage: string
+}
+
 // 예시 데이터 (실제 데이터로 교체 필요)
-const top100Places: Place[] = [
+const mocktop100Places: Place[] = [
   { contentid: 123445, contenttypeid: 12, place: '첨성대', firstimage: img1 },
   { contentid: 123446, contenttypeid: 12, place: '경복궁', firstimage: img2 },
   { contentid: 123447, contenttypeid: 12, place: '창경궁', firstimage: img3 },
@@ -229,13 +260,60 @@ const top100Places: Place[] = [
   },
 ]
 
-const PlaceCard: React.FC<{ place: Place }> = ({ place }) => {
-  const handleClick = () => {
-    window.location.href = `/detail?contentid=${place.contentid}&place=${encodeURIComponent(place.place)}`
-  }
+const mockVisitedPlaces: VisitedPlace[] = [
+  {
+    contentid: 123445,
+    contenttypeid: 12,
+    areacode: 1,
+    sigungucode: 1,
+    place: '첨성대',
+    firstimage: 'img1.png',
+  },
+  {
+    contentid: 123447,
+    contenttypeid: 12,
+    areacode: 4,
+    sigungucode: 4,
+    place: '창경궁',
+    firstimage: 'img3.png',
+  },
+  {
+    contentid: 123452,
+    contenttypeid: 12,
+    areacode: 2,
+    sigungucode: 3,
+    place: '보안사',
+    firstimage: 'img8.png',
+  },
+  {
+    contentid: 123459,
+    contenttypeid: 12,
+    areacode: 5,
+    sigungucode: 7,
+    place: '경포대',
+    firstimage: 'img15.png',
+  },
+  {
+    contentid: 123465,
+    contenttypeid: 12,
+    areacode: 8,
+    sigungucode: 6,
+    place: '안동 하회마을',
+    firstimage: 'img21.png',
+  },
+]
 
+const PlaceCard: React.FC<{ place: Place; selected: boolean }> = ({
+  place,
+  selected,
+}) => {
   return (
-    <PlaceCardContainer onClick={handleClick}>
+    <PlaceCardContainer selected={selected}>
+      {selected && (
+        <CheckMark>
+          <Icon icon='gravity-ui:check' width='40' height='40' />
+        </CheckMark>
+      )}
       <PlaceImage src={place.firstimage} alt={place.place} />
       <PlaceName>{place.place}</PlaceName>
     </PlaceCardContainer>
@@ -244,19 +322,48 @@ const PlaceCard: React.FC<{ place: Place }> = ({ place }) => {
 
 const Rank: React.FC = () => {
   //-----API 연결------
-  // const token = authToken.getAccessToken()
-  // const [top100Places, setTop100Places] = useState<Place[]>([])
 
-  // const fetchRankPlace = async () => {
-  //   if (token) {
-  //     const successResponse = await getRank(token)
-  //     if (successResponse && successResponse) {
-  //       setTop100Places(successResponse)
-  //       console.log(top100Places)//확인
-  //     }
-  //   }
-  // }
-  // -----------------
+  const [visitedPlaces, setVisitedPlaces] = useState<Set<number>>(new Set())
+  const [top100Places, setTop100Places] = useState<Place[]>([])
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      const token = authToken.getAccessToken()
+
+      const places = await getRank(token)
+      if (places) {
+        setTop100Places(places.data)
+      }
+    }
+
+    const fetchVisitedPlaces = async () => {
+      const token = authToken.getAccessToken()
+      const visited = await getVisited(token)
+      if (visited && visited.data) {
+        const visitedIds = new Set(
+          visited.data.map((place: VisitedPlace) => place.contentid),
+        ) // Set 생성
+        setVisitedPlaces(visitedIds)
+      }
+    }
+
+    fetchPlaces()
+    fetchVisitedPlaces()
+  }, [])
+
+  useEffect(() => {
+    const fetchMockData = () => {
+      // Mock 데이터를 사용하여 상태를 설정합니다
+      setTop100Places(mocktop100Places)
+
+      const visitedIds = new Set(
+        mockVisitedPlaces.map(place => place.contentid),
+      )
+      setVisitedPlaces(visitedIds)
+    }
+
+    fetchMockData()
+  }, [])
 
   return (
     <AppContainer>
@@ -265,7 +372,11 @@ const Rank: React.FC = () => {
       </Title>
       <PlacesContainer>
         {top100Places.map(place => (
-          <PlaceCard key={place.contentid} place={place} />
+          <PlaceCard
+            key={place.contentid}
+            place={place}
+            selected={visitedPlaces.has(place.contentid)}
+          />
         ))}
       </PlacesContainer>
     </AppContainer>
