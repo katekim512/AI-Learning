@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 // import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { checkEmail } from '../../../api/auth/postCheckEmail'
 import { checkNickname } from '../../../api/auth/postCheckNickname'
@@ -8,20 +8,15 @@ import { register } from '../../../api/auth/postRegister'
 import { cities } from '../styles/City.list'
 import * as L from '../styles/Register.style'
 
-// 가짜 이메일 생성 함수
-const generateFakeEmail = () => {
-  const randomString = Math.random().toString(36).substring(2, 12) // 임의의 문자열 생성
-  return `${randomString}@privaterelay.ailearning.com`
-}
-
 const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const navigate = useNavigate()
-
+  const location = useLocation()
+  const emailFromKakao = location.state?.email || ''
   //   const [openModal, setOpenModal] = useState(false)
   //   const [openFailModal, setOpenFailModal] = useState(false)
 
   const [signupForm, setSignupForm] = useState({
-    email: accessToken ? generateFakeEmail() : '',
+    email: accessToken ? emailFromKakao : '',
     nickname: '',
     year: 2024,
     city: '',
@@ -39,7 +34,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
 
   // 유효성 검사
   const [isValid, setIsValid] = useState({
-    email: accessToken ? true : false,
+    email: !!accessToken,
     nickname: false,
     password: false,
     checkedPassword: false,

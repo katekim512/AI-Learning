@@ -50,11 +50,12 @@ const KakaoRedirectHandle = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then(async (response: any) => {
         console.log(response)
+        const email = response.kakao_account?.email
         const callbackResponse = await kakaoCallback(accessToken)
         if (callbackResponse?.data.userExists) {
           navigate('/calendar')
         } else {
-          navigate('/register', { state: { accessToken } })
+          navigate('/register', { state: { accessToken, email } })
         }
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

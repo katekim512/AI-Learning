@@ -12,7 +12,7 @@ const SocialLogin = () => {
         onClick={() =>
           kakao.Auth.authorize({
             redirectUri: `${url}`,
-            scope: 'profile_image',
+            scope: 'profile_image,account_email',
           })
         }
       >
