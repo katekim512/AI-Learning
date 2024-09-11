@@ -4,7 +4,7 @@ import * as L from '../styles/Login.style'
 const kakao = (window as any).Kakao
 
 const SocialLogin = () => {
-  const url = 'https://ai-learning-kappa.vercel.app'
+  const url = 'https://ai-learning-kappa.vercel.app/login/oauth'
 
   return (
     <>
