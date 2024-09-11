@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { kakaoCallback } from '../../../api/auth/postKakaoCallback'
 import { postNewAccessToken } from '../../../api/auth/postNewAccessToken'
 import { postRefreshAccessToken } from '../../../api/auth/postRefreshAccessToken'
-import useLikeList from '../../../hooks/useLikeList'
-import { useUser } from '../../../hooks/useUser'
 import authToken from '../../../stores/authToken'
 import { isAxios401Error } from '../../../utils/isAxios401Error'
 
@@ -15,15 +13,13 @@ const kakao = (window as any).Kakao
 
 const KakaoRedirectHandle = () => {
   const navigate = useNavigate()
-  const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
-  const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
 
   useEffect(() => {
     const params = new URL(document.location.toString()).searchParams
     const code = params.get('code')
     const grant_type = 'authorization_code'
     const client_id = process.env.REACT_APP_KAKAO_CLIENT_ID
-    const url = 'http://localhost:3000'
+    const url = 'https://ai-learning-kappa.vercel.app'
     axios
       .post(
         `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=${url}/login/oauth&code=${code}`,
@@ -56,8 +52,6 @@ const KakaoRedirectHandle = () => {
         console.log(response)
         const callbackResponse = await kakaoCallback(accessToken)
         if (callbackResponse?.data.userExists) {
-          await refetchUser()
-          await refetchLikeList()
           navigate('/calendar')
         } else {
           navigate('/register', { state: { accessToken } })
