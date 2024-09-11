@@ -32,7 +32,7 @@ const PlaceDetail = () => {
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
-  const [like, setLike] = useState<number>(0)
+  const [likeInfo, setLikeInfo] = useState<number>(0)
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
@@ -93,7 +93,9 @@ const PlaceDetail = () => {
     if (!token || !contentid) return
 
     const successResponse = await postPlaceLike(token, Number(contentid))
-    if (successResponse) setLike(successResponse.data.like)
+    if (successResponse && successResponse.data) {
+      setLikeInfo(successResponse.data.like)
+    }
   }
 
   const handleLikeToggle = async () => {
@@ -152,7 +154,7 @@ const PlaceDetail = () => {
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
             <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
-            <L.SmText>{like || 0}</L.SmText>
+            <L.SmText>{likeInfo || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
         <L.SecondLineContainer>

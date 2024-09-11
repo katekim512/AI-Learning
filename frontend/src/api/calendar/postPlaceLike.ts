@@ -15,5 +15,5 @@ export const postPlaceLike = async (
     { contentid },
     { headers: { Authorization: `Bearer ${token}` } },
   )
-  return response.data
+  return response
 }
