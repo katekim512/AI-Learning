@@ -19,7 +19,6 @@ export const aiLearningAxios = axios.create({
 // 요청 인터셉터 설정: 필요한 요청 설정만 추가
 aiLearningAxios.interceptors.request.use(
   config => {
-    // 요청을 그대로 통과시키거나 필요한 설정만 추가
     return config
   },
   error => Promise.reject(error),
@@ -39,18 +38,25 @@ aiLearningAxios.interceptors.response.use(
         if (refreshToken) {
           const newAccessToken = await postRefreshAccessToken(refreshToken)
           if (newAccessToken) {
-            // 새로운 액세스 토큰 저장
             authToken.setAccessToken(newAccessToken)
-            await postNewAccessToken(newAccessToken) // 백엔드에 새로운 토큰 저장
+            await postNewAccessToken(newAccessToken)
 
-            // 원래 요청에 새로운 토큰을 설정하고 재시도
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
             return aiLearningAxios(originalRequest)
           }
         }
       } catch (tokenError) {
-        console.error('토큰 재발급 실패:', tokenError)
-        // 재발급 실패 시 로그아웃 또는 다른 처리
+        if (
+          tokenError instanceof Error &&
+          tokenError.message === 'REFRESH_TOKEN_EXPIRED'
+        ) {
+          console.error('Refresh token expired. Logging out.')
+          authToken.removeTokens() // 모든 토큰 삭제 (로그아웃 처리)
+          window.location.href = '/login' // 로그인 페이지로 리다이렉트
+        } else {
+          console.error('토큰 재발급 실패:', tokenError)
+          // 재발급 실패 시 추가적인 에러 처리 로직
+        }
       }
     }
 
