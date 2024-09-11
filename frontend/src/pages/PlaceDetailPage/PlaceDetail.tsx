@@ -57,7 +57,10 @@ const PlaceDetail = () => {
   // 좋아요 리스트에 현재 장소가 있는지 확인
   useEffect(() => {
     if (likeList && contentid) {
-      setIsLiked(likeList.some(place => place.contentid === Number(contentid)))
+      const liked = likeList.some(
+        place => place.contentid.toString() === contentid,
+      )
+      setIsLiked(liked)
     }
   }, [likeList, contentid])
 
@@ -130,26 +133,27 @@ const PlaceDetail = () => {
 
   return (
     <>
-      <BackButton />
-      <L.MapIconContainer>
-        {showMap ? (
-          <Icon
-            icon='system-uicons:picture'
-            width='28'
-            height='28'
-            onClick={handleMapToggle}
-          />
-        ) : (
-          <Icon
-            icon='material-symbols-light:map-outline'
-            width='28'
-            height='28'
-            onClick={handleMapToggle}
-          />
-        )}
-      </L.MapIconContainer>
-
       <L.Container>
+        <L.HeaderContainer>
+          <BackButton />
+          <L.MapButton>
+            {showMap ? (
+              <Icon
+                icon='system-uicons:picture'
+                width='28'
+                height='28'
+                onClick={handleMapToggle}
+              />
+            ) : (
+              <Icon
+                icon='material-symbols-light:map-outline'
+                width='28'
+                height='28'
+                onClick={handleMapToggle}
+              />
+            )}
+          </L.MapButton>
+        </L.HeaderContainer>
         <L.Title>
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
