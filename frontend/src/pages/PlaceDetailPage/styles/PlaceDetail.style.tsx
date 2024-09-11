@@ -17,6 +17,26 @@ export const HeaderContainer = styled.div`
   margin-bottom: 0.3rem;
 `
 
+export const HeaderRightIcons = styled.div`
+  display: flex;
+`
+
+export const VisitedCheckButton = styled.button`
+  display: flex;
+  background-color: #525fd4;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  text-ailgns: center;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem;
+  font-size: 0.7rem;
+  height: 1.4rem;
+  margin-top: 0.3rem;
+  margin-right: 0.3rem;
+`
+
 export const MapButton = styled.div`
   display: flex;
   padding-top: 0.1rem;
@@ -92,8 +112,10 @@ export const OverviewTitle = styled.h3`
 `
 
 export const OverviewText = styled.p`
+  margin-top: 0.3rem;
   font-size: 0.9rem;
   line-height: 1.4;
+  white-space: pre-wrap;
 `
 
 export const HomepageLink = styled.div`

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 
-import { aiLearningAxios } from '../axiosInstance' // 커스텀 Axios 인스턴스 import
+import { aiLearningAxios } from '../axiosInstance'
 
 export interface VisitedPlace {
   contentid: number
