@@ -137,20 +137,24 @@ const PlaceDetail = () => {
         <L.HeaderContainer>
           <BackButton />
           <L.MapButton>
-            {showMap ? (
-              <Icon
-                icon='system-uicons:picture'
-                width='28'
-                height='28'
-                onClick={handleMapToggle}
-              />
-            ) : (
-              <Icon
-                icon='material-symbols-light:map-outline'
-                width='28'
-                height='28'
-                onClick={handleMapToggle}
-              />
+            {placeDetail?.firstimage && (
+              <>
+                {showMap ? (
+                  <Icon
+                    icon='system-uicons:picture'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                ) : (
+                  <Icon
+                    icon='material-symbols-light:map-outline'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                )}
+              </>
             )}
           </L.MapButton>
         </L.HeaderContainer>
@@ -190,15 +194,19 @@ const PlaceDetail = () => {
             mapy={placeDetail?.mapy || 0}
             height={imageHeight}
           />
+        ) : placeDetail?.firstimage ? (
+          <L.ImageContainer ref={imageContainerRef}>
+            <L.PlaceImage
+              src={placeDetail.firstimage}
+              alt={placeDetail.title}
+            />
+          </L.ImageContainer>
         ) : (
-          placeDetail?.firstimage && (
-            <L.ImageContainer ref={imageContainerRef}>
-              <L.PlaceImage
-                src={placeDetail.firstimage}
-                alt={placeDetail.title}
-              />
-            </L.ImageContainer>
-          )
+          <PlaceMap
+            mapx={placeDetail?.mapx || 0}
+            mapy={placeDetail?.mapy || 0}
+            height={imageHeight}
+          />
         )}
 
         {placeDetail?.homepage && (
