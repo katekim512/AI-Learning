@@ -8,14 +8,20 @@ import { register } from '../../../api/auth/postRegister'
 import { cities } from '../styles/City.list'
 import * as L from '../styles/Register.style'
 
-const RegisterForm = () => {
+// 가짜 이메일 생성 함수
+const generateFakeEmail = () => {
+  const randomString = Math.random().toString(36).substring(2, 12) // 임의의 문자열 생성
+  return `${randomString}@privaterelay.ailearning.com`
+}
+
+const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const navigate = useNavigate()
 
   //   const [openModal, setOpenModal] = useState(false)
   //   const [openFailModal, setOpenFailModal] = useState(false)
 
   const [signupForm, setSignupForm] = useState({
-    email: '',
+    email: accessToken ? generateFakeEmail() : '',
     nickname: '',
     year: 2024,
     city: '',
@@ -33,7 +39,7 @@ const RegisterForm = () => {
 
   // 유효성 검사
   const [isValid, setIsValid] = useState({
-    email: false,
+    email: accessToken ? true : false,
     nickname: false,
     password: false,
     checkedPassword: false,
@@ -170,6 +176,7 @@ const RegisterForm = () => {
         signupForm.password,
         signupForm.year,
         signupForm.city,
+        accessToken,
       )
 
       if (registerResult) {
@@ -203,10 +210,13 @@ const RegisterForm = () => {
           onChange={handleChange}
           placeholder='이메일을 입력해주세요'
           required
+          disabled={!!accessToken} // accessToken이 있으면 이메일 입력을 비활성화
         />
-        <L.Button type='button' onClick={handleCheckEmail}>
-          중복확인
-        </L.Button>
+        {!accessToken && (
+          <L.Button type='button' onClick={handleCheckEmail}>
+            중복확인
+          </L.Button>
+        )}
         <L.ValidationMessage error={!isValid.email}>
           {validMessage.emailMessage}
         </L.ValidationMessage>
