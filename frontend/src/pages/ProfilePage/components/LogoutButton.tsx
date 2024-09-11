@@ -7,7 +7,7 @@ const LogoutButton = () => {
   const navigate = useNavigate()
 
   const handleLogoutButton = () => {
-    authToken.removeAccessToken()
+    authToken.removeTokens()
     navigate('/')
   }
   return <L.BottomButton onClick={handleLogoutButton}>로그아웃</L.BottomButton>
