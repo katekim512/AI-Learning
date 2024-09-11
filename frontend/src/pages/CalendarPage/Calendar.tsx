@@ -5,9 +5,14 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
+import useLikeList from '../../hooks/useLikeList'
+import { useUser } from '../../hooks/useUser'
 
 const Calendar = () => {
   const navigate = useNavigate()
+  const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
+  const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
+
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
@@ -15,8 +20,14 @@ const Calendar = () => {
   })
 
   useEffect(() => {
+    saveInfos()
     setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
   }, [])
+
+  const saveInfos = async () => {
+    await refetchUser()
+    await refetchLikeList()
+  }
 
   const handleAIScheduleButton = () => {
     navigate('/ai-schedule-step1')
