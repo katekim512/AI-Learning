@@ -8,27 +8,43 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 0.8rem;
   padding: 2rem;
-  padding-top: 5.5rem;
   overflow-y: auto;
 `
 
-export const MapIconContainer = styled.div`
-  position: fixed;
-  width: 100%;
-  max-width: 400px;
-  padding-right: 1.3rem;
-  height: 5rem;
-  border: none;
+export const HeaderContainer = styled.div`
+  justify-content: space-between;
   display: flex;
-  justify-content: flex-end;
+  margin-bottom: 0.3rem;
+`
+
+export const HeaderRightIcons = styled.div`
+  display: flex;
+`
+
+export const VisitedCheckButton = styled.button`
+  display: flex;
+  background-color: #525fd4;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  text-ailgns: center;
+  justify-content: center;
   align-items: center;
-  z-index: 10;
-  cursor: pointer;
+  padding: 0.4rem;
+  font-size: 0.7rem;
+  height: 1.4rem;
+  margin-top: 0.3rem;
+  margin-right: 0.3rem;
+`
+
+export const MapButton = styled.div`
+  display: flex;
+  padding-top: 0.1rem;
 `
 
 export const Title = styled.div`
   display: flex;
-  line-height: 1rem;
+  line-height: 1.4rem;
 `
 
 export const Text = styled.p`
@@ -96,8 +112,10 @@ export const OverviewTitle = styled.h3`
 `
 
 export const OverviewText = styled.p`
+  margin-top: 0.3rem;
   font-size: 0.9rem;
   line-height: 1.4;
+  white-space: pre-wrap;
 `
 
 export const HomepageLink = styled.div`

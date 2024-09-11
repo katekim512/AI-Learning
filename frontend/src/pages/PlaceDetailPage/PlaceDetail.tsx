@@ -4,12 +4,17 @@ import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
+import ContentType12 from './components/ContentType12'
+import ContentType14 from './components/ContentType14'
+import ContentType15 from './components/ContentType15'
 import PlaceMap from './components/PlaceMap'
 import * as L from './styles/PlaceDetail.style'
+import { postAddVisited } from '../../api/calendar/postAddVisited'
 import { postLike } from '../../api/calendar/postLike'
 import { postPlaceLike } from '../../api/calendar/postPlaceLike'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
+import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
 import { getCityName } from '../../style/CityMapper'
 
@@ -32,9 +37,11 @@ const PlaceDetail = () => {
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
-  const [like, setLike] = useState<number>(0)
+  const [likeInfo, setLikeInfo] = useState<number>(0)
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
+  const { visitedList, refetch: refetchVisitedList } = useVisitedList()
+  const [isVisited, setIsVisited] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
@@ -54,12 +61,23 @@ const PlaceDetail = () => {
     }
   }, [placeDetail?.firstimage])
 
-  // 좋아요 리스트에 현재 장소가 있는지 확인
   useEffect(() => {
     if (likeList && contentid) {
-      setIsLiked(likeList.some(place => place.contentid === Number(contentid)))
+      const liked = likeList.some(
+        place => place.contentid.toString() === contentid,
+      )
+      setIsLiked(liked)
     }
   }, [likeList, contentid])
+
+  useEffect(() => {
+    if (visitedList && contentid) {
+      const visited = visitedList.some(
+        place => place.contentid.toString() === contentid,
+      )
+      setIsVisited(visited)
+    }
+  }, [visitedList, contentid])
 
   // placeDetail이 업데이트될 때 city 설정
   useEffect(() => {
@@ -76,8 +94,9 @@ const PlaceDetail = () => {
     if (!token || !contentid) return
 
     try {
+      const myServiceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
       const response = await fetch(
-        `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=I%2BMzNcsHcMWL7gORiWo%2BBaZ%2FPl8w4OpluiaN88eg5zIYnjtoQ0pxS6Vpy6OaHBaIf%2BrZf9%2FgjDcrtUBv%2BcuhCw%3D%3D&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
+        `https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=${myServiceKey}&MobileOS=ETC&MobileOS=ETC&MobileApp=AILearning&_type=json&contentId=${contentid}&contentTypeId=${contenttypeid}&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=N&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1`,
       )
       const data = await response.json()
       if (data.response.body.items.item[0]) {
@@ -93,7 +112,9 @@ const PlaceDetail = () => {
     if (!token || !contentid) return
 
     const successResponse = await postPlaceLike(token, Number(contentid))
-    if (successResponse) setLike(successResponse.data.like)
+    if (successResponse && successResponse.data) {
+      setLikeInfo(successResponse.data.like)
+    }
   }
 
   const handleLikeToggle = async () => {
@@ -101,11 +122,23 @@ const PlaceDetail = () => {
 
     try {
       await postLike(token, Number(contentid))
-      await refetchLikeList() // 좋아요 리스트 갱신
-      setIsLiked(!isLiked) // 상태 변경
+      await refetchLikeList()
+      setIsLiked(!isLiked)
       fetchPlaceLikeTotal()
     } catch (error) {
       console.error('Error toggling like:', error)
+    }
+  }
+
+  const handleVistedCheckButton = async () => {
+    if (!token || !contentid) return
+
+    try {
+      await postAddVisited(token, Number(contentid))
+      await refetchVisitedList()
+      setIsVisited(!isVisited)
+    } catch (error) {
+      console.error('Error toggling visited:', error)
     }
   }
 
@@ -122,37 +155,57 @@ const PlaceDetail = () => {
       case 15:
         return '축제공연행사'
       default:
-        return ''
+        return '기타'
     }
   }
 
   return (
     <>
-      <BackButton />
-      <L.MapIconContainer>
-        {showMap ? (
-          <Icon
-            icon='system-uicons:picture'
-            width='28'
-            height='28'
-            onClick={handleMapToggle}
-          />
-        ) : (
-          <Icon
-            icon='material-symbols-light:map-outline'
-            width='28'
-            height='28'
-            onClick={handleMapToggle}
-          />
-        )}
-      </L.MapIconContainer>
-
       <L.Container>
+        <L.HeaderContainer>
+          <BackButton />
+          <L.HeaderRightIcons>
+            <L.VisitedCheckButton onClick={handleVistedCheckButton}>
+              {isVisited ? (
+                <>
+                  방문완료&nbsp;
+                  <Icon icon='iconamoon:check' width='12' height='12' />
+                </>
+              ) : (
+                <>
+                  방문한 장소&nbsp;
+                  <Icon icon='material-symbols:add' width='12' height='12' />
+                </>
+              )}
+            </L.VisitedCheckButton>
+            <L.MapButton>
+              {placeDetail?.firstimage && (
+                <>
+                  {showMap ? (
+                    <Icon
+                      icon='system-uicons:picture'
+                      width='28'
+                      height='28'
+                      onClick={handleMapToggle}
+                    />
+                  ) : (
+                    <Icon
+                      icon='material-symbols-light:map-outline'
+                      width='28'
+                      height='28'
+                      onClick={handleMapToggle}
+                    />
+                  )}
+                </>
+              )}
+            </L.MapButton>
+          </L.HeaderRightIcons>
+        </L.HeaderContainer>
         <L.Title>
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
             <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
-            <L.SmText>{like || 0}</L.SmText>
+            <L.SmText>{likeInfo || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
         <L.SecondLineContainer>
@@ -184,30 +237,43 @@ const PlaceDetail = () => {
             mapy={placeDetail?.mapy || 0}
             height={imageHeight}
           />
-        ) : (
-          placeDetail?.firstimage && (
-            <L.ImageContainer ref={imageContainerRef}>
-              <L.PlaceImage
-                src={placeDetail.firstimage}
-                alt={placeDetail.title}
-              />
-            </L.ImageContainer>
-          )
-        )}
-
-        {placeDetail?.homepage && (
-          <L.OverviewContainer>
-            <L.OverviewTitle>홈페이지</L.OverviewTitle>
-            <L.HomepageLink
-              dangerouslySetInnerHTML={{ __html: placeDetail.homepage }}
+        ) : placeDetail?.firstimage ? (
+          <L.ImageContainer ref={imageContainerRef}>
+            <L.PlaceImage
+              src={placeDetail.firstimage}
+              alt={placeDetail.title}
             />
-          </L.OverviewContainer>
+          </L.ImageContainer>
+        ) : (
+          <PlaceMap
+            mapx={placeDetail?.mapx || 0}
+            mapy={placeDetail?.mapy || 0}
+            height={imageHeight}
+          />
         )}
-        {placeDetail?.overview && (
-          <L.OverviewContainer>
+        <L.OverviewContainer>
+          {placeDetail?.homepage && (
+            <>
+              <L.OverviewTitle>홈페이지</L.OverviewTitle>
+              <L.HomepageLink
+                dangerouslySetInnerHTML={{ __html: placeDetail.homepage }}
+              />
+              <br></br>
+            </>
+          )}
+          {placeDetail?.overview && (
             <L.OverviewText>{placeDetail.overview}</L.OverviewText>
-          </L.OverviewContainer>
-        )}
+          )}
+          {Number(contenttypeid) === 12 && (
+            <ContentType12 contentid={contentid!} />
+          )}
+          {Number(contenttypeid) === 14 && (
+            <ContentType14 contentid={contentid!} />
+          )}
+          {Number(contenttypeid) === 15 && (
+            <ContentType15 contentid={contentid!} />
+          )}
+        </L.OverviewContainer>
       </L.Container>
     </>
   )

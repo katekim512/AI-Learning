@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react'
-import { useEffect, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // import img1 from './img/1.png'
@@ -36,8 +35,8 @@ import { useNavigate } from 'react-router-dom'
 // import img8 from './img/8.png'
 // import img9 from './img/9.png'
 import * as L from './styles/Rank.style'
-import { getVisited } from '../../api/profile/getVisited'
 import { getRank } from '../../api/rank/getRank'
+import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
 
 interface Place {
@@ -248,6 +247,7 @@ const PlaceCard: React.FC<{
 }
 
 const Rank: React.FC = () => {
+  const { visitedList } = useVisitedList()
   const [visitedPlaces, setVisitedPlaces] = useState<Set<number>>(new Set())
   const [top100Places, setTop100Places] = useState<Place[]>([])
 
@@ -262,11 +262,9 @@ const Rank: React.FC = () => {
     }
 
     const fetchVisitedPlaces = async () => {
-      const token = authToken.getAccessToken()
-      const visited = await getVisited(token)
-      if (visited && visited.data) {
+      if (visitedList) {
         const visitedIds = new Set(
-          visited.data.map((place: VisitedPlace) => place.contentid),
+          visitedList.map((place: VisitedPlace) => place.contentid),
         ) // Set 생성
         setVisitedPlaces(visitedIds)
       }

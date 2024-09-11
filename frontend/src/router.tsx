@@ -14,7 +14,6 @@ import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
 import Register from './pages/RegisterPage/Register'
-import Test from './pages/TestPage/Test'
 
 const router = createBrowserRouter([
   {
@@ -76,10 +75,6 @@ const router = createBrowserRouter([
       {
         path: 'ai-schedule-step3',
         element: <AISchedule3 />,
-      },
-      {
-        path: 'test',
-        element: <Test />,
       },
     ],
   },

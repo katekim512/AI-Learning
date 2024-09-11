@@ -3,17 +3,17 @@ import { AxiosResponse } from 'axios'
 import { aiLearningAxios } from '../axiosInstance'
 
 interface SuccessResponse {
-  like: number
+  message: string
 }
 
-export const postPlaceLike = async (
+export const postAddVisited = async (
   token: string,
   contentid: number,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
-    'calendar/place-like',
+    'calendar/add-visited',
     { contentid },
     { headers: { Authorization: `Bearer ${token}` } },
   )
-  return response
+  return response.data
 }
