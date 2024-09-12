@@ -13,6 +13,7 @@ import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
+import RecommendDetail from './pages/RecommendPage/RecommendDetail'
 import Register from './pages/RegisterPage/Register'
 
 const router = createBrowserRouter([
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: 'recommend-place',
         element: <Recommend />,
+      },
+      {
+        path: 'recommend-place-detail/:locationid',
+        element: <RecommendDetail />,
       },
       {
         path: 'ranking-place',
