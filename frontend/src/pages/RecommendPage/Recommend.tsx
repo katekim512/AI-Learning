@@ -56,7 +56,7 @@ const Recommend: React.FC = () => {
         onClick={() => handleClick({ areacode: [31], sigungucode: null })}
       >
         <L.Icon src='img/placeRecommend/Gyeonggido.png' alt='경기도' />
-        <L.LocationName>경기도</L.LocationName>
+        <L.LocationName className='gyeonggi'>경기도</L.LocationName>
       </L.Location>
       {/* 충청도 */}
       <L.Location

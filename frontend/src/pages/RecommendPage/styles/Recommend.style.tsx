@@ -38,6 +38,10 @@ export const LocationName = styled.p`
   margin-top: 0.5rem;
   font-size: 0.8rem;
   color: black;
+
+  &.gyeonggi {
+    margin-top: 0.1rem; /* 경기도에만 적용될 스타일 */
+  }
 `
 
 export const Title = styled.div`
