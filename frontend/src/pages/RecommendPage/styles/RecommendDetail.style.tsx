@@ -59,7 +59,6 @@ export const PlacesList = styled.ul`
 export const PlaceItem = styled.li`
   display: flex;
   align-items: center;
-  //border-bottom: 1px solid #ddd;
   padding: 10px 0;
 `
 
