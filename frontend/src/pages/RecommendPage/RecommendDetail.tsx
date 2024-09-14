@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import PlaceItem from './components/PlaceItem'
 import * as L from './styles/RecommendDetail.style'
 //import { getAllPlace } from '../../api/calendar/getAllPlace'
 //import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
@@ -203,19 +204,6 @@ const RecommendDetail: React.FC = () => {
     sigungucode !== 'null' ? Number(sigungucode) : null,
   )
 
-  const getContentTypeDescription = (contenttypeid: number): string => {
-    switch (contenttypeid) {
-      case 12:
-        return '관광지'
-      case 14:
-        return '문화시설'
-      case 15:
-        return '축제공연행사'
-      default:
-        return '기타'
-    }
-  }
-
   const filteredPlaces = recommendedPlaces.filter(place =>
     place.place.includes(searchTerm),
   )
@@ -253,29 +241,14 @@ const RecommendDetail: React.FC = () => {
           </L.SectionTitle>
           <L.PlacesList>
             {filteredPlaces.map((place, index) => (
-              <L.PlaceItem
+              <PlaceItem
                 key={place.contentid}
-                onClick={() => handleClick(place)}
-              >
-                <L.PlaceNumber>{index + 1}</L.PlaceNumber>
-                <L.PlaceImage
-                  src={place.firstimage || dummyImage}
-                  alt={place.place}
-                />
-                <L.PlaceInfo>
-                  <L.PlaceName>{place.place}</L.PlaceName>
-                  <L.PlaceDescription>
-                    {`${locationName} · ${getContentTypeDescription(place.contenttypeid)}`}
-                  </L.PlaceDescription>
-                </L.PlaceInfo>
-                <L.AddButton
-                  onClick={e =>
-                    handleAddButtonClick(e, place.contentid, place.place)
-                  }
-                >
-                  추가
-                </L.AddButton>
-              </L.PlaceItem>
+                place={place}
+                index={index}
+                locationName={locationName}
+                onClick={handleClick}
+                onAddClick={handleAddButtonClick}
+              />
             ))}
           </L.PlacesList>
         </L.PlacesSection>
