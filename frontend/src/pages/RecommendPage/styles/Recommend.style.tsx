@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 export const Background = styled.div`
   position: relative;
-  width: 101%;
-  height: calc(100vh - 4rem);
+  width: 100%;
+  height: calc(100vh - 5rem);
   background-image: url('img/placeRecommend/Background.png');
   background-size: 100% auto;
   background-position: bottom center;
   background-repeat: no-repeat;
   overflow: hidden;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 `
 
 export const Location = styled.div<{
