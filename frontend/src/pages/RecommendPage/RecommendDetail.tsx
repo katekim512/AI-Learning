@@ -246,7 +246,18 @@ const RecommendDetail: React.FC = () => {
     place.place.includes(searchTerm),
   )
 
-  const handleAddButtonClick = (contentid: number, place: string) => {
+  const handleClick = (place: RecommendPlace) => {
+    navigate(
+      `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+    )
+  }
+
+  const handleAddButtonClick = (
+    e: React.MouseEvent,
+    contentid: number,
+    place: string,
+  ) => {
+    e.stopPropagation() // 상세페이지와 추가버튼 분리
     navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
   }
 
@@ -268,7 +279,10 @@ const RecommendDetail: React.FC = () => {
           </SectionTitle>
           <PlacesList>
             {filteredPlaces.map((place, index) => (
-              <PlaceItem key={place.contentid}>
+              <PlaceItem
+                key={place.contentid}
+                onClick={() => handleClick(place)}
+              >
                 <PlaceNumber>{index + 1}</PlaceNumber>
                 <PlaceImage
                   src={place.firstimage || dummyImage}
@@ -281,8 +295,8 @@ const RecommendDetail: React.FC = () => {
                   </PlaceDescription>
                 </PlaceInfo>
                 <AddButton
-                  onClick={() =>
-                    handleAddButtonClick(place.contentid, place.place)
+                  onClick={e =>
+                    handleAddButtonClick(e, place.contentid, place.place)
                   }
                 >
                   추가
