@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import * as L from '../RecommendPage/styles/Recommend.style' // Import the styled components with alias L
+import * as L from '../RecommendPage/styles/Recommend.style'
 
 const Recommend: React.FC = () => {
   const navigate = useNavigate()
@@ -16,13 +16,6 @@ const Recommend: React.FC = () => {
 
     navigate(`/recommend-place-detail?${queryString}`)
   }
-
-  // const handleViewAllClick = () => {
-  //   navigate('/recommend-place-detail') // "모두 보기" 버튼 클릭 시 이동할 경로
-  // }
-
-  // Example call
-  handleClick({ areacode: [1], sigungucode: null })
 
   return (
     <L.Background>

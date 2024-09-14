@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
 
+import * as L from './styles/RecommendDetail.style'
 import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
@@ -44,111 +44,6 @@ interface RecommendPlace {
 //     firstimage: dummyImage,
 //   },
 // ]
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 6rem); /* 전체 화면 높이 */
-  margin-bottom: 6rem;
-`
-
-// 스타일드 컴포넌트 정의
-const Container = styled.div`
-  padding: 20px;
-  padding-bottom: 0px;
-  font-family: 'Arial', sans-serif;
-`
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
-`
-
-const SearchInput = styled.input`
-  padding: 8px 12px;
-  font-size: 14px;
-  border: none; /* 테두리 제거 */
-  outline: none; /* 포커스 시 기본 테두리 제거 */
-  border-radius: 4px;
-  margin-left: 0.5rem;
-  width: calc(100% - 1.8rem);
-  background-color: #f7f7f7; /* 배경색 설정 */
-  color: #333; /* 텍스트 색상 설정 */
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01); /* 내부 그림자 추가 */
-`
-
-const PlacesSection = styled.section`
-  margin-top: 10px;
-`
-
-const SectionTitle = styled.div`
-  font-size: 16px;
-  margin-bottom: 15px;
-  margin-left: 5px;
-`
-
-const BoldText = styled.span`
-  font-weight: bold;
-  font-size: 20px; /* 글씨 크기를 조금 키움 */
-`
-
-const PlacesList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`
-
-const PlaceItem = styled.li`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-`
-
-const PlaceNumber = styled.span`
-  font-size: 12px;
-  font-weight: bold;
-  margin-left: 5px;
-  margin-right: 15px;
-`
-
-const PlaceImage = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 5px;
-  margin-right: 15px;
-`
-
-const PlaceInfo = styled.div`
-  flex-grow: 1;
-`
-
-const PlaceName = styled.p`
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-`
-
-const PlaceDescription = styled.p`
-  font-size: 14px;
-  color: #666;
-  margin: 5px 0 0 0;
-`
-
-const AddButton = styled.button`
-  background-color: #f0f0f0;
-  border: none;
-  padding: 5px 13px;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 22px;
-
-  &:hover {
-    background-color: #e0e0e0;
-  }
-`
 
 const RecommendDetail: React.FC = () => {
   const token = authToken.getAccessToken()
@@ -262,52 +157,52 @@ const RecommendDetail: React.FC = () => {
   }
 
   return (
-    <AppContainer>
-      <Container>
-        <Header>
+    <L.AppContainer>
+      <L.Container>
+        <L.Header>
           <BackButton />
-          <SearchInput
+          <L.SearchInput
             type='text'
             placeholder='원하는 장소 검색'
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)} // 검색어 업데이트
+            onChange={e => setSearchTerm(e.target.value)}
           />
-        </Header>
-        <PlacesSection>
-          <SectionTitle>
-            <BoldText>{locationName}</BoldText> 추천 장소
-          </SectionTitle>
-          <PlacesList>
+        </L.Header>
+        <L.PlacesSection>
+          <L.SectionTitle>
+            <L.BoldText>{locationName}</L.BoldText> 추천 장소
+          </L.SectionTitle>
+          <L.PlacesList>
             {filteredPlaces.map((place, index) => (
-              <PlaceItem
+              <L.PlaceItem
                 key={place.contentid}
                 onClick={() => handleClick(place)}
               >
-                <PlaceNumber>{index + 1}</PlaceNumber>
-                <PlaceImage
+                <L.PlaceNumber>{index + 1}</L.PlaceNumber>
+                <L.PlaceImage
                   src={place.firstimage || dummyImage}
                   alt={place.place}
                 />
-                <PlaceInfo>
-                  <PlaceName>{place.place}</PlaceName>
-                  <PlaceDescription>
+                <L.PlaceInfo>
+                  <L.PlaceName>{place.place}</L.PlaceName>
+                  <L.PlaceDescription>
                     {`${locationName} · ${getContentTypeDescription(place.contenttypeid)}`}
-                  </PlaceDescription>
-                </PlaceInfo>
-                <AddButton
+                  </L.PlaceDescription>
+                </L.PlaceInfo>
+                <L.AddButton
                   onClick={e =>
                     handleAddButtonClick(e, place.contentid, place.place)
                   }
                 >
                   추가
-                </AddButton>
-              </PlaceItem>
+                </L.AddButton>
+              </L.PlaceItem>
             ))}
-          </PlacesList>
-        </PlacesSection>
-      </Container>
+          </L.PlacesList>
+        </L.PlacesSection>
+      </L.Container>
       <BottomNav />
-    </AppContainer>
+    </L.AppContainer>
   )
 }
 
