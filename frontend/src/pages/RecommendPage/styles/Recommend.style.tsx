@@ -52,3 +52,25 @@ export const Title = styled.div`
   text-align: left;
   font-size: 18px;
 `
+
+export const ViewAllButton = styled.button`
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: #333; // 버튼 텍스트 색상
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #666; // 호버 시 텍스트 색상 변경
+  }
+
+  svg {
+    margin-left: 5px;
+  }
+`

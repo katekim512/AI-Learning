@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
 import BottomNav from '../../components/BottomMenuBar/BottomMenuBar'
@@ -165,27 +166,38 @@ const RecommendDetail: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
   //-----API 연결----
   useEffect(() => {
-    const fetchRecommendedPlaces = async () => {
-      if (!areacode || !sigungucode) return
+    const fetchPlaces = async () => {
+      if (sigungucode === null) return
 
-      const requestPayload = [
-        {
-          areacode,
-          sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
-        },
-      ]
-
-      try {
-        const response = await postRecommendPlace(token, requestPayload)
-        if (response && response.data) {
-          setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+      if (areacode.length === 0) {
+        // areacode가 빈 배열인 경우
+        const allPlaces = await getAllPlace(token)
+        if (allPlaces) {
+          setRecommendedPlaces(allPlaces.data)
+        } else {
+          setRecommendedPlaces([]) // null인 경우 빈 배열로 설정
         }
-      } catch (error) {
-        console.error('추천 장소를 가져오는 데 실패했습니다:', error)
+      } else {
+        // areacode가 값이 있는 경우
+        const requestPayload = [
+          {
+            areacode,
+            sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
+          },
+        ]
+
+        try {
+          const response = await postRecommendPlace(token, requestPayload)
+          if (response && response.data) {
+            setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+          }
+        } catch (error) {
+          console.error('추천 장소를 가져오는 데 실패했습니다:', error)
+        }
       }
     }
 
-    fetchRecommendedPlaces()
+    fetchPlaces()
   }, [areacode, sigungucode, token])
 
   // 더미 데이터를 상태로 설정
@@ -197,6 +209,7 @@ const RecommendDetail: React.FC = () => {
     areacode: number[],
     sigungucode: number | null,
   ): string => {
+    if (areacode.length === 0) return '전체'
     if (areacode.includes(1)) return '서울'
     if (areacode.includes(2)) return '인천'
     if (areacode.includes(32)) return '강원도'

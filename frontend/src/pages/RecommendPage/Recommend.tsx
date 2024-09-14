@@ -17,6 +17,10 @@ const Recommend: React.FC = () => {
     navigate(`/recommend-place-detail?${queryString}`)
   }
 
+  // const handleViewAllClick = () => {
+  //   navigate('/recommend-place-detail') // "모두 보기" 버튼 클릭 시 이동할 경로
+  // }
+
   // Example call
   handleClick({ areacode: [1], sigungucode: null })
 
@@ -124,6 +128,12 @@ const Recommend: React.FC = () => {
         <L.Icon src='img/placeRecommend/Jeju.png' alt='제주' />
         <L.LocationName>제주</L.LocationName>
       </L.Location>
+      {/* 모두 보기*/}
+      <L.ViewAllButton
+        onClick={() => handleClick({ areacode: [], sigungucode: null })}
+      >
+        모두 보기 &gt;
+      </L.ViewAllButton>
     </L.Background>
   )
 }
