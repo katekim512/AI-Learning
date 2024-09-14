@@ -27,8 +27,9 @@ export const SearchInput = styled.input`
   outline: none;
   border-radius: 4px;
   margin-left: 0.5rem;
+  margin-top: 0.15rem;
   width: calc(100% - 1.8rem);
-  background-color: #f7f7f7;
+  background-color: transparent;
   color: #333;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
 `
