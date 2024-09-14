@@ -62,7 +62,7 @@ const router = createBrowserRouter([
         element: <Recommend />,
       },
       {
-        path: 'recommend-place-detail/:locationid',
+        path: 'recommend-place-detail',
         element: <RecommendDetail />,
       },
       {
