@@ -1,25 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
 import BottomNav from '../../components/BottomMenuBar/BottomMenuBar'
+import authToken from '../../stores/authToken'
 import dummyImage from '../RecommendPage/img/dummy.png'
 
-// 추천 장소 데이터 타입 정의
-interface Place {
-  id: number
-  name: string
-  description: string
-  imageUrl: string
+interface RecommendPlace {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  place: string
+  firstimage: string
 }
 
-// 추천 장소 데이터를 위한 더미 데이터
-const places: Place[] = Array.from({ length: 10 }, (_, index) => ({
-  id: index + 1,
-  name: '첨성대',
-  description: '경주 • 유적지',
-  imageUrl: dummyImage, // 실제 이미지 URL로 대체 필요
-}))
+// const dummyData: RecommendPlace[] = [
+//   {
+//     contentid: 1,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '불국사',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 2,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '석굴암',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 3,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '동궁과 월지',
+//     firstimage: dummyImage,
+//   },
+// ]
 
 const AppContainer = styled.div`
   display: flex;
@@ -127,25 +150,117 @@ const AddButton = styled.button`
 `
 
 const RecommendDetail: React.FC = () => {
+  const token = authToken.getAccessToken()
+
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+
+  // Retrieve query parameters
+  const areacode = JSON.parse(searchParams.get('areacode') || '[]')
+  const sigungucode = searchParams.get('sigungucode')
+  const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
+    [],
+  )
+  const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
+  //-----API 연결----
+  useEffect(() => {
+    const fetchRecommendedPlaces = async () => {
+      if (!areacode || !sigungucode) return
+
+      const requestPayload = [
+        {
+          areacode,
+          sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
+        },
+      ]
+
+      try {
+        const response = await postRecommendPlace(token, requestPayload)
+        if (response && response.data) {
+          setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+        }
+      } catch (error) {
+        console.error('추천 장소를 가져오는 데 실패했습니다:', error)
+      }
+    }
+
+    fetchRecommendedPlaces()
+  }, [areacode, sigungucode, token])
+
+  // 더미 데이터를 상태로 설정
+  // useEffect(() => {
+  //   setRecommendedPlaces(dummyData)
+  // }, [areacode, sigungucode, token])
+
+  const getLocationName = (
+    areacode: number[],
+    sigungucode: number | null,
+  ): string => {
+    if (areacode.includes(1)) return '서울'
+    if (areacode.includes(2)) return '인천'
+    if (areacode.includes(32)) return '강원도'
+    if (areacode.includes(31)) return '경기도'
+    if (areacode.includes(33) || areacode.includes(34)) return '충청도'
+    if (areacode.includes(35) && sigungucode === 2) return '경주' // 특정 조건에 맞춰 경주로 설정
+    if (areacode.includes(35) || areacode.includes(36)) return '경상도'
+    if (areacode.includes(37) || areacode.includes(38)) return '전라도'
+    if (areacode.includes(6)) return '부산'
+    if (areacode.includes(5)) return '광주'
+    if (areacode.includes(39)) return '제주'
+    return '알 수 없음' // 매칭되지 않는 경우 기본값
+  }
+
+  const locationName = getLocationName(
+    areacode,
+    sigungucode !== 'null' ? Number(sigungucode) : null,
+  )
+
+  const getContentTypeDescription = (contenttypeid: number): string => {
+    switch (contenttypeid) {
+      case 12:
+        return '관광지'
+      case 14:
+        return '문화시설'
+      case 15:
+        return '축제공연행사'
+      default:
+        return '기타'
+    }
+  }
+
+  const filteredPlaces = recommendedPlaces.filter(place =>
+    place.place.includes(searchTerm),
+  )
+
   return (
     <AppContainer>
       <Container>
         <Header>
           <BackButton />
-          <SearchInput type='text' placeholder='원하는 장소 검색' />
+          <SearchInput
+            type='text'
+            placeholder='원하는 장소 검색'
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)} // 검색어 업데이트
+          />
         </Header>
         <PlacesSection>
           <SectionTitle>
-            <BoldText>경주</BoldText> 추천 장소
+            <BoldText>{locationName}</BoldText> 추천 장소
           </SectionTitle>
           <PlacesList>
-            {places.map((place, index) => (
-              <PlaceItem key={place.id}>
+            {filteredPlaces.map((place, index) => (
+              <PlaceItem key={place.contentid}>
                 <PlaceNumber>{index + 1}</PlaceNumber>
-                <PlaceImage src={place.imageUrl} alt={place.name} />
+                <PlaceImage
+                  src={place.firstimage || dummyImage}
+                  alt={place.place}
+                />
                 <PlaceInfo>
-                  <PlaceName>{place.name}</PlaceName>
-                  <PlaceDescription>경주 • 유적지</PlaceDescription>
+                  <PlaceName>{place.place}</PlaceName>
+                  <PlaceDescription>
+                    {`${locationName} · ${getContentTypeDescription(place.contenttypeid)}`}
+                  </PlaceDescription>
                 </PlaceInfo>
                 <AddButton>추가</AddButton>
               </PlaceItem>
