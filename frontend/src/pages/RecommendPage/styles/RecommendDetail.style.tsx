@@ -28,9 +28,9 @@ export const SearchInput = styled.input`
   border-radius: 4px;
   margin-left: 0.5rem;
   width: calc(100% - 1.8rem);
-  background-color: #f7f7f7;
+  background-color: transparent;
   color: #333;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
+  //box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
 `
 
 export const PlacesSection = styled.section`
@@ -69,8 +69,8 @@ export const PlaceNumber = styled.span`
 `
 
 export const PlaceImage = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 51px;
+  height: 51px;
   border-radius: 5px;
   margin-right: 15px;
 `
