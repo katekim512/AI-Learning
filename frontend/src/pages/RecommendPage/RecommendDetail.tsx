@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
@@ -151,6 +151,7 @@ const AddButton = styled.button`
 
 const RecommendDetail: React.FC = () => {
   const token = authToken.getAccessToken()
+  const navigate = useNavigate() // useNavigate 훅 사용
 
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -232,6 +233,10 @@ const RecommendDetail: React.FC = () => {
     place.place.includes(searchTerm),
   )
 
+  const handleAddButtonClick = (contentid: number, place: string) => {
+    navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
+  }
+
   return (
     <AppContainer>
       <Container>
@@ -262,7 +267,13 @@ const RecommendDetail: React.FC = () => {
                     {`${locationName} · ${getContentTypeDescription(place.contenttypeid)}`}
                   </PlaceDescription>
                 </PlaceInfo>
-                <AddButton>추가</AddButton>
+                <AddButton
+                  onClick={() =>
+                    handleAddButtonClick(place.contentid, place.place)
+                  }
+                >
+                  추가
+                </AddButton>
               </PlaceItem>
             ))}
           </PlacesList>
