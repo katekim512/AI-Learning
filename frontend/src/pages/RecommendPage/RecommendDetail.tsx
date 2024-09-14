@@ -5,7 +5,6 @@ import * as L from './styles/RecommendDetail.style'
 import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
-import BottomNav from '../../components/BottomMenuBar/BottomMenuBar'
 import authToken from '../../stores/authToken'
 import dummyImage from '../RecommendPage/img/dummy.png'
 
@@ -201,7 +200,6 @@ const RecommendDetail: React.FC = () => {
           </L.PlacesList>
         </L.PlacesSection>
       </L.Container>
-      <BottomNav />
     </L.AppContainer>
   )
 }
