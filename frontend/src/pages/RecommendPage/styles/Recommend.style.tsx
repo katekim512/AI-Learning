@@ -4,7 +4,7 @@ export const Background = styled.div`
   position: relative;
   width: 101%;
   height: calc(100vh - 4rem);
-  background-image: url('img/placeRecommend/Korea.png');
+  background-image: url('img/placeRecommend/Background.png');
   background-size: 100% auto;
   background-position: bottom center;
   background-repeat: no-repeat;
@@ -33,9 +33,20 @@ export const Icon = styled.img`
   max-width: 100px;
   height: auto;
 `
+export const Picture = styled.img`
+  width: 120vw;
+  max-width: 360px;
+  height: auto;
+`
+
+export const Picture2 = styled.img`
+  width: 120vw;
+  max-width: 150px;
+  height: auto;
+`
 
 export const LocationName = styled.p`
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
   font-size: 0.8rem;
   color: black;
 
@@ -55,6 +66,8 @@ export const Title = styled.div`
   padding-left: 2rem;
   text-align: left;
   font-size: 18px;
+  z-index: 100;
+  position: relative; /* Ensure the z-index works by adding a position property */
 `
 
 export const ViewAllButton = styled.button`

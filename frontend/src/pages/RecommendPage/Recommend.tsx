@@ -22,6 +22,16 @@ const Recommend: React.FC = () => {
       <L.Title>
         <h1>지역별 장소 보기</h1>
       </L.Title>
+      {/* 한반도 */}
+      <L.Location top='45%' left='50%'>
+        <L.Picture src='/img/placeRecommend/Korea.png' alt='한반도' />
+        <L.LocationName></L.LocationName>
+      </L.Location>
+      {/* 한반도2 - 제주도 */}
+      <L.Location top='89%' left='30%'>
+        <L.Picture2 src='/img/placeRecommend/Korea2.png' alt='한반도' />
+        <L.LocationName></L.LocationName>
+      </L.Location>
       {/* 서울 */}
       <L.Location
         top='17%'
@@ -114,7 +124,7 @@ const Recommend: React.FC = () => {
       </L.Location>
       {/* 제주 */}
       <L.Location
-        top='90%'
+        top='88%'
         left='30%'
         onClick={() => handleClick({ areacode: [39], sigungucode: null })}
       >
