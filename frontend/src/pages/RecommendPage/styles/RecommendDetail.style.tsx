@@ -17,7 +17,9 @@ export const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 `
 
 export const SearchInput = styled.input`
@@ -31,7 +33,6 @@ export const SearchInput = styled.input`
   width: calc(100% - 1.8rem);
   background-color: transparent;
   color: #333;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
 `
 
 export const PlacesSection = styled.section`
@@ -58,7 +59,7 @@ export const PlacesList = styled.ul`
 export const PlaceItem = styled.li`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  //border-bottom: 1px solid #ddd;
   padding: 10px 0;
 `
 
@@ -70,8 +71,8 @@ export const PlaceNumber = styled.span`
 `
 
 export const PlaceImage = styled.img`
-  width: 51px;
-  height: 51px;
+  width: 52px;
+  height: 52px;
   border-radius: 5px;
   margin-right: 15px;
 `
