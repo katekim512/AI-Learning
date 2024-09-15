@@ -24,12 +24,12 @@ const Recommend: React.FC = () => {
       </L.Title>
       {/* 한반도 */}
       <L.Location top='45%' left='50%'>
-        <L.Picture src='/img/placeRecommend/korea.png' alt='한반도' />
+        <L.Picture src='/img/placeRecommend/place_korea.png' alt='한반도' />
         <L.LocationName></L.LocationName>
       </L.Location>
       {/* 한반도2 - 제주도 */}
       <L.Location top='89%' left='30%'>
-        <L.Picture2 src='/img/placeRecommend/korea2.png' alt='한반도' />
+        <L.Picture2 src='/img/placeRecommend/place_korea2.png' alt='한반도' />
         <L.LocationName></L.LocationName>
       </L.Location>
       {/* 서울 */}
@@ -38,7 +38,7 @@ const Recommend: React.FC = () => {
         left='45%'
         onClick={() => handleClick({ areacode: [1], sigungucode: null })}
       >
-        <L.Icon src='/img/placeRecommend/seoul.png' alt='서울' />
+        <L.Icon src='/img/placeRecommend/place_seoul.png' alt='서울' />
         <L.LocationName>서울</L.LocationName>
       </L.Location>
       {/* 인천 */}
@@ -47,7 +47,7 @@ const Recommend: React.FC = () => {
         left='19%'
         onClick={() => handleClick({ areacode: [2], sigungucode: null })}
       >
-        <L.Icon src='/img/placeRecommend/incheon.png' alt='인천' />
+        <L.Icon src='/img/placeRecommend/place_incheon.png' alt='인천' />
         <L.LocationName>인천</L.LocationName>
       </L.Location>
       {/* 강원도 */}
@@ -56,7 +56,7 @@ const Recommend: React.FC = () => {
         left='75%'
         onClick={() => handleClick({ areacode: [32], sigungucode: null })}
       >
-        <L.Icon src='/img/placeRecommend/gangwondo.png' alt='강원도' />
+        <L.Icon src='/img/placeRecommend/place_gangwondo.png' alt='강원도' />
         <L.LocationName>강원도</L.LocationName>
       </L.Location>
       {/* 경기도 */}
@@ -65,7 +65,7 @@ const Recommend: React.FC = () => {
         left='54%'
         onClick={() => handleClick({ areacode: [31], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/gyeonggido.png' alt='경기도' />
+        <L.Icon src='img/placeRecommend/place_gyeonggido.png' alt='경기도' />
         <L.LocationName className='gyeonggi'>경기도</L.LocationName>
       </L.Location>
       {/* 충청도 */}
@@ -74,7 +74,7 @@ const Recommend: React.FC = () => {
         left='29%'
         onClick={() => handleClick({ areacode: [33, 34], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/chungcheongdo.png' alt='충청도' />
+        <L.Icon src='img/placeRecommend/place_chungcheongdo.png' alt='충청도' />
         <L.LocationName>충청도</L.LocationName>
       </L.Location>
       {/* 경상도 */}
@@ -83,7 +83,7 @@ const Recommend: React.FC = () => {
         left='59%'
         onClick={() => handleClick({ areacode: [35, 36], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/gyeongsangdo.png' alt='경상도' />
+        <L.Icon src='img/placeRecommend/place_gyeongsangdo.png' alt='경상도' />
         <L.LocationName>경상도</L.LocationName>
       </L.Location>
       {/* 경주 */}
@@ -92,7 +92,7 @@ const Recommend: React.FC = () => {
         left='82%'
         onClick={() => handleClick({ areacode: [35], sigungucode: 2 })}
       >
-        <L.Icon src='img/placeRecommend/gyeongju.png' alt='경주' />
+        <L.Icon src='img/placeRecommend/place_gyeongju.png' alt='경주' />
         <L.LocationName>경주</L.LocationName>
       </L.Location>
       {/* 전라도 */}
@@ -101,7 +101,7 @@ const Recommend: React.FC = () => {
         left='20%'
         onClick={() => handleClick({ areacode: [37, 38], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/jeonlado.png' alt='전라도' />
+        <L.Icon src='img/placeRecommend/place_jeonlado.png' alt='전라도' />
         <L.LocationName>전라도</L.LocationName>
       </L.Location>
       {/* 부산 */}
@@ -110,7 +110,7 @@ const Recommend: React.FC = () => {
         left='70%'
         onClick={() => handleClick({ areacode: [6], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/busan.png' alt='부산' />
+        <L.Icon src='img/placeRecommend/place_busan.png' alt='부산' />
         <L.LocationName>부산</L.LocationName>
       </L.Location>
       {/* 광주 */}
