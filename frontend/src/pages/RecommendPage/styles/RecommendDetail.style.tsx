@@ -8,7 +8,7 @@ export const AppContainer = styled.div`
 `
 
 export const Container = styled.div`
-  padding: 20px;
+  padding: 20px 10px;
   padding-bottom: 0px;
   font-family: 'Arial', sans-serif;
 `
@@ -37,6 +37,7 @@ export const SearchInput = styled.input`
 
 export const PlacesSection = styled.section`
   margin-top: 10px;
+  padding: 0px 10px;
 `
 
 export const SectionTitle = styled.div`
