@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 
 import DrawerButton from './DrawerButton'
 import MemoPopUp from './MemoPopUp'
@@ -37,6 +38,7 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
   const [startY, setStartY] = useState<number | null>(null)
   const token = authToken.getAccessToken()
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   useQuery(['daySchedule', date], () => postTimelineDay(token, date), {
     enabled: !!token,
@@ -168,7 +170,12 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       </L.DrawerCenter>
       <L.DrawerBottom>
         <L.DrawerBottomBox>
-          <L.DrawerBottomButton>장소 추가</L.DrawerBottomButton>
+          <L.DrawerBottomButton
+            onClick={() => navigate(`/addplace?date=${date}`)}
+          >
+            장소 추가
+          </L.DrawerBottomButton>
+
           <L.DrawerBottomButton onClick={handleMemoAdd}>
             메모 추가
           </L.DrawerBottomButton>
