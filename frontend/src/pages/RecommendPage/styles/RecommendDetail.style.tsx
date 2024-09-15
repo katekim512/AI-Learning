@@ -47,7 +47,7 @@ export const SectionTitle = styled.div`
 
 export const BoldText = styled.span`
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
 `
 
 export const PlacesList = styled.ul`
