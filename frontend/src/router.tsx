@@ -7,12 +7,14 @@ import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
 import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
+import DateSelected from './pages/DateSelectedPage/DateSelected'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
+import RecommendDetail from './pages/RecommendPage/RecommendDetail'
 import Register from './pages/RegisterPage/Register'
 
 const router = createBrowserRouter([
@@ -59,6 +61,14 @@ const router = createBrowserRouter([
       {
         path: 'recommend-place',
         element: <Recommend />,
+      },
+      {
+        path: 'recommend-place-detail',
+        element: <RecommendDetail />,
+      },
+      {
+        path: 'dateselected/:contentid/:place', // 동적 매개변수로 경로 설정
+        element: <DateSelected />,
       },
       {
         path: 'ranking-place',
