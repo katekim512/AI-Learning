@@ -7,6 +7,7 @@ import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
 import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
+import AddPlace from './pages/CalendarPage/components/AddPlace'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: 'calendar',
         element: <Calendar />,
+      },
+      {
+        path: 'addplace/:date',
+        element: <AddPlace />,
       },
       {
         path: 'calendarInput',
