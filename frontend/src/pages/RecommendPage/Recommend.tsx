@@ -119,7 +119,7 @@ const Recommend: React.FC = () => {
         left='27%'
         onClick={() => handleClick({ areacode: [5], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/gwangju.png' alt='광주' />
+        <L.Icon src='img/placeRecommend/place_gwangju.png' alt='광주' />
         <L.LocationName>광주</L.LocationName>
       </L.Location>
       {/* 제주 */}
@@ -128,7 +128,7 @@ const Recommend: React.FC = () => {
         left='30%'
         onClick={() => handleClick({ areacode: [39], sigungucode: null })}
       >
-        <L.Icon src='img/placeRecommend/jeju.png' alt='제주' />
+        <L.Icon src='img/placeRecommend/place_jeju.png' alt='제주' />
         <L.LocationName>제주</L.LocationName>
       </L.Location>
       {/* 모두 보기*/}
