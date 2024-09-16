@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { kakaoCallback } from '../../../api/auth/postKakaoCallback'
 import { postNewAccessToken } from '../../../api/auth/postNewAccessToken'
 import { postRefreshAccessToken } from '../../../api/auth/postRefreshAccessToken'
+import authKakaoToken from '../../../stores/authKakaoToken'
 import authToken from '../../../stores/authToken'
 import { isAxios401Error } from '../../../utils/isAxios401Error'
 
@@ -35,7 +36,7 @@ const KakaoRedirectHandle = () => {
         const refreshToken = res.data.refresh_token
         kakao.Auth.setAccessToken(accessToken)
 
-        authToken.setTokens(accessToken, refreshToken)
+        authKakaoToken.setTokens(accessToken, refreshToken)
         getUserInfo(accessToken, refreshToken)
       })
       .catch(error => {
@@ -54,6 +55,7 @@ const KakaoRedirectHandle = () => {
         const callbackResponse = await kakaoCallback(accessToken)
         if (callbackResponse?.data.userExists) {
           navigate('/calendar')
+          authToken.setToken(callbackResponse.data.token)
         } else {
           navigate('/register', { state: { accessToken, email } })
         }
@@ -65,12 +67,21 @@ const KakaoRedirectHandle = () => {
         if (isAxios401Error(error)) {
           const newAccessToken = await postRefreshAccessToken(refreshToken)
           if (newAccessToken) {
-            authToken.setAccessToken(newAccessToken)
-            await postNewAccessToken(newAccessToken)
+            authKakaoToken.setAccessToken(newAccessToken)
+            const successResponse = await postNewAccessToken(
+              accessToken,
+              newAccessToken,
+            )
 
-            // 재발급 받은 액세스 토큰으로 사용자 정보 다시 요청
-            kakao.Auth.setAccessToken(newAccessToken)
-            getUserInfo(newAccessToken, refreshToken)
+            if (successResponse && successResponse.data) {
+              authToken.setToken(successResponse.data.token)
+
+              // 재발급 받은 액세스 토큰으로 사용자 정보 다시 요청
+              kakao.Auth.setAccessToken(newAccessToken)
+              getUserInfo(newAccessToken, refreshToken)
+            } else {
+              console.error('새로운 액세스 토큰 백엔드 전달 실패')
+            }
           } else {
             console.error('액세스 토큰 재발급 실패')
           }
