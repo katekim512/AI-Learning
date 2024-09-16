@@ -4,7 +4,7 @@ import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
-import ChatDrawer from './components/ChatDrawer'
+import ChatDrawer from './components/ChatDrawer/ChatDrawer'
 import ContentType12 from './components/ContentType12'
 import ContentType14 from './components/ContentType14'
 import ContentType15 from './components/ContentType15'
