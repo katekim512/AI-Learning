@@ -68,11 +68,20 @@ const KakaoRedirectHandle = () => {
           const newAccessToken = await postRefreshAccessToken(refreshToken)
           if (newAccessToken) {
             authKakaoToken.setAccessToken(newAccessToken)
-            await postNewAccessToken(accessToken, newAccessToken)
+            const successResponse = await postNewAccessToken(
+              accessToken,
+              newAccessToken,
+            )
 
-            // 재발급 받은 액세스 토큰으로 사용자 정보 다시 요청
-            kakao.Auth.setAccessToken(newAccessToken)
-            getUserInfo(newAccessToken, refreshToken)
+            if (successResponse && successResponse.data) {
+              authToken.setToken(successResponse.data.token)
+
+              // 재발급 받은 액세스 토큰으로 사용자 정보 다시 요청
+              kakao.Auth.setAccessToken(newAccessToken)
+              getUserInfo(newAccessToken, refreshToken)
+            } else {
+              console.error('새로운 액세스 토큰 백엔드 전달 실패')
+            }
           } else {
             console.error('액세스 토큰 재발급 실패')
           }
