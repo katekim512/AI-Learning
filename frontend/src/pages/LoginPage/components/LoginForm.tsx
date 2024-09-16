@@ -23,7 +23,7 @@ const LoginForm = () => {
       const loginResult = await login(email, password)
 
       if (loginResult) {
-        authToken.setAccessToken(loginResult.data.token)
+        authToken.setToken(loginResult.data.token)
         navigate('/calendar')
       } else {
         console.error('login fail')
