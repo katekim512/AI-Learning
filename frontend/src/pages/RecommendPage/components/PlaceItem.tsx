@@ -20,8 +20,11 @@ interface PlaceItemProps {
   onAddClick: (e: React.MouseEvent, contentid: number, place: string) => void
 }
 
-const getContentTypeDescription = (contenttypeid: number): string => {
-  switch (contenttypeid) {
+const getContentTypeDescription = (contenttypeid: number | string): string => {
+  // contenttypeid를 숫자로 변환
+  const id = Number(contenttypeid)
+
+  switch (id) {
     case 12:
       return '관광지'
     case 14:
