@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useChatStore } from '../../../../stores/useChatStore'
 import * as L from '../../styles/ChatDrawer.style'
 
-const ChatInput = () => {
+const ChatInput = ({ contentid }: { contentid: string }) => {
   const [input, setInput] = useState('')
   const { addMessage, setLoading } = useChatStore()
 
@@ -11,11 +11,14 @@ const ChatInput = () => {
     if (!input.trim()) return
 
     // 사용자의 메시지 추가
-    addMessage({
-      id: Date.now().toString(),
-      sender: 'user',
-      text: input,
-    })
+    addMessage(
+      {
+        id: Date.now().toString(),
+        sender: 'user',
+        text: input,
+      },
+      contentid,
+    )
 
     // ChatGPT API 호출 준비
     setLoading(true)
@@ -57,20 +60,26 @@ const ChatInput = () => {
         const data = await response.json()
 
         // AI의 응답 메시지 추가
-        addMessage({
-          id: Date.now().toString(),
-          sender: 'bot',
-          text:
-            data.choices[0].message.content.trim() ||
-            '답변을 생성할 수 없습니다.',
-        })
+        addMessage(
+          {
+            id: Date.now().toString(),
+            sender: 'bot',
+            text:
+              data.choices[0].message.content.trim() ||
+              '답변을 생성할 수 없습니다.',
+          },
+          contentid,
+        )
       } catch (error) {
         console.error('Error fetching ChatGPT response:', error)
-        addMessage({
-          id: Date.now().toString(),
-          sender: 'bot',
-          text: '오류가 발생했습니다. 다시 시도해 주세요.',
-        })
+        addMessage(
+          {
+            id: Date.now().toString(),
+            sender: 'bot',
+            text: '오류가 발생했습니다. 다시 시도해 주세요.',
+          },
+          contentid,
+        )
       } finally {
         setLoading(false)
       }
