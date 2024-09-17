@@ -128,3 +128,21 @@ export const HomepageLink = styled.div`
     color: inherit;
   }
 `
+
+export const ChatButton = styled.button`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 5rem;
+  height: 5rem;
+  border: none;
+  border-radius: 100%;
+  background-color: #525fd4;
+  color: white;
+  padding: 1rem;
+  font-size: 0.7rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+`

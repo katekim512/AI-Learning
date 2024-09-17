@@ -4,6 +4,7 @@ import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
+import ChatDrawer from './components/ChatDrawer/ChatDrawer'
 import ContentType12 from './components/ContentType12'
 import ContentType14 from './components/ContentType14'
 import ContentType15 from './components/ContentType15'
@@ -46,6 +47,7 @@ const PlaceDetail = () => {
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
   const [city, setCity] = useState<string>('')
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
   useEffect(() => {
     fetchCommonPlaceInfo()
@@ -144,6 +146,14 @@ const PlaceDetail = () => {
 
   const handleMapToggle = () => {
     setShowMap(prevState => !prevState)
+  }
+
+  const handleChatButtonClick = () => {
+    if (drawerOpen) {
+      setDrawerOpen(false)
+    } else {
+      setDrawerOpen(true)
+    }
   }
 
   const getContentTypeText = (contenttypeid: number) => {
@@ -274,7 +284,24 @@ const PlaceDetail = () => {
             <ContentType15 contentid={contentid!} />
           )}
         </L.OverviewContainer>
+        <L.ChatButton onClick={handleChatButtonClick}>
+          <Icon
+            icon='fluent:chat-12-filled'
+            width='32'
+            height='32'
+            style={{ color: '#F8F8F8' }}
+          />
+          <br></br>
+          장소 Q&A
+        </L.ChatButton>
       </L.Container>
+      {drawerOpen && (
+        <ChatDrawer
+          contentid={contentid!}
+          isOpen={drawerOpen}
+          onClose={handleChatButtonClick}
+        />
+      )}
     </>
   )
 }
