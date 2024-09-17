@@ -107,7 +107,10 @@ const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
 
   const handleAddPlace = async () => {
     if (date) {
-      await postAddPlace(token, Number(contentid), date)
+      const successResponse = await postAddPlace(token, Number(contentid), date)
+      if (successResponse && successResponse.data) {
+        navigate('/calendar')
+      }
     } else {
       navigate(`/dateselected/${contentid}/${encodeURIComponent(title!)}`)
     }
