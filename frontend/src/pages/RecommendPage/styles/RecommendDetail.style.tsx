@@ -47,7 +47,7 @@ export const PlacesSection = styled.section`
 `
 
 export const SectionTitle = styled.div`
-  font-size: 16px;
+  font-size: 18x;
   margin-bottom: 15px;
   margin-left: 5px;
 `
