@@ -21,40 +21,62 @@ const ChatInput = () => {
     setLoading(true)
     setInput('')
 
-    try {
-      // ChatGPT API 호출
-      const response = await fetch(
-        'https://api.openai.com/v1/engines/davinci-codex/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+    const fetchChatGPTResponse = async (retryCount = 3): Promise<void> => {
+      try {
+        // ChatGPT API 호출
+        const response = await fetch(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: 'gpt-3.5-turbo',
+              messages: [
+                {
+                  role: 'user',
+                  content: `${input} 한국어로 대답해주고, 반말로 아이가 쉽게 이해하도록 설명해줘! 친구처럼!`,
+                },
+              ],
+              max_tokens: 200,
+            }),
           },
-          body: JSON.stringify({
-            prompt: input,
-            max_tokens: 150,
-          }),
-        },
-      )
-      const data = await response.json()
+        )
 
-      // AI의 응답 메시지 추가
-      addMessage({
-        id: Date.now().toString(),
-        sender: 'bot',
-        text: data.choices[0].text.trim() || '답변을 생성할 수 없습니다.',
-      })
-    } catch (error) {
-      console.error('Error fetching ChatGPT response:', error)
-      addMessage({
-        id: Date.now().toString(),
-        sender: 'bot',
-        text: '오류가 발생했습니다. 다시 시도해 주세요.',
-      })
-    } finally {
-      setLoading(false)
+        if (!response.ok) {
+          if (response.status === 429 && retryCount > 0) {
+            // 429 에러 발생 시 2초 후 재시도
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            return fetchChatGPTResponse(retryCount - 1)
+          }
+          throw new Error(`Error: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        // AI의 응답 메시지 추가
+        addMessage({
+          id: Date.now().toString(),
+          sender: 'bot',
+          text:
+            data.choices[0].message.content.trim() ||
+            '답변을 생성할 수 없습니다.',
+        })
+      } catch (error) {
+        console.error('Error fetching ChatGPT response:', error)
+        addMessage({
+          id: Date.now().toString(),
+          sender: 'bot',
+          text: '오류가 발생했습니다. 다시 시도해 주세요.',
+        })
+      } finally {
+        setLoading(false)
+      }
     }
+
+    await fetchChatGPTResponse()
   }
 
   return (
