@@ -1,6 +1,9 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { postAddPlace } from '../../../api/place/postAddPlace'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/PlaceDetail.style'
 
 // Kakao 객체를 전역에서 참조
@@ -12,6 +15,7 @@ declare global {
 }
 
 interface MiddleMenuBarProps {
+  date?: string
   isLiked: boolean
   isVisited: boolean
   onLikeToggle: () => void
@@ -26,6 +30,7 @@ interface MiddleMenuBarProps {
 }
 
 const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
+  date,
   isLiked,
   isVisited,
   onLikeToggle,
@@ -38,6 +43,8 @@ const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
   firstimage,
   overview,
 }) => {
+  const token = authToken.getAccessToken()
+  const navigate = useNavigate()
   const menubarRef = useRef<HTMLDivElement>(null)
   const realUrl = `https://ai-learning-kappa.vercel.app/${contenttypeid}/${contentid}` // 전달받은 contenttypeid와 contentid를 사용하여 URL 설정
 
@@ -98,6 +105,14 @@ const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
     })
   }
 
+  const handleAddPlace = async () => {
+    if (date) {
+      await postAddPlace(token, Number(contentid), date)
+    } else {
+      navigate(`/dateselected/${contentid}/${encodeURIComponent(title!)}`)
+    }
+  }
+
   return (
     <L.MenubarContainer ref={menubarRef}>
       <L.MenuButton
@@ -117,7 +132,11 @@ const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
           </>
         )}
       </L.MenuButton>
-      <L.MenuButton isLast={false} style={{ width: menuButtonWidth }}>
+      <L.MenuButton
+        onClick={handleAddPlace}
+        isLast={false}
+        style={{ width: menuButtonWidth }}
+      >
         <>
           <Icon icon='hugeicons:pin-location-03' width='24' height='24' />
           <div>장소추가</div>

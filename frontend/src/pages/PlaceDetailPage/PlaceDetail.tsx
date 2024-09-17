@@ -2,7 +2,7 @@ import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import ChatDrawer from './components/ChatDrawer/ChatDrawer'
 import ContentType12 from './components/ContentType12'
@@ -36,6 +36,8 @@ interface PlaceDetail {
 
 const PlaceDetail = () => {
   const token = authToken.getAccessToken()
+  const location = useLocation()
+  const { date } = location.state || {} // date 가져오기
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
@@ -249,6 +251,7 @@ const PlaceDetail = () => {
           />
         )}
         <MiddleMenuBar
+          date={date}
           isLiked={isLiked}
           isVisited={isVisited}
           onLikeToggle={handleLikeToggle}
