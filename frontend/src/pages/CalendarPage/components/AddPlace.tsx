@@ -24,7 +24,7 @@ interface OpenAPIPlace {
   areacode: number
   sigungucode: number
   title: string // OpenAPI의 장소 이름 필드
-  firstimage?: string // 이미지가 있을 수도 있고 없을 수도 있음
+  firstimage?: string
 }
 
 const dummyData: RecommendPlace[] = [
@@ -138,16 +138,11 @@ const AddPlace: React.FC = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate() // useNavigate 훅 사용
 
-  // const location = useLocation()
-  // const searchParams = new URLSearchParams(location.search)
-
-  // Retrieve query parameters
   const { date: dateParam } = useParams<{ date: string }>()
   const date: string | null = dateParam ?? null
 
   console.log('Date:', date)
-  // const areacode = JSON.parse(searchParams.get('areacode') || '[]')
-  // const sigungucode = searchParams.get('sigungucode')
+
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
@@ -310,11 +305,6 @@ const AddPlace: React.FC = () => {
     if (areacode.includes(39)) return '제주'
     return '알 수 없음' // 매칭되지 않는 경우 기본값
   }
-
-  // const locationName = getLocationName(
-  //   areacode,
-  //   sigungucode !== 'null' ? Number(sigungucode) : null,
-  // )
 
   const filteredPlaces = recommendedPlaces.filter(
     place => place && place.place && place.place.includes(searchTerm),
