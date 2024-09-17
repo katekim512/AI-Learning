@@ -3,25 +3,45 @@ import styled from 'styled-components'
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 5rem); /* 하단 메뉴바 5rem 뺀 높이 */
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
-  align-items: center;
-  padding: 1.5rem;
+  gap: 1rem;
+  overflow: hidden;
+`
+
+export const ProfileHeaderSection = styled.div`
+  justify-content: space-between;
+  display: flex;
+`
+
+export const HeaderIcon = styled.div`
+  display: flex;
+  margin-top: 1.7rem;
+  margin-right: 1.7rem;
+  cursor: pointer;
 `
 
 export const ProfileSection = styled.div`
   width: 100%;
   display: flex;
-  padding: 1rem;
+  align-items: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+`
+
+export const Title = styled.div`
+  margin-top: 1.7rem;
+  margin-left: 1.7rem;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 700;
 `
 
 export const ProfileContainer = styled.div`
   border-radius: 50%;
   overflow: hidden;
-  margin-left: 1rem;
-  margin-right: 2rem;
+  margin-right: 1.8rem;
   width: 6rem;
   height: 6rem;
 `
@@ -33,10 +53,24 @@ export const ProfileImage = styled.img`
   border-radius: 50%;
 `
 
+export const ProfileInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.8rem;
+  align-items: flex-start;
+`
+
 export const ProfileNickname = styled.p`
   font-weight: 700;
-  margin-top: 1rem;
   font-size: 1.5rem;
+`
+
+export const ProfileEditInfo = styled.p`
+  font-weight: 400;
+  font-size: 1rem;
+  color: #565656;
+  cursor: pointer;
 `
 
 export const BottomButton = styled.button`
@@ -54,4 +88,9 @@ export const BottomButton = styled.button`
   &:hover {
     background-color: #434cb1;
   }
+`
+
+export const BannerContainer = styled.div`
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 `

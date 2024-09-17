@@ -12,7 +12,7 @@ export interface User {
   levels: Level
 }
 
-interface Level {
+export interface Level {
   prehistoric: number
   threeKingdoms: number
   goryeo: number
