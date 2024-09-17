@@ -6,27 +6,36 @@ import GlobalStyle from './style/GlobalStyle'
 import { MobileContainer } from './style/MobileStyle'
 import setScreenHeight from './utils/mobileScreenSize/setScreenHeight'
 
+// 모바일 기기 여부 확인
+const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  )
+}
+
 const App = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const lockScreenOrientation = async () => {
-      if (screen.orientation && screen.orientation.lock) {
-        try {
-          await screen.orientation.lock('portrait') // 'portrait'를 세로 모드로 고정
-        } catch (error) {
-          console.error('Orientation lock failed:', error)
+    const handleOrientationChange = () => {
+      // 모바일 기기에서만 적용
+      if (isMobileDevice()) {
+        if (window.innerHeight > window.innerWidth) {
+          document.body.style.transform = 'rotate(0deg)'
+        } else {
+          document.body.style.transform = 'rotate(-90deg)'
         }
+      } else {
+        // 웹 환경에서는 스타일을 초기화
+        document.body.style.transform = 'none'
       }
     }
 
-    lockScreenOrientation()
+    window.addEventListener('resize', handleOrientationChange)
+    handleOrientationChange()
 
     return () => {
-      // 필요할 경우 해제
-      if (screen.orientation && screen.orientation.unlock) {
-        screen.orientation.unlock()
-      }
+      window.removeEventListener('resize', handleOrientationChange)
     }
   }, [])
 
