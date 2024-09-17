@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
@@ -16,6 +16,15 @@ interface RecommendPlace {
   sigungucode: number
   place: string
   firstimage: string
+}
+
+interface OpenAPIPlace {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  title: string // OpenAPI의 장소 이름 필드
+  firstimage?: string // 이미지가 있을 수도 있고 없을 수도 있음
 }
 
 const dummyData: RecommendPlace[] = [
@@ -129,16 +138,16 @@ const AddPlace: React.FC = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate() // useNavigate 훅 사용
 
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
+  // const location = useLocation()
+  // const searchParams = new URLSearchParams(location.search)
 
   // Retrieve query parameters
   const { date: dateParam } = useParams<{ date: string }>()
   const date: string | null = dateParam ?? null
 
   console.log('Date:', date)
-  const areacode = JSON.parse(searchParams.get('areacode') || '[]')
-  const sigungucode = searchParams.get('sigungucode')
+  // const areacode = JSON.parse(searchParams.get('areacode') || '[]')
+  // const sigungucode = searchParams.get('sigungucode')
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
@@ -181,7 +190,107 @@ const AddPlace: React.FC = () => {
   // 더미 데이터를 상태로 설정
   useEffect(() => {
     setRecommendedPlaces(dummyData)
-  }, [areacode, sigungucode, token])
+  }, [date, token])
+
+  const handleClick = (place: RecommendPlace) => {
+    navigate(
+      `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { date } },
+    )
+  }
+
+  const handleAddButtonClick = async (
+    e: React.MouseEvent,
+    contentid: number,
+  ) => {
+    e.stopPropagation()
+
+    if (!date) {
+      console.error('Date is null or undefined.')
+      return
+    }
+
+    try {
+      const response = await postAddPlace(token, contentid, date)
+      if (response) {
+        console.log('Place added successfully:', response.data.message)
+      } else {
+        console.error('Failed to add place.')
+      }
+    } catch (error) {
+      console.error('Error adding place:', error)
+    }
+  }
+
+  const fetchPlacesByContentType = async (
+    latitude: number,
+    longitude: number,
+  ) => {
+    const radius = '10000' // 검색 반경 (10km)
+    const serviceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
+    const contentTypeIds = [12, 14, 15] // 검색할 contentTypeId 목록
+    let allPlaces: RecommendPlace[] = []
+
+    try {
+      for (const contentTypeId of contentTypeIds) {
+        const url = `https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AILearning&_type=json&listYN=Y&arrange=A&mapX=${longitude}&mapY=${latitude}&radius=${radius}&contentTypeId=${contentTypeId}`
+
+        const response = await fetch(url)
+
+        if (response.ok) {
+          const contentType = response.headers.get('content-type') || ''
+          if (contentType.includes('application/json')) {
+            const data = await response.json()
+            if (data.response?.body?.items?.item) {
+              // 장소 항목들을 배열에 병합하고 'title'을 'place'로 매핑
+              const places = data.response.body.items.item.map(
+                (item: OpenAPIPlace) => ({
+                  contentid: item.contentid,
+                  contenttypeid: item.contenttypeid,
+                  areacode: Number(item.areacode),
+                  sigungucode: item.sigungucode,
+                  place: item.title, // OpenAPI의 'title'을 'place'로 매핑
+                  firstimage: item.firstimage || dummyImage, // 이미지가 없는 경우 더미 이미지 사용
+                }),
+              )
+
+              allPlaces = allPlaces.concat(places)
+
+              // 변환된 장소 목록에서 contentid 값만 콘솔에 출력
+              places.forEach((place: OpenAPIPlace) => {
+                console.log(`contentid: ${place.contentid}`)
+              })
+            }
+          } else {
+            console.error('Expected JSON, but received:', await response.text())
+          }
+        } else {
+          console.error('Failed to fetch places:', response.statusText)
+        }
+      }
+
+      setRecommendedPlaces(allPlaces)
+      console.log('Places fetched by content type:', allPlaces)
+    } catch (error) {
+      console.error('Error fetching places by content type:', error)
+    }
+  }
+
+  const handleGPSButtonClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords
+          fetchPlacesByContentType(latitude, longitude)
+        },
+        error => {
+          console.error('Error getting location:', error)
+        },
+      )
+    } else {
+      console.error('Geolocation is not supported by this browser.')
+    }
+  }
 
   const getLocationName = (
     areacode: number[],
@@ -202,49 +311,14 @@ const AddPlace: React.FC = () => {
     return '알 수 없음' // 매칭되지 않는 경우 기본값
   }
 
-  const locationName = getLocationName(
-    areacode,
-    sigungucode !== 'null' ? Number(sigungucode) : null,
+  // const locationName = getLocationName(
+  //   areacode,
+  //   sigungucode !== 'null' ? Number(sigungucode) : null,
+  // )
+
+  const filteredPlaces = recommendedPlaces.filter(
+    place => place && place.place && place.place.includes(searchTerm),
   )
-
-  const filteredPlaces = recommendedPlaces.filter(place =>
-    place.place.includes(searchTerm),
-  )
-
-  const handleClick = (place: RecommendPlace) => {
-    navigate(
-      `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
-      { state: { date } },
-    )
-  }
-
-  const handleAddButtonClick = async (
-    e: React.MouseEvent,
-    contentid: number,
-  ) => {
-    e.stopPropagation() // Prevent propagation to avoid navigating to another page
-
-    if (!date) {
-      console.error('Date is null or undefined.')
-      return
-    }
-
-    const requestBody = {
-      contentid,
-      date,
-    }
-
-    try {
-      const response = await postAddPlace(token, requestBody)
-      if (response) {
-        console.log('Place added successfully:', response.data.message)
-      } else {
-        console.error('Failed to add place.')
-      }
-    } catch (error) {
-      console.error('Error adding place:', error)
-    }
-  }
 
   return (
     <L.AppContainer>
@@ -261,19 +335,32 @@ const AddPlace: React.FC = () => {
         <L.PlacesSection>
           <L.SectionTitle>
             <L.BoldText>{formatDate(date)}</L.BoldText> 추천 장소
-            <L.gpsIcon></L.gpsIcon>
+            <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
           </L.SectionTitle>
           <L.PlacesList>
-            {filteredPlaces.map((place, index) => (
-              <PlaceItem
-                key={place.contentid}
-                place={place}
-                index={index}
-                locationName={locationName}
-                onClick={handleClick}
-                onAddClick={handleAddButtonClick}
-              />
-            ))}
+            {filteredPlaces.map((place, index) => {
+              // Calculate locationName for each place
+              const locationName = getLocationName(
+                [place.areacode], // Ensure areacode is passed as an array
+                place.sigungucode,
+              )
+
+              // Print locationName and areacode to the console
+              console.log(
+                `Location Name: ${locationName}, Area Code: ${place.areacode}`,
+              )
+
+              return (
+                <PlaceItem
+                  key={place.contentid}
+                  place={place}
+                  index={index}
+                  locationName={locationName} // Pass locationName to PlaceItem
+                  onClick={handleClick}
+                  onAddClick={handleAddButtonClick}
+                />
+              )
+            })}
           </L.PlacesList>
         </L.PlacesSection>
       </L.Container>
