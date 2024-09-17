@@ -26,7 +26,7 @@ export const Header = styled.header`
 
 export const SearchInput = styled.input`
   padding: 8px 12px;
-  font-size: 14px;
+  font-size: 18px;
   border: none;
   outline: none;
   border-radius: 4px;
