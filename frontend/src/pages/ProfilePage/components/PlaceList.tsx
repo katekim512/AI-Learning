@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import PlaceItem, { PlaceItemInfo } from './PlaceItem'
 import { getRecentPlace } from '../../../api/profile/getRecentPlace'
@@ -8,6 +9,7 @@ import authToken from '../../../stores/authToken'
 import * as L from '../styles/PlaceList.style'
 
 const PlaceList = () => {
+  const navigate = useNavigate()
   const [selectedTab, setSelectedTab] = useState<'recent' | 'like' | 'visited'>(
     'recent',
   )
@@ -21,6 +23,14 @@ const PlaceList = () => {
   const token = authToken.getAccessToken()
   const { likeList: fetchedLikeList } = useLikeList()
   const { visitedList: fetchedVisitedList } = useVisitedList()
+
+  const handleClick = (place: PlaceItemInfo) => {
+    navigate(
+      `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(
+        place.contentid,
+      )}`,
+    )
+  }
 
   // 최근 본 장소 요청 함수
   const fetchRecentPlaces = async () => {
@@ -66,17 +76,17 @@ const PlaceList = () => {
       if (loadingRecent) return <div>로딩 중...</div>
       if (errorRecent) return <div>{errorRecent}</div>
       return recentList.map(place => (
-        <PlaceItem key={place.contentid} place={place} onClick={() => {}} />
+        <PlaceItem key={place.contentid} place={place} onClick={handleClick} />
       ))
     }
     if (selectedTab === 'like' && likeList) {
       return likeList.map(place => (
-        <PlaceItem key={place.contentid} place={place} onClick={() => {}} />
+        <PlaceItem key={place.contentid} place={place} onClick={handleClick} />
       ))
     }
     if (selectedTab === 'visited' && visitedList) {
       return visitedList.map(place => (
-        <PlaceItem key={place.contentid} place={place} onClick={() => {}} />
+        <PlaceItem key={place.contentid} place={place} onClick={handleClick} />
       ))
     }
     return <div>목록이 없습니다.</div>
