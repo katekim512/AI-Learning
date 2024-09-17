@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
-import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import authToken from '../../../stores/authToken'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
@@ -218,32 +217,13 @@ const AddPlace: React.FC = () => {
     )
   }
 
-  const handleAddButtonClick = async (
+  const handleAddButtonClick = (
     e: React.MouseEvent,
     contentid: number,
+    place: string,
   ) => {
-    e.stopPropagation() // Prevent propagation to avoid navigating to another page
-
-    if (!date) {
-      console.error('Date is null or undefined.')
-      return
-    }
-
-    const requestBody = {
-      contentid,
-      date,
-    }
-
-    try {
-      const response = await postAddPlace(token, requestBody)
-      if (response) {
-        console.log('Place added successfully:', response.data.message)
-      } else {
-        console.error('Failed to add place.')
-      }
-    } catch (error) {
-      console.error('Error adding place:', error)
-    }
+    e.stopPropagation() // 상세페이지와 추가버튼 분리
+    navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
   }
 
   return (
