@@ -88,3 +88,8 @@ export const BottomButton = styled.button`
     background-color: #434cb1;
   }
 `
+
+export const BannerContainer = styled.div`
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+`
