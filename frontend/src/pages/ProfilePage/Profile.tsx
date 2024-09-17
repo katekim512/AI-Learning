@@ -1,3 +1,4 @@
+import MyLevel from './components/MyLevel'
 import ProfileSection from './components/ProfileSection'
 import * as L from './styles/Profile.style'
 
@@ -6,6 +7,7 @@ const Profile = () => {
     <>
       <L.Container>
         <ProfileSection />
+        <MyLevel />
       </L.Container>
     </>
   )
