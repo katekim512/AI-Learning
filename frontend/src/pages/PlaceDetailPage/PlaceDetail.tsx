@@ -105,7 +105,7 @@ const PlaceDetail = () => {
   }, [placeDetail])
 
   const fetchCommonPlaceInfo = async () => {
-    if (!token || !contentid) return
+    if (!contentid) return
 
     try {
       const myServiceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
