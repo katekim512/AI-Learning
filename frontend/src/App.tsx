@@ -10,6 +10,27 @@ const App = () => {
   const location = useLocation()
 
   useEffect(() => {
+    const lockScreenOrientation = async () => {
+      if (screen.orientation && screen.orientation.lock) {
+        try {
+          await screen.orientation.lock('portrait') // 'portrait'를 세로 모드로 고정
+        } catch (error) {
+          console.error('Orientation lock failed:', error)
+        }
+      }
+    }
+
+    lockScreenOrientation()
+
+    return () => {
+      // 필요할 경우 해제
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     setScreenHeight()
     window.addEventListener('resize', setScreenHeight)
     return () => window.removeEventListener('resize', setScreenHeight)
