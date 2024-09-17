@@ -48,6 +48,15 @@ const PlaceDetail = () => {
   const [imageHeight, setImageHeight] = useState<number>(200)
   const [city, setCity] = useState<string>('')
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const menubarRef = useRef<HTMLDivElement>(null)
+  const [menuButtonWidth, setMenuButtonWidth] = useState<number>(0)
+
+  useEffect(() => {
+    if (menubarRef.current) {
+      const menubarWidth = menubarRef.current.offsetWidth
+      setMenuButtonWidth(menubarWidth / 4)
+    }
+  }, [menubarRef])
 
   useEffect(() => {
     fetchCommonPlaceInfo()
@@ -174,73 +183,50 @@ const PlaceDetail = () => {
       <L.Container>
         <L.HeaderContainer>
           <BackButton />
-          <L.HeaderRightIcons>
-            <L.VisitedCheckButton onClick={handleVistedCheckButton}>
-              {isVisited ? (
-                <>
-                  방문완료&nbsp;
-                  <Icon icon='iconamoon:check' width='12' height='12' />
-                </>
-              ) : (
-                <>
-                  방문한 장소&nbsp;
-                  <Icon icon='material-symbols:add' width='12' height='12' />
-                </>
-              )}
-            </L.VisitedCheckButton>
-            <L.MapButton>
-              {placeDetail?.firstimage && (
-                <>
-                  {showMap ? (
-                    <Icon
-                      icon='system-uicons:picture'
-                      width='28'
-                      height='28'
-                      onClick={handleMapToggle}
-                    />
-                  ) : (
-                    <Icon
-                      icon='material-symbols-light:map-outline'
-                      width='28'
-                      height='28'
-                      onClick={handleMapToggle}
-                    />
-                  )}
-                </>
-              )}
-            </L.MapButton>
-          </L.HeaderRightIcons>
+          <L.MapButton>
+            {placeDetail?.firstimage && (
+              <>
+                {showMap ? (
+                  <Icon
+                    icon='system-uicons:picture'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                ) : (
+                  <Icon
+                    icon='material-symbols-light:map-outline'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                )}
+              </>
+            )}
+          </L.MapButton>
         </L.HeaderContainer>
         <L.Title>
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
-            <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
+            <Icon
+              icon={heartIcon}
+              style={{ fontSize: '16px', color: 'red', paddingTop: '3px' }}
+            />
             <L.SmText>{likeInfo || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
-        <L.SecondLineContainer>
-          <L.Title>
-            <Icon
-              icon={mapMarker}
-              width='18'
-              height='18'
-              style={{ color: '#BCBCBC' }}
-            />
-            <L.LocationText>
-              {city},&nbsp;
-              {getContentTypeText(Number(contenttypeid))}
-            </L.LocationText>
-          </L.Title>
-          <L.Title>
-            <L.SecondLineButton onClick={handleLikeToggle}>
-              {isLiked ? '저장됨' : '저장하기'}
-            </L.SecondLineButton>
-            <L.SecondLineButton onClick={handleMapToggle}>
-              장소추가
-            </L.SecondLineButton>
-          </L.Title>
-        </L.SecondLineContainer>
-
+        <L.Title>
+          <Icon
+            icon={mapMarker}
+            width='18'
+            height='18'
+            style={{ color: '#BCBCBC' }}
+          />
+          <L.LocationText>
+            {city},&nbsp;
+            {getContentTypeText(Number(contenttypeid))}
+          </L.LocationText>
+        </L.Title>
         {showMap ? (
           <PlaceMap
             mapx={placeDetail?.mapx || 0}
@@ -261,6 +247,64 @@ const PlaceDetail = () => {
             height={imageHeight}
           />
         )}
+        <L.MenubarContainer ref={menubarRef}>
+          <L.MenuButton
+            onClick={handleLikeToggle}
+            isLast={false}
+            style={{ width: menuButtonWidth }}
+          >
+            {isLiked ? (
+              <>
+                <Icon icon='ph:heart-fill' width='24' height='24' />
+                <div>저장됨</div>
+              </>
+            ) : (
+              <>
+                <Icon icon='ph:heart-light' width='24' height='24' />
+                <div>저장하기</div>
+              </>
+            )}
+          </L.MenuButton>
+          <L.MenuButton
+            onClick={handleMapToggle}
+            isLast={false}
+            style={{ width: menuButtonWidth }}
+          >
+            <>
+              <Icon icon='hugeicons:pin-location-03' width='24' height='24' />
+              <div>장소추가</div>
+            </>
+          </L.MenuButton>
+          <L.MenuButton
+            onClick={handleVistedCheckButton}
+            isLast={false}
+            style={{ width: menuButtonWidth }}
+          >
+            {isVisited ? (
+              <>
+                <Icon
+                  icon='teenyicons:calendar-tick-solid'
+                  width='20'
+                  height='24'
+                />
+                <div>방문완료</div>
+              </>
+            ) : (
+              <>
+                <Icon
+                  icon='teenyicons:calendar-tick-outline'
+                  width='20'
+                  height='24'
+                />
+                <div>방문추가</div>
+              </>
+            )}
+          </L.MenuButton>
+          <L.MenuButton isLast={true} style={{ width: menuButtonWidth }}>
+            <Icon icon='material-symbols:share' width='24' height='24' />
+            <div>공유하기</div>
+          </L.MenuButton>
+        </L.MenubarContainer>
         <L.OverviewContainer>
           {placeDetail?.homepage && (
             <>
