@@ -8,6 +8,7 @@ import ChatDrawer from './components/ChatDrawer/ChatDrawer'
 import ContentType12 from './components/ContentType12'
 import ContentType14 from './components/ContentType14'
 import ContentType15 from './components/ContentType15'
+import MiddleMenuBar from './components/MiddleMenuBar'
 import PlaceMap from './components/PlaceMap'
 import * as L from './styles/PlaceDetail.style'
 import { postAddVisited } from '../../api/calendar/postAddVisited'
@@ -247,64 +248,14 @@ const PlaceDetail = () => {
             height={imageHeight}
           />
         )}
-        <L.MenubarContainer ref={menubarRef}>
-          <L.MenuButton
-            onClick={handleLikeToggle}
-            isLast={false}
-            style={{ width: menuButtonWidth }}
-          >
-            {isLiked ? (
-              <>
-                <Icon icon='ph:heart-fill' width='24' height='24' />
-                <div>저장됨</div>
-              </>
-            ) : (
-              <>
-                <Icon icon='ph:heart-light' width='24' height='24' />
-                <div>저장하기</div>
-              </>
-            )}
-          </L.MenuButton>
-          <L.MenuButton
-            onClick={handleMapToggle}
-            isLast={false}
-            style={{ width: menuButtonWidth }}
-          >
-            <>
-              <Icon icon='hugeicons:pin-location-03' width='24' height='24' />
-              <div>장소추가</div>
-            </>
-          </L.MenuButton>
-          <L.MenuButton
-            onClick={handleVistedCheckButton}
-            isLast={false}
-            style={{ width: menuButtonWidth }}
-          >
-            {isVisited ? (
-              <>
-                <Icon
-                  icon='teenyicons:calendar-tick-solid'
-                  width='20'
-                  height='24'
-                />
-                <div>방문완료</div>
-              </>
-            ) : (
-              <>
-                <Icon
-                  icon='teenyicons:calendar-tick-outline'
-                  width='20'
-                  height='24'
-                />
-                <div>방문추가</div>
-              </>
-            )}
-          </L.MenuButton>
-          <L.MenuButton isLast={true} style={{ width: menuButtonWidth }}>
-            <Icon icon='material-symbols:share' width='24' height='24' />
-            <div>공유하기</div>
-          </L.MenuButton>
-        </L.MenubarContainer>
+        <MiddleMenuBar
+          isLiked={isLiked}
+          isVisited={isVisited}
+          onLikeToggle={handleLikeToggle}
+          onVisitedToggle={handleVistedCheckButton}
+          menuButtonWidth={menuButtonWidth}
+          setMenuButtonWidth={setMenuButtonWidth}
+        />
         <L.OverviewContainer>
           {placeDetail?.homepage && (
             <>
