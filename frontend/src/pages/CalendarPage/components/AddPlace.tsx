@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
+import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import authToken from '../../../stores/authToken'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
@@ -132,7 +133,10 @@ const AddPlace: React.FC = () => {
   const searchParams = new URLSearchParams(location.search)
 
   // Retrieve query parameters
-  const date = searchParams.get('date')
+  const { date: dateParam } = useParams<{ date: string }>()
+  const date: string | null = dateParam ?? null
+
+  console.log('Date:', date)
   const areacode = JSON.parse(searchParams.get('areacode') || '[]')
   const sigungucode = searchParams.get('sigungucode')
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
@@ -210,16 +214,36 @@ const AddPlace: React.FC = () => {
   const handleClick = (place: RecommendPlace) => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { date } },
     )
   }
 
-  const handleAddButtonClick = (
+  const handleAddButtonClick = async (
     e: React.MouseEvent,
     contentid: number,
-    place: string,
   ) => {
-    e.stopPropagation() // 상세페이지와 추가버튼 분리
-    navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
+    e.stopPropagation() // Prevent propagation to avoid navigating to another page
+
+    if (!date) {
+      console.error('Date is null or undefined.')
+      return
+    }
+
+    const requestBody = {
+      contentid,
+      date,
+    }
+
+    try {
+      const response = await postAddPlace(token, requestBody)
+      if (response) {
+        console.log('Place added successfully:', response.data.message)
+      } else {
+        console.error('Failed to add place.')
+      }
+    } catch (error) {
+      console.error('Error adding place:', error)
+    }
   }
 
   return (

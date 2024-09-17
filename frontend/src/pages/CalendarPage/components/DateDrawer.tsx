@@ -136,6 +136,10 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
     )
   }
 
+  const handleClick = () => {
+    navigate(`/addplace/${encodeURIComponent(date)}`)
+  }
+
   return (
     <L.DrawerContainer
       isExpanded={isExpanded}
@@ -170,9 +174,7 @@ const DateDrawer: React.FC<DateDrawerProps> = ({ date }) => {
       </L.DrawerCenter>
       <L.DrawerBottom>
         <L.DrawerBottomBox>
-          <L.DrawerBottomButton
-            onClick={() => navigate(`/addplace?date=${date}`)}
-          >
+          <L.DrawerBottomButton onClick={handleClick}>
             장소 추가
           </L.DrawerBottomButton>
 

@@ -18,6 +18,8 @@ export const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
 `
@@ -36,8 +38,12 @@ export const SearchInput = styled.input`
 `
 
 export const PlacesSection = styled.section`
-  margin-top: 10px;
+  margin-top: 5px;
   padding: 0px 10px;
+  max-height: calc(
+    100vh - 5rem
+  ); /* Adjusts the height to leave space for other elements */
+  overflow-y: auto; /* Enables vertical scrolling */
 `
 
 export const SectionTitle = styled.div`
