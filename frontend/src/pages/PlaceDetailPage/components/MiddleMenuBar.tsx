@@ -46,7 +46,7 @@ const MiddleMenuBar: React.FC<MiddleMenuBarProps> = ({
   const token = authToken.getAccessToken()
   const navigate = useNavigate()
   const menubarRef = useRef<HTMLDivElement>(null)
-  const realUrl = `https://ai-learning-kappa.vercel.app/${contenttypeid}/${contentid}` // 전달받은 contenttypeid와 contentid를 사용하여 URL 설정
+  const realUrl = `https://ai-learning-kappa.vercel.app/place/${contenttypeid}/${contentid}` // 전달받은 contenttypeid와 contentid를 사용하여 URL 설정
 
   useEffect(() => {
     if (menubarRef.current) {
