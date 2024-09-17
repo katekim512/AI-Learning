@@ -11,6 +11,7 @@ import AddPlace from './pages/CalendarPage/components/AddPlace'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
+import MyInfoEdit from './pages/MyInfoEditPage/MyInfoEdit'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: 'ai-schedule-step3',
         element: <AISchedule3 />,
+      },
+      {
+        path: 'my-info',
+        element: <MyInfoEdit />,
       },
     ],
   },
