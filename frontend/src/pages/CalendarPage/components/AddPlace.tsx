@@ -161,26 +161,26 @@ const AddPlace: React.FC = () => {
 
   //-----API 연결----
   useEffect(() => {
-    const fetchPlaces = async () => {
-      if (!token || !date) return
-
-      try {
-        const requestPayload = { date }
-        const response = await postRecommendPlace(token, requestPayload)
-
-        if (response && response.data) {
-          setRecommendedPlaces(response.data)
-        } else {
-          setRecommendedPlaces([])
-        }
-      } catch (error) {
-        console.error('Failed to fetch recommended places:', error)
-        setRecommendedPlaces([])
-      }
-    }
-
     fetchPlaces()
   }, [token, date])
+
+  const fetchPlaces = async () => {
+    if (!token || !date) return
+
+    try {
+      const requestPayload = { date }
+      const response = await postRecommendPlace(token, requestPayload)
+
+      if (response && response.data) {
+        setRecommendedPlaces(response.data)
+      } else {
+        setRecommendedPlaces([])
+      }
+    } catch (error) {
+      console.error('Failed to fetch recommended places:', error)
+      setRecommendedPlaces([])
+    }
+  }
 
   // 더미 데이터를 상태로 설정
   // useEffect(() => {
@@ -310,6 +310,10 @@ const AddPlace: React.FC = () => {
     place => place && place.place && place.place.includes(searchTerm),
   )
 
+  const handleReloadButtonClick = () => {
+    fetchPlaces()
+  }
+
   return (
     <L.AppContainer>
       <L.Container>
@@ -326,6 +330,7 @@ const AddPlace: React.FC = () => {
           <L.SectionTitle>
             <L.BoldText>{formatDate(date)}</L.BoldText> 추천 장소
             <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
+            <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
           <L.PlacesList>
             {filteredPlaces.map((place, index) => {
