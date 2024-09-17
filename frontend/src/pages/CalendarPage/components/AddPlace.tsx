@@ -312,6 +312,12 @@ const AddPlace: React.FC = () => {
 
   const handleReloadButtonClick = () => {
     fetchPlaces()
+    const handleClick = (place: RecommendPlace) => {
+      navigate(
+        `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+        { state: { date } },
+      )
+    }
   }
 
   return (
