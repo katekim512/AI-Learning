@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import MyLevel from './components/MyLevel'
+import PlaceList from './components/PlaceList'
 import ProfileSection from './components/ProfileSection'
 import * as L from './styles/Profile.style'
 import InfoBanner from '../../components/InfoBanner/InfoBanner'
@@ -22,6 +23,7 @@ const Profile = () => {
             />
           )}
         </L.BannerContainer>
+        <PlaceList />
       </L.Container>
     </>
   )

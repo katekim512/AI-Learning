@@ -3,10 +3,11 @@ import styled from 'styled-components'
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 5rem); /* 하단 메뉴바 5rem 뺀 높이 */
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow: hidden;
 `
 
 export const ProfileHeaderSection = styled.div`
