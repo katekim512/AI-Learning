@@ -255,6 +255,11 @@ const PlaceDetail = () => {
           onVisitedToggle={handleVistedCheckButton}
           menuButtonWidth={menuButtonWidth}
           setMenuButtonWidth={setMenuButtonWidth}
+          contentid={contentid}
+          contenttypeid={contenttypeid}
+          title={placeDetail?.title}
+          firstimage={placeDetail?.firstimage}
+          overview={placeDetail?.overview}
         />
         <L.OverviewContainer>
           {placeDetail?.homepage && (
