@@ -40,10 +40,6 @@ export const SearchInput = styled.input`
 export const PlacesSection = styled.section`
   margin-top: 5px;
   padding: 0px 10px;
-  max-height: calc(
-    100vh - 5rem
-  ); /* Adjusts the height to leave space for other elements */
-  overflow-y: auto; /* Enables vertical scrolling */
 `
 
 export const SectionTitle = styled.div`
@@ -61,6 +57,8 @@ export const PlacesList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: calc(100vh - 5rem);
+  overflow-y: auto;
 `
 
 export const PlaceItem = styled.li`
