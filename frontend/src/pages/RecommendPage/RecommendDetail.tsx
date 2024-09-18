@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import PlaceItem from './components/PlaceItem'
 import * as L from './styles/RecommendDetail.style'
-import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
+import { useAllPlace } from '../../hooks/useAllPlace'
 import authToken from '../../stores/authToken'
 
 interface RecommendPlace {
@@ -20,29 +20,32 @@ interface RecommendPlace {
 const RecommendDetail: React.FC = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate()
-
   const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
 
+  const searchParams = new URLSearchParams(location.search)
   const areacode = JSON.parse(searchParams.get('areacode') || '[]')
   const sigungucode = searchParams.get('sigungucode')
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
+  const { data: allPlaces, isLoading, error } = useAllPlace()
+
+  // 항상 useEffect를 조건없이 호출
+  useEffect(() => {
+    fetchPlaces()
+  }, [token])
+
+  // Loading이나 Error 상태는 useEffect 외부에서 처리
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error fetching places</div>
 
   const fetchPlaces = async () => {
     if (sigungucode === null) return
 
     if (areacode.length === 0) {
       // areacode가 빈 배열인 경우
-      const allPlaces = await getAllPlace(token)
-      if (allPlaces) {
-        console.log(allPlaces.data)
-        setRecommendedPlaces(allPlaces.data)
-      } else {
-        setRecommendedPlaces([]) // null인 경우 빈 배열로 설정
-      }
+      if (allPlaces) setRecommendedPlaces(allPlaces.data)
     } else {
       // areacode가 값이 있는 경우
       let sigungu = null
@@ -53,17 +56,13 @@ const RecommendDetail: React.FC = () => {
       try {
         const response = await postRecommendPlace(token, areacode, sigungu)
         if (response && response.data) {
-          setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+          setRecommendedPlaces(response.data)
         }
       } catch (error) {
         console.error('추천 장소를 가져오는 데 실패했습니다:', error)
       }
     }
   }
-
-  useEffect(() => {
-    fetchPlaces()
-  }, [token])
 
   const getLocationName = (
     areacode: number[],
