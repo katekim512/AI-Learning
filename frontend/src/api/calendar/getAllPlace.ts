@@ -18,5 +18,5 @@ export const getAllPlace = async (
   const response = await aiLearningAxios.get('calendar/all-place', {
     headers: { Authorization: `Bearer ${token}` },
   })
-  return response.data
+  return response
 }
