@@ -5,15 +5,19 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
+import Loading from '../../components/Loading/Loading'
+import { useAllPlace } from '../../hooks/useAllPlace'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 
 const Calendar = () => {
   const navigate = useNavigate()
+  useAllPlace()
   const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
   const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
   const { refetch: refetchVisitedList } = useVisitedList() // 방문장소 리스트 갱신
+  const { isLoading } = useAllPlace()
 
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
@@ -92,31 +96,34 @@ const Calendar = () => {
   })
 
   return (
-    <div {...handlers}>
-      <L.HeaderSection>
-        <L.HeaderTitle>
-          <L.CalendarSelect
-            value={currentDate.year}
-            onChange={handleYearChange}
-          >
-            {generateYearOptions()}
-          </L.CalendarSelect>
-          년&nbsp;&nbsp;
-          <L.CalendarSelect
-            value={currentDate.month}
-            onChange={handleMonthChange}
-          >
-            {generateMonthOptions()}
-          </L.CalendarSelect>
-          월
-        </L.HeaderTitle>
-        <L.AIScheduleButton onClick={handleAIScheduleButton}>
-          <FaWandMagicSparkles />
-          &nbsp;&nbsp;AI 교육여행
-        </L.AIScheduleButton>
-      </L.HeaderSection>
-      <MainCalendar year={currentDate.year} month={currentDate.month} />
-    </div>
+    <>
+      {isLoading && <Loading />}
+      <div {...handlers}>
+        <L.HeaderSection>
+          <L.HeaderTitle>
+            <L.CalendarSelect
+              value={currentDate.year}
+              onChange={handleYearChange}
+            >
+              {generateYearOptions()}
+            </L.CalendarSelect>
+            년&nbsp;&nbsp;
+            <L.CalendarSelect
+              value={currentDate.month}
+              onChange={handleMonthChange}
+            >
+              {generateMonthOptions()}
+            </L.CalendarSelect>
+            월
+          </L.HeaderTitle>
+          <L.AIScheduleButton onClick={handleAIScheduleButton}>
+            <FaWandMagicSparkles />
+            &nbsp;&nbsp;AI 교육여행
+          </L.AIScheduleButton>
+        </L.HeaderSection>
+        <MainCalendar year={currentDate.year} month={currentDate.month} />
+      </div>
+    </>
   )
 }
 
