@@ -5,7 +5,6 @@ import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import authToken from '../../../stores/authToken'
-import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import dummyImage from '../../RecommendPage/img/dummy.png'
 import * as L from '../styles/AddPlace.style'
@@ -316,14 +315,11 @@ const AddPlace: React.FC = () => {
           </L.SectionTitle>
           <L.PlacesList>
             {filteredPlaces.map((place, index) => {
-              const cityName = getCityName(place.areacode, place.sigungucode)
-
               return (
                 <PlaceItem
                   key={place.contentid}
                   place={place}
                   index={index}
-                  locationName={cityName}
                   onClick={handleClick}
                   onAddClick={handleAddButtonClick}
                 />
