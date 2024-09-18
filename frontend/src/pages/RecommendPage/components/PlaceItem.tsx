@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { getCityName } from '../../../style/CityMapper'
-import dummyImage from '../img/dummy.png'
 import * as L from '../styles/RecommendDetail.style'
 
 interface RecommendPlace {
@@ -43,7 +42,10 @@ const PlaceItem: React.FC<PlaceItemProps> = ({
   return (
     <L.PlaceItem key={place.contentid} onClick={() => onClick(place)}>
       <L.PlaceNumber>{index + 1}</L.PlaceNumber>
-      <L.PlaceImage src={place.firstimage || dummyImage} alt={place.place} />
+      <L.PlaceImage
+        src={place.firstimage || '/img/default_pic.png'}
+        alt={place.place}
+      />
       <L.PlaceInfo>
         <L.PlaceName>{place.place}</L.PlaceName>
         <L.PlaceDescription>
