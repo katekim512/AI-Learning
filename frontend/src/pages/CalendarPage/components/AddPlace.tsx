@@ -5,6 +5,7 @@ import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import authToken from '../../../stores/authToken'
+import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import dummyImage from '../../RecommendPage/img/dummy.png'
 import * as L from '../styles/AddPlace.style'
@@ -287,25 +288,6 @@ const AddPlace: React.FC = () => {
     }
   }
 
-  const getLocationName = (
-    areacode: number[],
-    sigungucode: number | null,
-  ): string => {
-    if (areacode.length === 0) return '전체'
-    if (areacode.includes(1)) return '서울'
-    if (areacode.includes(2)) return '인천'
-    if (areacode.includes(32)) return '강원도'
-    if (areacode.includes(31)) return '경기도'
-    if (areacode.includes(33) || areacode.includes(34)) return '충청도'
-    if (areacode.includes(35) && sigungucode === 2) return '경주' // 특정 조건에 맞춰 경주로 설정
-    if (areacode.includes(35) || areacode.includes(36)) return '경상도'
-    if (areacode.includes(37) || areacode.includes(38)) return '전라도'
-    if (areacode.includes(6)) return '부산'
-    if (areacode.includes(5)) return '광주'
-    if (areacode.includes(39)) return '제주'
-    return '알 수 없음' // 매칭되지 않는 경우 기본값
-  }
-
   const filteredPlaces = recommendedPlaces.filter(
     place => place && place.place && place.place.includes(searchTerm),
   )
@@ -334,23 +316,14 @@ const AddPlace: React.FC = () => {
           </L.SectionTitle>
           <L.PlacesList>
             {filteredPlaces.map((place, index) => {
-              // Calculate locationName for each place
-              const locationName = getLocationName(
-                [place.areacode], // Ensure areacode is passed as an array
-                place.sigungucode,
-              )
-
-              // Print locationName and areacode to the console
-              console.log(
-                `Location Name: ${locationName}, Area Code: ${place.areacode}`,
-              )
+              const cityName = getCityName(place.areacode, place.sigungucode)
 
               return (
                 <PlaceItem
                   key={place.contentid}
                   place={place}
                   index={index}
-                  locationName={locationName} // Pass locationName to PlaceItem
+                  locationName={cityName}
                   onClick={handleClick}
                   onAddClick={handleAddButtonClick}
                 />
