@@ -78,12 +78,25 @@ const RecommendDetail: React.FC = () => {
     if (!listElement) return
 
     const handleScroll = () => {
+      // 모든 데이터를 이미 로드한 경우 더 이상 업데이트하지 않음
+      if (visiblePlaces.length >= recommendedPlaces.length) return
+
       if (
         listElement.scrollTop + listElement.clientHeight >=
         listElement.scrollHeight - 100
       ) {
+        // 이미 모든 데이터를 로드한 경우, 추가 데이터를 로드하지 않음
         setCurrentIndex(prevIndex => {
           const newIndex = prevIndex + 20
+
+          // 새로운 인덱스가 recommendedPlaces의 길이를 넘지 않도록 제한
+          if (newIndex >= recommendedPlaces.length) {
+            setVisiblePlaces(
+              recommendedPlaces.slice(0, recommendedPlaces.length),
+            )
+            return prevIndex // 더 이상 증가하지 않도록 이전 인덱스를 반환
+          }
+
           setVisiblePlaces(recommendedPlaces.slice(0, newIndex))
           return newIndex
         })
@@ -95,7 +108,7 @@ const RecommendDetail: React.FC = () => {
     return () => {
       listElement.removeEventListener('scroll', handleScroll)
     }
-  }, [recommendedPlaces])
+  }, [recommendedPlaces, visiblePlaces.length])
 
   const getLocationName = (
     areacode: number[],
