@@ -5,7 +5,7 @@ import {
   LoadingText,
   DotsWrapper,
   Dot,
-} from '../styles/Loading.style'
+} from './styles/Loading.style'
 
 const Loading: React.FC = () => {
   return (

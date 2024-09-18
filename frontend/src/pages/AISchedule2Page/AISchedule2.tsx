@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Loading from './components/Loading'
 import * as L from './styles/AISchedule2.style'
 import { makeSchedule } from '../../api/schedule/postMakeSchedule'
 import BackButton from '../../components/BackButton/BackButton'
+import Loading from '../../components/Loading/Loading'
 import authToken from '../../stores/authToken'
 import { useScheduleStore } from '../../stores/useScheduleStore'
 

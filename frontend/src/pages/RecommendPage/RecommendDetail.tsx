@@ -5,6 +5,7 @@ import PlaceItem from './components/PlaceItem'
 import * as L from './styles/RecommendDetail.style'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
+import Loading from '../../components/Loading/Loading'
 import { useAllPlace } from '../../hooks/useAllPlace'
 import authToken from '../../stores/authToken'
 
@@ -31,13 +32,11 @@ const RecommendDetail: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
   const { data: allPlaces, isLoading, error } = useAllPlace()
 
-  // 항상 useEffect를 조건없이 호출
   useEffect(() => {
     fetchPlaces()
   }, [token])
 
-  // Loading이나 Error 상태는 useEffect 외부에서 처리
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading />
   if (error) return <div>Error fetching places</div>
 
   const fetchPlaces = async () => {
