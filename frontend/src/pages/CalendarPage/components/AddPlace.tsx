@@ -136,7 +136,7 @@ interface OpenAPIPlace {
 
 const AddPlace: React.FC = () => {
   const token = authToken.getAccessToken()
-  const navigate = useNavigate() // useNavigate 훅 사용
+  const navigate = useNavigate()
 
   const { date: dateParam } = useParams<{ date: string }>()
   const date: string | null = dateParam ?? null
@@ -150,10 +150,10 @@ const AddPlace: React.FC = () => {
 
   const formatDate = (dateString: string | null): string => {
     if (!dateString) {
-      return '날짜 없음' // Return a default message if dateString is null
+      return '날짜 없음'
     } else {
       const date = new Date(dateString)
-      const month = date.getMonth() + 1 // JavaScript months are 0-based
+      const month = date.getMonth() + 1
       const day = date.getDate()
       return `${month}월 ${day}일`
     }
@@ -221,7 +221,7 @@ const AddPlace: React.FC = () => {
     latitude: number,
     longitude: number,
   ) => {
-    const radius = '10000' // 검색 반경 (10km)
+    const radius = '5000' // 검색 반경 (10km)
     const serviceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
     const contentTypeIds = [12, 14, 15] // 검색할 contentTypeId 목록
     let allPlaces: RecommendPlace[] = []
