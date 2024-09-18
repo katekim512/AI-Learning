@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import PlaceItem from './components/PlaceItem'
@@ -29,24 +30,21 @@ const RecommendDetail: React.FC = () => {
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
+  const [visiblePlaces, setVisiblePlaces] = useState<RecommendPlace[]>([]) // 현재 보여줄 장소들
+  const [currentIndex, setCurrentIndex] = useState(20) // 처음에 20개만 보이도록 설정
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
-  const { data: allPlaces, isLoading, error } = useAllPlace()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { data: allPlaces } = useAllPlace()
 
-  useEffect(() => {
-    fetchPlaces()
-  }, [token])
-
-  if (isLoading) return <Loading />
-  if (error) return <div>Error fetching places</div>
+  const listRef = useRef<HTMLUListElement | null>(null) // PlacesList에 ref 추가
 
   const fetchPlaces = async () => {
+    setIsLoading(true)
     if (sigungucode === null) return
 
     if (areacode.length === 0) {
-      // areacode가 빈 배열인 경우
       if (allPlaces) setRecommendedPlaces(allPlaces.data)
     } else {
-      // areacode가 값이 있는 경우
       let sigungu = null
       if (sigungucode !== 'null') {
         sigungu = Number(sigungucode)
@@ -61,7 +59,43 @@ const RecommendDetail: React.FC = () => {
         console.error('추천 장소를 가져오는 데 실패했습니다:', error)
       }
     }
+    setIsLoading(false)
   }
+
+  useEffect(() => {
+    fetchPlaces()
+  }, [token])
+
+  useEffect(() => {
+    if (recommendedPlaces.length > 0) {
+      setVisiblePlaces(recommendedPlaces.slice(0, currentIndex))
+    }
+  }, [recommendedPlaces, currentIndex])
+
+  // 스크롤 이벤트를 PlacesList에 등록
+  useEffect(() => {
+    const listElement = listRef.current // PlacesList 요소 참조
+    if (!listElement) return
+
+    const handleScroll = () => {
+      if (
+        listElement.scrollTop + listElement.clientHeight >=
+        listElement.scrollHeight - 100
+      ) {
+        setCurrentIndex(prevIndex => {
+          const newIndex = prevIndex + 20
+          setVisiblePlaces(recommendedPlaces.slice(0, newIndex))
+          return newIndex
+        })
+      }
+    }
+
+    listElement.addEventListener('scroll', handleScroll)
+
+    return () => {
+      listElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [recommendedPlaces])
 
   const getLocationName = (
     areacode: number[],
@@ -73,13 +107,13 @@ const RecommendDetail: React.FC = () => {
     if (areacode.includes(32)) return '강원도'
     if (areacode.includes(31)) return '경기도'
     if (areacode.includes(33) || areacode.includes(34)) return '충청도'
-    if (areacode.includes(35) && sigungucode === 2) return '경주' // 특정 조건에 맞춰 경주로 설정
+    if (areacode.includes(35) && sigungucode === 2) return '경주'
     if (areacode.includes(35) || areacode.includes(36)) return '경상도'
     if (areacode.includes(37) || areacode.includes(38)) return '전라도'
     if (areacode.includes(6)) return '부산'
     if (areacode.includes(5)) return '광주'
     if (areacode.includes(39)) return '제주'
-    return '알 수 없음' // 매칭되지 않는 경우 기본값
+    return '알 수 없음'
   }
 
   const locationName = getLocationName(
@@ -90,6 +124,13 @@ const RecommendDetail: React.FC = () => {
   const filteredPlaces = recommendedPlaces.filter(place =>
     place.place.includes(searchTerm),
   )
+
+  useEffect(() => {
+    const slicedPlaces = filteredPlaces.slice(0, currentIndex)
+    if (slicedPlaces.length !== visiblePlaces.length) {
+      setVisiblePlaces(slicedPlaces)
+    }
+  }, [filteredPlaces, currentIndex])
 
   const handleClick = (place: RecommendPlace) => {
     navigate(
@@ -102,40 +143,43 @@ const RecommendDetail: React.FC = () => {
     contentid: number,
     place: string,
   ) => {
-    e.stopPropagation() // 상세페이지와 추가버튼 분리
+    e.stopPropagation()
     navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
   }
 
   return (
-    <L.AppContainer>
-      <L.Container>
-        <L.Header>
-          <BackButton />
-          <L.SearchInput
-            type='text'
-            placeholder='원하는 장소 검색'
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </L.Header>
-        <L.PlacesSection>
-          <L.SectionTitle>
-            <L.BoldText>{locationName}</L.BoldText> 추천 장소
-          </L.SectionTitle>
-          <L.PlacesList>
-            {filteredPlaces.map((place, index) => (
-              <PlaceItem
-                key={place.contentid}
-                place={place}
-                index={index}
-                onClick={handleClick}
-                onAddClick={handleAddButtonClick}
-              />
-            ))}
-          </L.PlacesList>
-        </L.PlacesSection>
-      </L.Container>
-    </L.AppContainer>
+    <>
+      {isLoading && <Loading />}
+      <L.AppContainer>
+        <L.Container>
+          <L.Header>
+            <BackButton />
+            <L.SearchInput
+              type='text'
+              placeholder='원하는 장소 검색'
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </L.Header>
+          <L.PlacesSection>
+            <L.SectionTitle>
+              <L.BoldText>{locationName}</L.BoldText> 추천 장소
+            </L.SectionTitle>
+            <L.PlacesList ref={listRef}>
+              {visiblePlaces.map((place, index) => (
+                <PlaceItem
+                  key={place.contentid}
+                  place={place}
+                  index={index}
+                  onClick={handleClick}
+                  onAddClick={handleAddButtonClick}
+                />
+              ))}
+            </L.PlacesList>
+          </L.PlacesSection>
+        </L.Container>
+      </L.AppContainer>
+    </>
   )
 }
 
