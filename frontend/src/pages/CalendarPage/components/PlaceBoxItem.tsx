@@ -32,6 +32,7 @@ interface PlaceBoxItemProps {
   handleToggleSelect: (index: number) => void
   selectedIndexes: number[]
   onDelete: (index: number) => void
+  date: string
 }
 
 interface DragItem {
@@ -52,6 +53,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
   handleToggleSelect,
   selectedIndexes,
   onDelete,
+  date,
 }) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
@@ -85,6 +87,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
     if (!isEditing) {
       navigate(
         `/place/${encodeURIComponent(item.contenttypeid)}/${encodeURIComponent(item.contentid)}`,
+        { state: { date } },
       )
     }
   }

@@ -19,6 +19,7 @@ interface PlaceBoxProps {
 }
 
 const PlaceBox: React.FC<PlaceBoxProps> = ({
+  date,
   isEditing,
   onDelete,
   onToggleSelect,
@@ -110,6 +111,7 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({
             handleToggleSelect={handleToggleSelect}
             selectedIndexes={selectedIndexes}
             onDelete={handleDelete}
+            date={date}
           />
         ))}
       </DndProvider>
