@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import PlaceItem from './components/PlaceItem'
-//import dummyImage from './img/dummy.png'
 import * as L from './styles/RecommendDetail.style'
-import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
+import Loading from '../../components/Loading/Loading'
+import { useAllPlace } from '../../hooks/useAllPlace'
 import authToken from '../../stores/authToken'
 
 interface RecommendPlace {
@@ -18,167 +19,96 @@ interface RecommendPlace {
   firstimage: string
 }
 
-// const dummyData: RecommendPlace[] = [
-//   {
-//     contentid: 1,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '불국사',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 2,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '석굴암',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 3,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '동궁과 월지',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 4,
-//     contenttypeid: 14,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '경주 대릉원',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 5,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 3,
-//     place: '첨성대',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 6,
-//     contenttypeid: 15,
-//     areacode: 35,
-//     sigungucode: 4,
-//     place: '포석정',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 7,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 5,
-//     place: '경주 남산',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 8,
-//     contenttypeid: 16,
-//     areacode: 35,
-//     sigungucode: 6,
-//     place: '문무대왕릉',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 9,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 7,
-//     place: '경주 오릉',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 10,
-//     contenttypeid: 14,
-//     areacode: 35,
-//     sigungucode: 8,
-//     place: '경주 국립공원',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 11,
-//     contenttypeid: 13,
-//     areacode: 35,
-//     sigungucode: 9,
-//     place: '경주 월정교',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 12,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 10,
-//     place: '경주 황리단길',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 13,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 11,
-//     place: '경주 보문단지',
-//     firstimage: dummyImage,
-//   },
-// ]
-
 const RecommendDetail: React.FC = () => {
   const token = authToken.getAccessToken()
-  const navigate = useNavigate() // useNavigate 훅 사용
-
+  const navigate = useNavigate()
   const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
 
-  // Retrieve query parameters
+  const searchParams = new URLSearchParams(location.search)
   const areacode = JSON.parse(searchParams.get('areacode') || '[]')
   const sigungucode = searchParams.get('sigungucode')
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
+  const [visiblePlaces, setVisiblePlaces] = useState<RecommendPlace[]>([]) // 현재 보여줄 장소들
+  const [currentIndex, setCurrentIndex] = useState(20) // 처음에 20개만 보이도록 설정
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
-  //-----API 연결----
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { data: allPlaces } = useAllPlace()
+
+  const listRef = useRef<HTMLUListElement | null>(null) // PlacesList에 ref 추가
+
+  const fetchPlaces = async () => {
+    setIsLoading(true)
+    if (sigungucode === null) return
+
+    if (areacode.length === 0) {
+      if (allPlaces) setRecommendedPlaces(allPlaces.data)
+    } else {
+      let sigungu = null
+      if (sigungucode !== 'null') {
+        sigungu = Number(sigungucode)
+      }
+
+      try {
+        const response = await postRecommendPlace(token, areacode, sigungu)
+        if (response && response.data) {
+          setRecommendedPlaces(response.data)
+        }
+      } catch (error) {
+        console.error('추천 장소를 가져오는 데 실패했습니다:', error)
+      }
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
-    const fetchPlaces = async () => {
-      if (sigungucode === null) return
+    fetchPlaces()
+  }, [token])
 
-      if (areacode.length === 0) {
-        // areacode가 빈 배열인 경우
-        const allPlaces = await getAllPlace(token)
-        if (allPlaces) {
-          setRecommendedPlaces(allPlaces.data)
-        } else {
-          setRecommendedPlaces([]) // null인 경우 빈 배열로 설정
-        }
-      } else {
-        // areacode가 값이 있는 경우
-        const requestPayload = [
-          {
-            areacode,
-            sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
-          },
-        ]
+  useEffect(() => {
+    if (recommendedPlaces.length > 0) {
+      setVisiblePlaces(recommendedPlaces.slice(0, currentIndex))
+    }
+  }, [recommendedPlaces, currentIndex])
 
-        try {
-          const response = await postRecommendPlace(token, requestPayload)
-          if (response && response.data) {
-            setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+  // 스크롤 이벤트를 PlacesList에 등록
+  useEffect(() => {
+    const listElement = listRef.current // PlacesList 요소 참조
+    if (!listElement) return
+
+    const handleScroll = () => {
+      // 모든 데이터를 이미 로드한 경우 더 이상 업데이트하지 않음
+      if (visiblePlaces.length >= recommendedPlaces.length) return
+
+      if (
+        listElement.scrollTop + listElement.clientHeight >=
+        listElement.scrollHeight - 100
+      ) {
+        // 이미 모든 데이터를 로드한 경우, 추가 데이터를 로드하지 않음
+        setCurrentIndex(prevIndex => {
+          const newIndex = prevIndex + 20
+
+          // 새로운 인덱스가 recommendedPlaces의 길이를 넘지 않도록 제한
+          if (newIndex >= recommendedPlaces.length) {
+            setVisiblePlaces(
+              recommendedPlaces.slice(0, recommendedPlaces.length),
+            )
+            return prevIndex // 더 이상 증가하지 않도록 이전 인덱스를 반환
           }
-        } catch (error) {
-          console.error('추천 장소를 가져오는 데 실패했습니다:', error)
-        }
+
+          setVisiblePlaces(recommendedPlaces.slice(0, newIndex))
+          return newIndex
+        })
       }
     }
 
-    fetchPlaces()
-  }, [areacode, sigungucode, token])
+    listElement.addEventListener('scroll', handleScroll)
 
-  // 더미 데이터를 상태로 설정
-  // useEffect(() => {
-  //   setRecommendedPlaces(dummyData)
-  // }, [areacode, sigungucode, token])
+    return () => {
+      listElement.removeEventListener('scroll', handleScroll)
+    }
+  }, [recommendedPlaces, visiblePlaces.length])
 
   const getLocationName = (
     areacode: number[],
@@ -190,13 +120,13 @@ const RecommendDetail: React.FC = () => {
     if (areacode.includes(32)) return '강원도'
     if (areacode.includes(31)) return '경기도'
     if (areacode.includes(33) || areacode.includes(34)) return '충청도'
-    if (areacode.includes(35) && sigungucode === 2) return '경주' // 특정 조건에 맞춰 경주로 설정
+    if (areacode.includes(35) && sigungucode === 2) return '경주'
     if (areacode.includes(35) || areacode.includes(36)) return '경상도'
     if (areacode.includes(37) || areacode.includes(38)) return '전라도'
     if (areacode.includes(6)) return '부산'
     if (areacode.includes(5)) return '광주'
     if (areacode.includes(39)) return '제주'
-    return '알 수 없음' // 매칭되지 않는 경우 기본값
+    return '알 수 없음'
   }
 
   const locationName = getLocationName(
@@ -207,6 +137,13 @@ const RecommendDetail: React.FC = () => {
   const filteredPlaces = recommendedPlaces.filter(place =>
     place.place.includes(searchTerm),
   )
+
+  useEffect(() => {
+    const slicedPlaces = filteredPlaces.slice(0, currentIndex)
+    if (slicedPlaces.length !== visiblePlaces.length) {
+      setVisiblePlaces(slicedPlaces)
+    }
+  }, [filteredPlaces, currentIndex])
 
   const handleClick = (place: RecommendPlace) => {
     navigate(
@@ -219,41 +156,43 @@ const RecommendDetail: React.FC = () => {
     contentid: number,
     place: string,
   ) => {
-    e.stopPropagation() // 상세페이지와 추가버튼 분리
+    e.stopPropagation()
     navigate(`/dateselected/${contentid}/${encodeURIComponent(place)}`)
   }
 
   return (
-    <L.AppContainer>
-      <L.Container>
-        <L.Header>
-          <BackButton />
-          <L.SearchInput
-            type='text'
-            placeholder='원하는 장소 검색'
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </L.Header>
-        <L.PlacesSection>
-          <L.SectionTitle>
-            <L.BoldText>{locationName}</L.BoldText> 추천 장소
-          </L.SectionTitle>
-          <L.PlacesList>
-            {filteredPlaces.map((place, index) => (
-              <PlaceItem
-                key={place.contentid}
-                place={place}
-                index={index}
-                locationName={locationName}
-                onClick={handleClick}
-                onAddClick={handleAddButtonClick}
-              />
-            ))}
-          </L.PlacesList>
-        </L.PlacesSection>
-      </L.Container>
-    </L.AppContainer>
+    <>
+      {isLoading && <Loading />}
+      <L.AppContainer>
+        <L.Container>
+          <L.Header>
+            <BackButton />
+            <L.SearchInput
+              type='text'
+              placeholder='원하는 장소 검색'
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </L.Header>
+          <L.PlacesSection>
+            <L.SectionTitle>
+              <L.BoldText>{locationName}</L.BoldText> 추천 장소
+            </L.SectionTitle>
+            <L.PlacesList ref={listRef}>
+              {visiblePlaces.map((place, index) => (
+                <PlaceItem
+                  key={place.contentid}
+                  place={place}
+                  index={index}
+                  onClick={handleClick}
+                  onAddClick={handleAddButtonClick}
+                />
+              ))}
+            </L.PlacesList>
+          </L.PlacesSection>
+        </L.Container>
+      </L.AppContainer>
+    </>
   )
 }
 

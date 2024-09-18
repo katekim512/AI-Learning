@@ -5,9 +5,7 @@ import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import authToken from '../../../stores/authToken'
-import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
-import dummyImage from '../../RecommendPage/img/dummy.png'
 import * as L from '../styles/AddPlace.style'
 
 interface RecommendPlace {
@@ -246,7 +244,7 @@ const AddPlace: React.FC = () => {
                   areacode: Number(item.areacode),
                   sigungucode: item.sigungucode,
                   place: item.title, // OpenAPI의 'title'을 'place'로 매핑
-                  firstimage: item.firstimage || dummyImage, // 이미지가 없는 경우 더미 이미지 사용
+                  firstimage: item.firstimage || '/img/default_pic.png', // 이미지가 없는 경우 더미 이미지 사용
                 }),
               )
 
@@ -316,14 +314,11 @@ const AddPlace: React.FC = () => {
           </L.SectionTitle>
           <L.PlacesList>
             {filteredPlaces.map((place, index) => {
-              const cityName = getCityName(place.areacode, place.sigungucode)
-
               return (
                 <PlaceItem
                   key={place.contentid}
                   place={place}
                   index={index}
-                  locationName={cityName}
                   onClick={handleClick}
                   onAddClick={handleAddButtonClick}
                 />

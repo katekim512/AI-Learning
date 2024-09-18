@@ -2,18 +2,23 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import BottomMenuBar from './components/BottomMenuBar/BottomMenuBar'
+import Loading from './components/Loading/Loading'
+import { useAllPlace } from './hooks/useAllPlace'
 import GlobalStyle from './style/GlobalStyle'
 import { MobileContainer } from './style/MobileStyle'
 import setScreenHeight from './utils/mobileScreenSize/setScreenHeight'
 
 const App = () => {
   const location = useLocation()
+  const { isLoading } = useAllPlace()
 
   useEffect(() => {
     setScreenHeight()
     window.addEventListener('resize', setScreenHeight)
     return () => window.removeEventListener('resize', setScreenHeight)
   }, [])
+
+  if (isLoading) return <Loading />
 
   const showBottomMenuBar = [
     '/calendar',

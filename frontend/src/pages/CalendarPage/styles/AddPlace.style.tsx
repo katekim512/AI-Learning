@@ -38,12 +38,7 @@ export const SearchInput = styled.input`
 `
 
 export const PlacesSection = styled.section`
-  margin-top: 5px;
   padding: 0px 10px;
-  max-height: calc(
-    100vh - 5rem
-  ); /* Adjusts the height to leave space for other elements */
-  overflow-y: auto; /* Enables vertical scrolling */
 `
 
 export const SectionTitle = styled.div`
@@ -66,6 +61,9 @@ export const PlacesList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  padding-bottom: 1rem;
 `
 
 export const PlaceItem = styled.li`
@@ -114,6 +112,7 @@ export const AddButton = styled.button`
   padding: 5px 13px;
   font-size: 13px;
   cursor: pointer;
+  white-space: nowrap;
   border-radius: 22px;
 
   &:hover {

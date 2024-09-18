@@ -1,6 +1,6 @@
 import React from 'react'
 
-import dummyImage from '../img/dummy.png'
+import { getCityName } from '../../../style/CityMapper'
 import * as L from '../styles/RecommendDetail.style'
 
 interface RecommendPlace {
@@ -15,21 +15,17 @@ interface RecommendPlace {
 interface PlaceItemProps {
   place: RecommendPlace
   index: number
-  locationName: string
   onClick: (place: RecommendPlace) => void
   onAddClick: (e: React.MouseEvent, contentid: number, place: string) => void
 }
 
 const getContentTypeDescription = (contenttypeid: number | string): string => {
-  // contenttypeid를 숫자로 변환
-  const id = Number(contenttypeid)
-
-  switch (id) {
-    case 12:
+  switch (contenttypeid.toString()) {
+    case '12':
       return '관광지'
-    case 14:
+    case '14':
       return '문화시설'
-    case 15:
+    case '15':
       return '축제공연행사'
     default:
       return '기타'
@@ -38,18 +34,22 @@ const getContentTypeDescription = (contenttypeid: number | string): string => {
 const PlaceItem: React.FC<PlaceItemProps> = ({
   place,
   index,
-  locationName,
   onClick,
   onAddClick,
 }) => {
+  const cityName = getCityName(place.areacode, place.sigungucode)
+
   return (
     <L.PlaceItem key={place.contentid} onClick={() => onClick(place)}>
       <L.PlaceNumber>{index + 1}</L.PlaceNumber>
-      <L.PlaceImage src={place.firstimage || dummyImage} alt={place.place} />
+      <L.PlaceImage
+        src={place.firstimage || '/img/default_pic.png'}
+        alt={place.place}
+      />
       <L.PlaceInfo>
         <L.PlaceName>{place.place}</L.PlaceName>
         <L.PlaceDescription>
-          {`${locationName} · ${getContentTypeDescription(place.contenttypeid)}`}
+          {`${cityName} · ${getContentTypeDescription(place.contenttypeid)}`}
         </L.PlaceDescription>
       </L.PlaceInfo>
       <L.AddButton onClick={e => onAddClick(e, place.contentid, place.place)}>

@@ -2,13 +2,6 @@ import { AxiosResponse } from 'axios'
 
 import { aiLearningAxios } from '../axiosInstance'
 
-// Request 바디의 인터페이스
-interface RecommendRequest {
-  areacode: number[]
-  sigungucode: number | null
-}
-
-// Response 바디의 인터페이스
 interface RecommendPlace {
   contentid: number
   contenttypeid: number
@@ -18,17 +11,16 @@ interface RecommendPlace {
   firstimage: string
 }
 
-type RecommendResponse = RecommendPlace[]
-
 // POST 요청 함수
 export const postRecommendPlace = async (
   token: string,
-  recommends: RecommendRequest[],
-): Promise<AxiosResponse<RecommendResponse> | null> => {
+  areacode: number[],
+  sigungucode: number | null,
+): Promise<AxiosResponse<RecommendPlace[]> | null> => {
   try {
-    const response = await aiLearningAxios.post<RecommendResponse>(
+    const response = await aiLearningAxios.post(
       'recommend/recommend-place',
-      recommends,
+      { areacode, sigungucode },
       {
         headers: { Authorization: `Bearer ${token}` },
       },
