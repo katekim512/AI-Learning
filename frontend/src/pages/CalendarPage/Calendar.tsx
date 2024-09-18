@@ -13,7 +13,6 @@ import useVisitedList from '../../hooks/useVisitedList'
 
 const Calendar = () => {
   const navigate = useNavigate()
-  useAllPlace()
   const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
   const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
   const { refetch: refetchVisitedList } = useVisitedList() // 방문장소 리스트 갱신
