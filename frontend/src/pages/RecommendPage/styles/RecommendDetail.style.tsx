@@ -107,6 +107,7 @@ export const AddButton = styled.button`
   padding: 5px 13px;
   font-size: 13px;
   cursor: pointer;
+  white-space: nowrap;
   border-radius: 22px;
 
   &:hover {
