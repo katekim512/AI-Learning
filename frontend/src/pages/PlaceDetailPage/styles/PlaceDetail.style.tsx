@@ -1,4 +1,8 @@
-import { styled } from 'styled-components'
+import { css, styled } from 'styled-components'
+
+interface MenuButtonProps {
+  isLast?: boolean
+}
 
 export const Container = styled.div`
   box-sizing: border-box;
@@ -17,26 +21,6 @@ export const HeaderContainer = styled.div`
   margin-bottom: 0.3rem;
 `
 
-export const HeaderRightIcons = styled.div`
-  display: flex;
-`
-
-export const VisitedCheckButton = styled.button`
-  display: flex;
-  background-color: #525fd4;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  text-ailgns: center;
-  justify-content: center;
-  align-items: center;
-  padding: 0.4rem;
-  font-size: 0.7rem;
-  height: 1.4rem;
-  margin-top: 0.3rem;
-  margin-right: 0.3rem;
-`
-
 export const MapButton = styled.div`
   display: flex;
   padding-top: 0.1rem;
@@ -52,21 +36,33 @@ export const Text = styled.p`
   font-weight: 700;
 `
 
-export const SecondLineContainer = styled.div`
-  justify-content: space-between;
+export const MenubarContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: 0.5px solid #d9d9d9;
 `
 
-export const SecondLineButton = styled.button`
-  height: 1.2rem;
-  padding: 0 1rem;
-  border: none;
-  border-radius: 1rem;
-  background-color: #3a3a3a;
-  color: white;
-  font-size: 0.5rem;
-  margin-left: 0.2rem;
+export const MenuButton = styled.div<MenuButtonProps>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #333333;
+  font-size: 0.6rem;
+  font-weight: 600;
   cursor: pointer;
+  padding: 0 1rem;
+  line-height: 1.2rem;
+
+  ${({ isLast }) =>
+    !isLast &&
+    css`
+      border-right: 0.5px solid #d9d9d9;
+    `}
 `
 
 export const LikeContatiner = styled.div`
@@ -127,4 +123,22 @@ export const HomepageLink = styled.div`
     text-decoration: none;
     color: inherit;
   }
+`
+
+export const ChatButton = styled.button`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 5rem;
+  height: 5rem;
+  border: none;
+  border-radius: 100%;
+  background-color: #525fd4;
+  color: white;
+  padding: 1rem;
+  font-size: 0.7rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 `

@@ -15,7 +15,7 @@ export const BannerContainer = styled.div`
 export const BannerText = styled.p`
   margin: 0;
   font-size: 11px;
-  margin-top: 9px;
+  padding: 0.2rem;
   margin-left: 10px;
   margin-bottom: 5px;
 `

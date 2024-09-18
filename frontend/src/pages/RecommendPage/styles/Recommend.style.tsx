@@ -4,7 +4,7 @@ export const Background = styled.div`
   position: relative;
   width: 100%;
   height: calc(100vh - 5rem);
-  background-image: url('img/placeRecommend/Background.png');
+  background-image: url('img/placeRecommend/white_background.png');
   background-size: 100% auto;
   background-position: bottom center;
   background-repeat: no-repeat;

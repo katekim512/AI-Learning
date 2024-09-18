@@ -4,6 +4,7 @@ import { aiLearningAxios } from '../axiosInstance'
 
 interface CallbackResponse {
   userExists: boolean
+  token: string
 }
 
 export const kakaoCallback = async (

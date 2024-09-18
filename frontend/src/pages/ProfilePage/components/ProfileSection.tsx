@@ -1,60 +1,66 @@
+import { Icon } from '@iconify/react'
 import { useState } from 'react'
-import { useQueryClient } from 'react-query'
+import { useNavigate } from 'react-router-dom'
 
-import { profileUpdate } from '../../../api/profile/postProfileUpdate'
 import { useUser } from '../../../hooks/useUser'
+import authKakaoToken from '../../../stores/authKakaoToken'
 import authToken from '../../../stores/authToken'
 import * as L from '../styles/Profile.style'
 
 const ProfileSection = () => {
-  const { data: userInfo, refetch } = useUser()
-  const queryClient = useQueryClient()
-  const [, setSelectedFile] = useState<File | null>(null)
-  const [previewSrc, setPreviewSrc] = useState<string>(
+  const navigate = useNavigate()
+  const { data: userInfo } = useUser()
+  const [previewSrc] = useState<string>(
     userInfo ? userInfo.profile : '/img/profile-default.png',
   )
 
-  const handleFileUpload = () => {
-    const fileInput = document.createElement('input')
-    fileInput.type = 'file'
-    fileInput.accept = 'image/*'
-    fileInput.onchange = async e => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        setSelectedFile(file)
-        await handleUploadPhoto(file)
-      }
-    }
-    fileInput.click()
+  const handleLogoutButton = () => {
+    authToken.removeToken()
+    authKakaoToken.removeTokens()
+    navigate('/')
   }
 
-  const handleUploadPhoto = async (file: File) => {
-    const token = authToken.getAccessToken()
-    if (token) {
-      const formData = new FormData()
-      formData.append('profile', file)
-
-      const successResponse = await profileUpdate(token, formData)
-      if (successResponse && successResponse.data) {
-        setPreviewSrc(URL.createObjectURL(file))
-
-        await refetch()
-        queryClient.invalidateQueries('user')
-      }
-    }
+  const handleMyInfoEdit = () => {
+    navigate('/my-info')
   }
 
   return (
-    <L.ProfileSection>
-      <L.ProfileContainer>
-        <L.ProfileImage
-          alt='profile'
-          src={previewSrc}
-          onClick={handleFileUpload}
-        />
-      </L.ProfileContainer>
-      <L.ProfileNickname>{userInfo?.nickname}</L.ProfileNickname>
-    </L.ProfileSection>
+    <>
+      <L.ProfileHeaderSection>
+        <L.Title>프로필</L.Title>
+        <L.HeaderIcon>
+          <Icon icon='ph:bell' width='24' height='24' />
+          <Icon
+            icon='line-md:logout'
+            width='24'
+            height='24'
+            style={{ marginLeft: '6px' }}
+            onClick={handleLogoutButton}
+          />
+        </L.HeaderIcon>
+      </L.ProfileHeaderSection>
+      <L.ProfileSection>
+        <L.ProfileContainer onClick={handleMyInfoEdit}>
+          <L.ProfileImage alt='profile' src={previewSrc} />
+        </L.ProfileContainer>
+        <L.ProfileInfoSection>
+          <L.ProfileNickname>{userInfo?.nickname}</L.ProfileNickname>
+          <L.ProfileEditInfo onClick={handleMyInfoEdit}>
+            내 정보 수정
+            <Icon
+              icon='oui:arrow-up'
+              width='15'
+              height='15'
+              style={{
+                transform: 'rotate(90deg)',
+                position: 'relative',
+                top: '2.5px',
+              }}
+            />
+          </L.ProfileEditInfo>
+        </L.ProfileInfoSection>
+      </L.ProfileSection>
+    </>
   )
 }
 

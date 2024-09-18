@@ -2,11 +2,13 @@ import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
+import ChatDrawer from './components/ChatDrawer/ChatDrawer'
 import ContentType12 from './components/ContentType12'
 import ContentType14 from './components/ContentType14'
 import ContentType15 from './components/ContentType15'
+import MiddleMenuBar from './components/MiddleMenuBar'
 import PlaceMap from './components/PlaceMap'
 import * as L from './styles/PlaceDetail.style'
 import { postAddVisited } from '../../api/calendar/postAddVisited'
@@ -34,6 +36,8 @@ interface PlaceDetail {
 
 const PlaceDetail = () => {
   const token = authToken.getAccessToken()
+  const location = useLocation()
+  const { date } = location.state || {} // date 가져오기
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
@@ -46,6 +50,16 @@ const PlaceDetail = () => {
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
   const [imageHeight, setImageHeight] = useState<number>(200)
   const [city, setCity] = useState<string>('')
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const menubarRef = useRef<HTMLDivElement>(null)
+  const [menuButtonWidth, setMenuButtonWidth] = useState<number>(0)
+
+  useEffect(() => {
+    if (menubarRef.current) {
+      const menubarWidth = menubarRef.current.offsetWidth
+      setMenuButtonWidth(menubarWidth / 4)
+    }
+  }, [menubarRef])
 
   useEffect(() => {
     fetchCommonPlaceInfo()
@@ -91,7 +105,7 @@ const PlaceDetail = () => {
   }, [placeDetail])
 
   const fetchCommonPlaceInfo = async () => {
-    if (!token || !contentid) return
+    if (!contentid) return
 
     try {
       const myServiceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
@@ -146,6 +160,14 @@ const PlaceDetail = () => {
     setShowMap(prevState => !prevState)
   }
 
+  const handleChatButtonClick = () => {
+    if (drawerOpen) {
+      setDrawerOpen(false)
+    } else {
+      setDrawerOpen(true)
+    }
+  }
+
   const getContentTypeText = (contenttypeid: number) => {
     switch (contenttypeid) {
       case 12:
@@ -164,73 +186,50 @@ const PlaceDetail = () => {
       <L.Container>
         <L.HeaderContainer>
           <BackButton />
-          <L.HeaderRightIcons>
-            <L.VisitedCheckButton onClick={handleVistedCheckButton}>
-              {isVisited ? (
-                <>
-                  방문완료&nbsp;
-                  <Icon icon='iconamoon:check' width='12' height='12' />
-                </>
-              ) : (
-                <>
-                  방문한 장소&nbsp;
-                  <Icon icon='material-symbols:add' width='12' height='12' />
-                </>
-              )}
-            </L.VisitedCheckButton>
-            <L.MapButton>
-              {placeDetail?.firstimage && (
-                <>
-                  {showMap ? (
-                    <Icon
-                      icon='system-uicons:picture'
-                      width='28'
-                      height='28'
-                      onClick={handleMapToggle}
-                    />
-                  ) : (
-                    <Icon
-                      icon='material-symbols-light:map-outline'
-                      width='28'
-                      height='28'
-                      onClick={handleMapToggle}
-                    />
-                  )}
-                </>
-              )}
-            </L.MapButton>
-          </L.HeaderRightIcons>
+          <L.MapButton>
+            {placeDetail?.firstimage && (
+              <>
+                {showMap ? (
+                  <Icon
+                    icon='system-uicons:picture'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                ) : (
+                  <Icon
+                    icon='material-symbols-light:map-outline'
+                    width='28'
+                    height='28'
+                    onClick={handleMapToggle}
+                  />
+                )}
+              </>
+            )}
+          </L.MapButton>
         </L.HeaderContainer>
         <L.Title>
           <L.Text>{placeDetail?.title || ''}</L.Text>
           <L.LikeContatiner>
-            <Icon icon={heartIcon} style={{ fontSize: '16px', color: 'red' }} />
+            <Icon
+              icon={heartIcon}
+              style={{ fontSize: '16px', color: 'red', paddingTop: '3px' }}
+            />
             <L.SmText>{likeInfo || 0}</L.SmText>
           </L.LikeContatiner>
         </L.Title>
-        <L.SecondLineContainer>
-          <L.Title>
-            <Icon
-              icon={mapMarker}
-              width='18'
-              height='18'
-              style={{ color: '#BCBCBC' }}
-            />
-            <L.LocationText>
-              {city},&nbsp;
-              {getContentTypeText(Number(contenttypeid))}
-            </L.LocationText>
-          </L.Title>
-          <L.Title>
-            <L.SecondLineButton onClick={handleLikeToggle}>
-              {isLiked ? '저장됨' : '저장하기'}
-            </L.SecondLineButton>
-            <L.SecondLineButton onClick={handleMapToggle}>
-              장소추가
-            </L.SecondLineButton>
-          </L.Title>
-        </L.SecondLineContainer>
-
+        <L.Title>
+          <Icon
+            icon={mapMarker}
+            width='18'
+            height='18'
+            style={{ color: '#BCBCBC' }}
+          />
+          <L.LocationText>
+            {city},&nbsp;
+            {getContentTypeText(Number(contenttypeid))}
+          </L.LocationText>
+        </L.Title>
         {showMap ? (
           <PlaceMap
             mapx={placeDetail?.mapx || 0}
@@ -251,6 +250,20 @@ const PlaceDetail = () => {
             height={imageHeight}
           />
         )}
+        <MiddleMenuBar
+          date={date}
+          isLiked={isLiked}
+          isVisited={isVisited}
+          onLikeToggle={handleLikeToggle}
+          onVisitedToggle={handleVistedCheckButton}
+          menuButtonWidth={menuButtonWidth}
+          setMenuButtonWidth={setMenuButtonWidth}
+          contentid={contentid}
+          contenttypeid={contenttypeid}
+          title={placeDetail?.title}
+          firstimage={placeDetail?.firstimage}
+          overview={placeDetail?.overview}
+        />
         <L.OverviewContainer>
           {placeDetail?.homepage && (
             <>
@@ -274,7 +287,24 @@ const PlaceDetail = () => {
             <ContentType15 contentid={contentid!} />
           )}
         </L.OverviewContainer>
+        <L.ChatButton onClick={handleChatButtonClick}>
+          <Icon
+            icon='fluent:chat-12-filled'
+            width='32'
+            height='32'
+            style={{ color: '#F8F8F8' }}
+          />
+          <br></br>
+          장소 Q&A
+        </L.ChatButton>
       </L.Container>
+      {drawerOpen && (
+        <ChatDrawer
+          contentid={contentid!}
+          isOpen={drawerOpen}
+          onClose={handleChatButtonClick}
+        />
+      )}
     </>
   )
 }
