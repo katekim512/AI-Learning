@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import PlaceItem from './components/PlaceItem'
-//import dummyImage from './img/dummy.png'
 import * as L from './styles/RecommendDetail.style'
 import { getAllPlace } from '../../api/calendar/getAllPlace'
 import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
