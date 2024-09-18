@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import PlaceItem from './components/PlaceItem'
-import dummyImage from './img/dummy.png'
+//import dummyImage from './img/dummy.png'
 import * as L from './styles/RecommendDetail.style'
-// import { getAllPlace } from '../../api/calendar/getAllPlace'
-// import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
+import { getAllPlace } from '../../api/calendar/getAllPlace'
+import { postRecommendPlace } from '../../api/recommend/postRecommendPlace'
 import BackButton from '../../components/BackButton/BackButton'
 import authToken from '../../stores/authToken'
 
@@ -18,112 +18,112 @@ interface RecommendPlace {
   firstimage: string
 }
 
-const dummyData: RecommendPlace[] = [
-  {
-    contentid: 1,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 2,
-    place: '불국사',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 2,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 2,
-    place: '석굴암',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 3,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 2,
-    place: '동궁과 월지',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 4,
-    contenttypeid: 14,
-    areacode: 35,
-    sigungucode: 2,
-    place: '경주 대릉원',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 5,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 3,
-    place: '첨성대',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 6,
-    contenttypeid: 15,
-    areacode: 35,
-    sigungucode: 4,
-    place: '포석정',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 7,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 5,
-    place: '경주 남산',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 8,
-    contenttypeid: 16,
-    areacode: 35,
-    sigungucode: 6,
-    place: '문무대왕릉',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 9,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 7,
-    place: '경주 오릉',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 10,
-    contenttypeid: 14,
-    areacode: 35,
-    sigungucode: 8,
-    place: '경주 국립공원',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 11,
-    contenttypeid: 13,
-    areacode: 35,
-    sigungucode: 9,
-    place: '경주 월정교',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 12,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 10,
-    place: '경주 황리단길',
-    firstimage: dummyImage,
-  },
-  {
-    contentid: 13,
-    contenttypeid: 12,
-    areacode: 35,
-    sigungucode: 11,
-    place: '경주 보문단지',
-    firstimage: dummyImage,
-  },
-]
+// const dummyData: RecommendPlace[] = [
+//   {
+//     contentid: 1,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '불국사',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 2,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '석굴암',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 3,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '동궁과 월지',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 4,
+//     contenttypeid: 14,
+//     areacode: 35,
+//     sigungucode: 2,
+//     place: '경주 대릉원',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 5,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 3,
+//     place: '첨성대',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 6,
+//     contenttypeid: 15,
+//     areacode: 35,
+//     sigungucode: 4,
+//     place: '포석정',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 7,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 5,
+//     place: '경주 남산',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 8,
+//     contenttypeid: 16,
+//     areacode: 35,
+//     sigungucode: 6,
+//     place: '문무대왕릉',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 9,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 7,
+//     place: '경주 오릉',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 10,
+//     contenttypeid: 14,
+//     areacode: 35,
+//     sigungucode: 8,
+//     place: '경주 국립공원',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 11,
+//     contenttypeid: 13,
+//     areacode: 35,
+//     sigungucode: 9,
+//     place: '경주 월정교',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 12,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 10,
+//     place: '경주 황리단길',
+//     firstimage: dummyImage,
+//   },
+//   {
+//     contentid: 13,
+//     contenttypeid: 12,
+//     areacode: 35,
+//     sigungucode: 11,
+//     place: '경주 보문단지',
+//     firstimage: dummyImage,
+//   },
+// ]
 
 const RecommendDetail: React.FC = () => {
   const token = authToken.getAccessToken()
@@ -140,45 +140,45 @@ const RecommendDetail: React.FC = () => {
   )
   const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
   //-----API 연결----
-  // useEffect(() => {
-  //   const fetchPlaces = async () => {
-  //     if (sigungucode === null) return
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      if (sigungucode === null) return
 
-  //     if (areacode.length === 0) {
-  //       // areacode가 빈 배열인 경우
-  //       const allPlaces = await getAllPlace(token)
-  //       if (allPlaces) {
-  //         setRecommendedPlaces(allPlaces.data)
-  //       } else {
-  //         setRecommendedPlaces([]) // null인 경우 빈 배열로 설정
-  //       }
-  //     } else {
-  //       // areacode가 값이 있는 경우
-  //       const requestPayload = [
-  //         {
-  //           areacode,
-  //           sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
-  //         },
-  //       ]
+      if (areacode.length === 0) {
+        // areacode가 빈 배열인 경우
+        const allPlaces = await getAllPlace(token)
+        if (allPlaces) {
+          setRecommendedPlaces(allPlaces.data)
+        } else {
+          setRecommendedPlaces([]) // null인 경우 빈 배열로 설정
+        }
+      } else {
+        // areacode가 값이 있는 경우
+        const requestPayload = [
+          {
+            areacode,
+            sigungucode: sigungucode !== 'null' ? Number(sigungucode) : null,
+          },
+        ]
 
-  //       try {
-  //         const response = await postRecommendPlace(token, requestPayload)
-  //         if (response && response.data) {
-  //           setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
-  //         }
-  //       } catch (error) {
-  //         console.error('추천 장소를 가져오는 데 실패했습니다:', error)
-  //       }
-  //     }
-  //   }
+        try {
+          const response = await postRecommendPlace(token, requestPayload)
+          if (response && response.data) {
+            setRecommendedPlaces(response.data) // API에서 받아온 추천 장소 데이터 저장
+          }
+        } catch (error) {
+          console.error('추천 장소를 가져오는 데 실패했습니다:', error)
+        }
+      }
+    }
 
-  //   fetchPlaces()
-  // }, [areacode, sigungucode, token])
+    fetchPlaces()
+  }, [areacode, sigungucode, token])
 
   // 더미 데이터를 상태로 설정
-  useEffect(() => {
-    setRecommendedPlaces(dummyData)
-  }, [areacode, sigungucode, token])
+  // useEffect(() => {
+  //   setRecommendedPlaces(dummyData)
+  // }, [areacode, sigungucode, token])
 
   const getLocationName = (
     areacode: number[],
