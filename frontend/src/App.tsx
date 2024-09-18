@@ -10,7 +10,7 @@ import setScreenHeight from './utils/mobileScreenSize/setScreenHeight'
 
 const App = () => {
   const location = useLocation()
-  const { isLoading, error } = useAllPlace()
+  const { isLoading } = useAllPlace()
 
   useEffect(() => {
     setScreenHeight()
@@ -19,7 +19,6 @@ const App = () => {
   }, [])
 
   if (isLoading) return <Loading />
-  if (error) return <div>Error fetching places</div>
 
   const showBottomMenuBar = [
     '/calendar',
