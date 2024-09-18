@@ -38,7 +38,6 @@ export const SearchInput = styled.input`
 `
 
 export const PlacesSection = styled.section`
-  margin-top: 5px;
   padding: 0px 10px;
 `
 
@@ -62,8 +61,9 @@ export const PlacesList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: calc(100vh - 5rem);
+  max-height: calc(100vh - 6rem);
   overflow-y: auto;
+  padding-bottom: 1rem;
 `
 
 export const PlaceItem = styled.li`
