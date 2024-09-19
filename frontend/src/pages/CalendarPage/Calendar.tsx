@@ -5,8 +5,6 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
-import Loading from '../../components/Loading/Loading'
-import { useAllPlace } from '../../hooks/useAllPlace'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
@@ -16,7 +14,6 @@ const Calendar = () => {
   const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
   const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
   const { refetch: refetchVisitedList } = useVisitedList() // 방문장소 리스트 갱신
-  const { isLoading } = useAllPlace()
 
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
@@ -96,7 +93,6 @@ const Calendar = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
       <div {...handlers}>
         <L.HeaderSection>
           <L.HeaderTitle>

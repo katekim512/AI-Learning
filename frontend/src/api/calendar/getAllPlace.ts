@@ -12,11 +12,9 @@ export interface PlaceAllPreviewInfo {
   city?: string
 }
 
-export const getAllPlace = async (
-  token: string,
-): Promise<AxiosResponse<PlaceAllPreviewInfo[]> | null> => {
-  const response = await aiLearningAxios.get('calendar/all-place', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+export const getAllPlace = async (): Promise<AxiosResponse<
+  PlaceAllPreviewInfo[]
+> | null> => {
+  const response = await aiLearningAxios.get('calendar/all-place')
   return response
 }
