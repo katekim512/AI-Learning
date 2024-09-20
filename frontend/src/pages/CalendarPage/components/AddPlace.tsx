@@ -297,6 +297,10 @@ const AddPlace: React.FC = () => {
     }
   }
 
+  const handleReloadButtonClick = () => {
+    fetchPlaces()
+  }
+
   const getAreaAndSigunguName = (
     areacode: number,
     sigungucode: number,
@@ -323,6 +327,7 @@ const AddPlace: React.FC = () => {
           <L.SectionTitle>
             <L.BoldText>{formatDate(date)}</L.BoldText> 추천장소
             <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
+            <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
 
           <L.PlacesList>
