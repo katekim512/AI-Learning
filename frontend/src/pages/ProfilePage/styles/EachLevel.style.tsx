@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
 `
 export const ScrollContainer = styled.div`
-  height: calc(100vh - 8rem);
+  height: calc(100vh - 7.5rem);
   overflow-y: auto;
 `
 export const ButtonContainer = styled.div`
