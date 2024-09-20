@@ -13,6 +13,7 @@ import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandl
 import Login from './pages/LoginPage/Login'
 import MyInfoEdit from './pages/MyInfoEditPage/MyInfoEdit'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
+import EachLevel from './pages/ProfilePage/components/EachLevel'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
+        path: 'eachlevel/:level',
+        element: <EachLevel />,
+      },
+      {
         path: 'recommend-place',
         element: <Recommend />,
       },
@@ -73,7 +78,7 @@ const router = createBrowserRouter([
         element: <RecommendDetail />,
       },
       {
-        path: 'dateselected/:contentid/:place', // 동적 매개변수로 경로 설정
+        path: 'dateselected/:contentid/:place',
         element: <DateSelected />,
       },
       {
