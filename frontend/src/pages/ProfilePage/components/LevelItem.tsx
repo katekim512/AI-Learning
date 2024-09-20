@@ -39,7 +39,7 @@ const LevelItem: React.FC<LevelItemProps> = ({ place, onClick }) => {
     <L.PlaceItem
       key={place.contentid}
       onClick={() => onClick(place)}
-      visited={place.isVisited} // Pass visited status as prop
+      visited={place.isVisited}
     >
       <L.PlaceImage
         src={place.firstimage || '/img/default_pic.png'}

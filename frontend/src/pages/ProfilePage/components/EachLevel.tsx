@@ -8,7 +8,6 @@ import authToken from '../../../stores/authToken'
 import dummyImage from '../styles/dummy.png'
 import * as L from '../styles/EachLevel.style'
 
-// Type for travel destination
 interface Level {
   contentid: number
   contenttypeid: number
@@ -19,7 +18,7 @@ interface Level {
   isVisited: boolean
 }
 
-// Sample data
+// 더미데이터
 const dummyData: Level[] = [
   {
     contentid: 1,
@@ -42,7 +41,7 @@ const dummyData: Level[] = [
   {
     contentid: 3,
     contenttypeid: 12,
-    areacode: 11,
+    areacode: 1,
     sigungucode: 3,
     place: '경복궁',
     firstimage: dummyImage,
@@ -51,7 +50,7 @@ const dummyData: Level[] = [
   {
     contentid: 4,
     contenttypeid: 12,
-    areacode: 11,
+    areacode: 1,
     sigungucode: 3,
     place: '광화문',
     firstimage: dummyImage,
@@ -60,7 +59,7 @@ const dummyData: Level[] = [
   {
     contentid: 5,
     contenttypeid: 14,
-    areacode: 37,
+    areacode: 1,
     sigungucode: 2,
     place: '순천만 국가정원',
     firstimage: dummyImage,
@@ -144,10 +143,9 @@ const EachLevel: React.FC = () => {
 
   //더미데이터 이용
   useEffect(() => {
-    setLevelPlaces(dummyData) // Simulate fetching data or setting based on external factors
-  }, [level, token]) // Dependencies to trigger the effect when they change
+    setLevelPlaces(dummyData)
+  }, [level, token])
 
-  // Filter destinations based on visited flag
   const notVisited = levelPlaces.filter(place => !place.isVisited)
   const visited = levelPlaces.filter(place => place.isVisited)
 

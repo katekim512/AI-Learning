@@ -5,9 +5,8 @@ export const PlaceItem = styled.li<{ visited?: boolean }>`
   align-items: center;
   padding: 10px 20px;
   border-bottom: 1px solid #eaeaea;
-  background-color: ${({ visited }) =>
-    visited ? '#f0f0f0' : 'white'}; /* Gray background if visited */
-  color: #333; /* Keep text color the same regardless of visited status */
+  background-color: ${({ visited }) => (visited ? '#f0f0f0' : 'white')};
+  color: #333;
 `
 
 export const PlaceImage = styled.img`
