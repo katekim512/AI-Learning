@@ -341,7 +341,7 @@ const AddPlace: React.FC = () => {
                 />
               ))
             ) : (
-              <div>No places found</div>
+              <div>Loading...</div>
             )}
           </L.PlacesList>
         </L.PlacesSection>
