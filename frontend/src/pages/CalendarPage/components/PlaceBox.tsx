@@ -36,6 +36,11 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({
     const [removed] = updatedInfo.splice(dragIndex, 1)
     updatedInfo.splice(hoverIndex, 0, removed)
 
+    // 각 아이템의 order 값을 인덱스에 맞게 재설정
+    updatedInfo.forEach((item, index) => {
+      item.order = index
+    })
+
     updateInfo(updatedInfo)
     console.log('Updated Info:', updatedInfo)
   }
