@@ -95,3 +95,16 @@ export const PlaceSection = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `
+
+export const HolidaySection = styled.div`
+  width: 100%;
+  text-align: center;
+  background-color: #d63535;
+  border-radius: 4px;
+  font-size: 0.5rem;
+  color: white;
+  padding: 0.22rem 0.3rem;
+  margin-bottom: 0.1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
