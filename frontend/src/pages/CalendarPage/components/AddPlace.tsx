@@ -5,6 +5,7 @@ import SearchBar from './SearchBar'
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
+import Loading from '../../../components/Loading/Loading'
 import { useAllPlace } from '../../../hooks/useAllPlace'
 import authToken from '../../../stores/authToken'
 import { getCityName } from '../../../style/CityMapper'
@@ -331,7 +332,7 @@ const AddPlace: React.FC = () => {
 
           <L.PlacesList>
             {isAllPlacesLoading ? (
-              <div>Loading...</div>
+              <Loading /> // Use Loading component here
             ) : allPlacesError ? (
               <div>Error occurred</div>
             ) : filteredPlaces && filteredPlaces.length > 0 ? (
@@ -345,7 +346,9 @@ const AddPlace: React.FC = () => {
                 />
               ))
             ) : (
-              <div>Loading...</div>
+              <L.LoadingOverlay>
+                <Loading />
+              </L.LoadingOverlay>
             )}
           </L.PlacesList>
         </L.PlacesSection>
