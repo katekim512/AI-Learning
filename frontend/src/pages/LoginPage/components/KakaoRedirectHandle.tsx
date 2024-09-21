@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { kakaoCallback } from '../../../api/auth/postKakaoCallback'
 import { postNewAccessToken } from '../../../api/auth/postNewAccessToken'
 import { postRefreshAccessToken } from '../../../api/auth/postRefreshAccessToken'
+import Loading from '../../../components/Loading/Loading'
+import { useAllPlace } from '../../../hooks/useAllPlace'
 import authKakaoToken from '../../../stores/authKakaoToken'
 import authToken from '../../../stores/authToken'
 import { isAxios401Error } from '../../../utils/isAxios401Error'
@@ -14,6 +16,13 @@ const kakao = (window as any).Kakao
 
 const KakaoRedirectHandle = () => {
   const navigate = useNavigate()
+  const { isLoading, data } = useAllPlace()
+
+  useEffect(() => {
+    if (data) {
+      console.log('Fetched places:', data)
+    }
+  }, [data])
 
   useEffect(() => {
     const params = new URL(document.location.toString()).searchParams
@@ -23,7 +32,7 @@ const KakaoRedirectHandle = () => {
     const url = 'https://ai-learning-kappa.vercel.app'
     axios
       .post(
-        `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=${url}/login/oauth&code=${code}`,
+        `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=${url}/start/oauth&code=${code}`,
         {
           headers: {
             'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -89,7 +98,7 @@ const KakaoRedirectHandle = () => {
       })
   }
 
-  return <></>
+  return <>{isLoading && <Loading />}</>
 }
 
 export default KakaoRedirectHandle

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import SocialLogin from './SocialLogin'
 import { login } from '../../../api/auth/postLogin'
 import authToken from '../../../stores/authToken'
 import * as L from '../styles/Login.style'
@@ -48,7 +47,6 @@ const LoginForm = () => {
         required
       />
       <L.LoginButton type='submit'>로그인</L.LoginButton>
-      <SocialLogin />
     </L.Form>
   )
 }
