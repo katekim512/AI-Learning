@@ -3,16 +3,18 @@ import { AxiosResponse } from 'axios'
 import { aiLearningAxios } from '../axiosInstance'
 
 interface SuccessResponse {
-  isCorrect: boolean
+  message: string
 }
 
-export const postCheckPassword = async (
+export const postUserUpdate = async (
   token: string,
-  password: string,
+  nickname: string,
+  birth: string,
+  city: string,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
-    'profile/check-password',
-    { password },
+    'profile/user-update',
+    { nickname, birth, city },
     {
       headers: { Authorization: `Bearer ${token}` },
     },

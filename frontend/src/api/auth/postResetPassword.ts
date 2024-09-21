@@ -10,7 +10,7 @@ export const postResetPassword = async (
   email: string,
   password: string,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
-  const response = await aiLearningAxios.post('members/reset-passowrd', {
+  const response = await aiLearningAxios.post('members/reset-password', {
     email,
     password,
   })

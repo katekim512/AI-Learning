@@ -11,7 +11,7 @@ export const postNewPassword = async (
   password: string,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
-    'profile/new-passowrd',
+    'profile/new-password',
     { password },
     {
       headers: { Authorization: `Bearer ${token}` },
