@@ -15,6 +15,7 @@ import CheckPassword from './pages/CheckPasswordPage/CheckPassword'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
+import Start from './pages/LoginPage/Start'
 import MyInfoEdit from './pages/MyInfoEditPage/MyInfoEdit'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import Profile from './pages/ProfilePage/Profile'
@@ -30,14 +31,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Login />,
+        element: <Start />,
+      },
+      {
+        path: 'start',
+        element: <Start />,
       },
       {
         path: 'login',
         element: <Login />,
       },
+
       {
-        path: 'login/oauth',
+        path: 'start/oauth',
         element: <KakaoRedirectHandle />,
       },
       {

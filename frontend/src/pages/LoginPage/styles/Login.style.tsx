@@ -55,15 +55,6 @@ export const LoginButton = styled(Button)`
   }
 `
 
-export const KaKaoButton = styled(Button)`
-  background-color: #fee500;
-  color: transparent;
-  background-image: url('/img/kakao_login_medium_wide.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`
-
 export const CreateAccountSection = styled.div`
   color: #141414;
 `
