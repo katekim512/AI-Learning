@@ -41,13 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       : recommendedPlaces
 
     onFilteredPlaces(filteredPlaces)
-  }, [
-    searchTerm,
-    allPlaces,
-    recommendedPlaces,
-    onFilteredPlaces,
-    getAreaAndSigunguName,
-  ])
+  }, [searchTerm, recommendedPlaces])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
