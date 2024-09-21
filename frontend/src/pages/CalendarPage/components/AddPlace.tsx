@@ -7,8 +7,8 @@ import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
 import { useAllPlace } from '../../../hooks/useAllPlace'
 import authToken from '../../../stores/authToken'
+import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
-import { areaCodeMap, sigunguCodeMap } from '../components/data/locationData'
 import * as L from '../styles/AddPlace.style'
 // import dummyImage from '../styles/dummy.png'
 
@@ -192,7 +192,7 @@ const AddPlace: React.FC = () => {
     }
   }
 
-  // 더미 데이터를 상태로 설정
+  // 더미 데이터 불러오기
   // useEffect(() => {
   //   setRecommendedPlaces(dummyData)
   // }, [date, token])
@@ -305,9 +305,7 @@ const AddPlace: React.FC = () => {
     areacode: number,
     sigungucode: number,
   ): string => {
-    const areaName = areaCodeMap[areacode] || ''
-    const sigunguName = sigunguCodeMap[areacode]?.[sigungucode] || ''
-    return `${areaName} ${sigunguName}`.trim()
+    return getCityName(areacode, sigungucode)
   }
 
   return (
