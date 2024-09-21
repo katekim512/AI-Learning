@@ -112,6 +112,7 @@ const PlaceBox: React.FC<PlaceBoxProps> = ({
             selectedIndexes={selectedIndexes}
             onDelete={handleDelete}
             date={date}
+            distance={daySchedule.distance}
           />
         ))}
       </DndProvider>

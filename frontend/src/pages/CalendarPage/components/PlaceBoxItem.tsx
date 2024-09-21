@@ -33,6 +33,7 @@ interface PlaceBoxItemProps {
   selectedIndexes: number[]
   onDelete: (index: number) => void
   date: string
+  distance: number[]
 }
 
 interface DragItem {
@@ -54,6 +55,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
   selectedIndexes,
   onDelete,
   date,
+  distance,
 }) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
@@ -96,7 +98,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
     <>
       <L.NumberCircle>{index + 1}</L.NumberCircle>
       {index < totalItems - 1 && (
-        <L.DistancePlaceholder>123m</L.DistancePlaceholder>
+        <L.DistancePlaceholder>{distance[index]}m</L.DistancePlaceholder>
       )}
       <L.PlaceBoxContainer
         isSliding={!isEditing && isSliding === index}
