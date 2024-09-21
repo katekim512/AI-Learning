@@ -1,8 +1,19 @@
 import { Icon } from '@iconify/react'
+import { useNavigate } from 'react-router-dom'
 
+import authKakaoToken from '../../../stores/authKakaoToken'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/MyInfoEdit.style'
 
 const ListItem = () => {
+  const navigate = useNavigate()
+
+  const handleLogoutButton = () => {
+    authToken.removeToken()
+    authKakaoToken.removeTokens()
+    navigate('/')
+  }
+
   return (
     <>
       <L.ListItem>
@@ -36,7 +47,7 @@ const ListItem = () => {
           }}
         />
       </L.ListItem>
-      <L.ListItem>
+      <L.ListItem onClick={handleLogoutButton}>
         <L.ListTextBox>
           <L.ListName>로그아웃</L.ListName>
         </L.ListTextBox>
