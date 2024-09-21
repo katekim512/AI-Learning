@@ -23,3 +23,80 @@ export const HeaderText = styled.p`
   font-size: 1.2rem;
   text-align: center;
 `
+
+export const InputWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  padding: 1.5rem;
+`
+
+export const Input = styled.input`
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #1a202c;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: 1px solid #2563eb;
+    border-color: #525fd4;
+  }
+`
+
+export const Button = styled.button`
+  position: absolute;
+  right: 2.25rem;
+  top: 2.3rem;
+  width: auto;
+  background-color: #525fd4;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: normal;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #434cb1;
+  }
+`
+
+interface ValidationMessageProps {
+  error?: boolean
+}
+
+export const ValidationMessage = styled.p<ValidationMessageProps>`
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: ${props => (props.error ? '#f56565' : '#6b7280')};
+`
+
+export const BottomButton = styled.button`
+  position: absolute;
+  align-items: center;
+  margin-top: 0px;
+  padding-top: 0px;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 352px;
+  height: 46px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  color: white;
+  font-weight: 600;
+  background-color: #525fd4;
+  cursor: pointer;
+  box-sizing: border-box;
+  &:hover {
+    background-color: #434cb1;
+  }
+`

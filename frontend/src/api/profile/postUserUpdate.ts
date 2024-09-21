@@ -9,7 +9,7 @@ interface SuccessResponse {
 export const postUserUpdate = async (
   token: string,
   nickname: string,
-  birth: string,
+  birth: number,
   city: string,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
