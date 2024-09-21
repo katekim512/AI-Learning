@@ -13,6 +13,14 @@ const ListItem = () => {
   const navigate = useNavigate()
   const [isAlertVisible, setIsAlertVisible] = useState(false)
 
+  const handleMoveChangeInfo = () => {
+    navigate('/change-info')
+  }
+
+  const handleMoveChangePassword = () => {
+    navigate('/check-password')
+  }
+
   const handleLogoutButton = () => {
     authToken.removeToken()
     authKakaoToken.removeTokens()
@@ -42,7 +50,7 @@ const ListItem = () => {
 
   return (
     <>
-      <L.ListItem>
+      <L.ListItem onClick={handleMoveChangeInfo}>
         <L.ListTextBox>
           <L.ListName>회원정보 변경</L.ListName>
           <L.ListSubName>자녀 출생년도, 사는 곳</L.ListSubName>
@@ -59,7 +67,7 @@ const ListItem = () => {
         />
       </L.ListItem>
 
-      <L.ListItem>
+      <L.ListItem onClick={handleMoveChangePassword}>
         <L.ListTextBox>
           <L.ListName>비밀번호 변경</L.ListName>
         </L.ListTextBox>
