@@ -163,7 +163,7 @@ const EachLevel: React.FC = () => {
 
       <L.Title>{level} 추천 여행지</L.Title>
       <L.ScrollContainer>
-        <L.Section>
+        <L.Section1>
           <L.SectionHeader>아직 방문하지 않음</L.SectionHeader>
           <L.DestinationList>
             {notVisited.map((place, index) => (
@@ -175,9 +175,9 @@ const EachLevel: React.FC = () => {
               />
             ))}
           </L.DestinationList>
-        </L.Section>
+        </L.Section1>
 
-        <L.Section>
+        <L.Section2>
           <L.SectionHeader>방문 완료</L.SectionHeader>
           <L.DestinationList>
             {visited.map((place, index) => (
@@ -189,7 +189,7 @@ const EachLevel: React.FC = () => {
               />
             ))}
           </L.DestinationList>
-        </L.Section>
+        </L.Section2>
       </L.ScrollContainer>
     </L.Container>
   )

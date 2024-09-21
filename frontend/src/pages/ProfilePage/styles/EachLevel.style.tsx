@@ -6,15 +6,18 @@ export const Container = styled.div`
   flex-direction: column;
 `
 export const ScrollContainer = styled.div`
-  height: calc(100vh - 7.5rem);
+  height: calc(100vh - 7rem);
   overflow-y: auto;
 `
 export const ButtonContainer = styled.div`
   padding: 20px;
 `
 
-export const Section = styled.div`
-  margin-bottom: 40px;
+export const Section1 = styled.div`
+  margin-top: 0px;
+`
+export const Section2 = styled.div`
+  margin-top: 40px;
 `
 
 export const Title = styled.h2`
