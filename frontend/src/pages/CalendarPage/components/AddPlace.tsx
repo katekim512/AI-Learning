@@ -10,7 +10,8 @@ import authToken from '../../../stores/authToken'
 import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
-// import dummyImage from '../styles/dummy.png'
+
+// const dummyImage = '/img/default_pic.png'
 
 interface RecommendPlace {
   contentid: number
