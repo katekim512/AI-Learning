@@ -14,6 +14,11 @@ interface MainCalendarProps {
   month: number
 }
 
+interface Holiday {
+  date: string
+  name: string
+}
+
 const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const token = authToken.getAccessToken()
   const today = new Date()
@@ -29,8 +34,50 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const calendarRef = useRef<HTMLDivElement>(null)
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
   const [schedule, setSchedule] = useState<CalendarSchedule[]>([])
+  const [holidays, setHolidays] = useState<Holiday[]>([])
   const [selectedDay, setSelectedDay] = useState<string>('')
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+
+  const fetchHolidayInfo = async () => {
+    try {
+      const myServiceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
+
+      // 2024년과 2025년 공휴일 데이터를 동시에 가져옴
+      const years = [2024, 2025]
+      const requests = years.map(year =>
+        fetch(
+          `https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=${myServiceKey}&solYear=${year}&numOfRows=50&_type=json`,
+        ),
+      )
+
+      const responses = await Promise.all(requests)
+      const jsonData = await Promise.all(responses.map(res => res.json()))
+
+      let allHolidays: { date: string; name: string }[] = []
+
+      // 각 연도의 공휴일 데이터를 포맷해서 합침
+      jsonData.forEach(data => {
+        if (data.response.body.items) {
+          const items = data.response.body.items.item
+          const formattedHolidays = items.map(
+            (holiday: { locdate: string; dateName: string }) => {
+              const dateStr = holiday.locdate.toString()
+              const formattedDate = `${dateStr.slice(0, 4)}-${dateStr.slice(4, 6)}-${dateStr.slice(6, 8)}`
+              return {
+                date: formattedDate,
+                name: holiday.dateName,
+              }
+            },
+          )
+          allHolidays = [...allHolidays, ...formattedHolidays] // 2024년과 2025년 공휴일 데이터를 합침
+        }
+      })
+
+      setHolidays(allHolidays)
+    } catch (error) {
+      console.error('Failed to fetch holiday details:', error)
+    }
+  }
 
   const fetchSchedule = async () => {
     if (token) {
@@ -43,6 +90,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 
   useEffect(() => {
     fetchSchedule()
+    fetchHolidayInfo()
   }, [year, month])
 
   useEffect(() => {
@@ -122,6 +170,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
               ? '#525FD4'
               : 'black',
       }
+      const holiday = holidays.find(holiday => holiday.date === currentDate)
 
       if (i === 0 && j < firstDay) {
         const prevMonthDay = prevMonthDays - (firstDay - j - 1)
@@ -137,6 +186,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
             <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
               {prevMonthDay}
             </L.DayText>
+            {holiday && <L.HolidaySection>{holiday.name}</L.HolidaySection>}
             {places.map(place => (
               <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
             ))}
@@ -154,6 +204,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
             onClick={() => handleDayClick(currentDate)}
           >
             <L.DayText style={dayTextStyle}>{day}</L.DayText>
+            {holiday && <L.HolidaySection>{holiday.name}</L.HolidaySection>}
             {places.map(place => (
               <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
             ))}
@@ -174,6 +225,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
             <L.DayText style={{ ...dayTextStyle, opacity: 0.3 }}>
               {nextMonthDay}
             </L.DayText>
+            {holiday && <L.HolidaySection>{holiday.name}</L.HolidaySection>}
             {places.map(place => (
               <L.PlaceSection key={place.order}>{place.place}</L.PlaceSection>
             ))}

@@ -69,6 +69,13 @@ const Calendar = () => {
   }
 
   const handleSwipeLeft = () => {
+    if (
+      currentDate.year === today.getFullYear() + 1 &&
+      currentDate.month === 12
+    ) {
+      return
+    }
+
     if (currentDate.month === 12) {
       setCurrentDate({ year: currentDate.year + 1, month: 1 })
     } else {
@@ -77,6 +84,11 @@ const Calendar = () => {
   }
 
   const handleSwipeRight = () => {
+    if (currentDate.year === 2024 && currentDate.month === 1) {
+      // 2024년 1월 이전으로 못 넘어가게 막음
+      return
+    }
+
     if (currentDate.month === 1) {
       setCurrentDate({ year: currentDate.year - 1, month: 12 })
     } else {
