@@ -8,6 +8,10 @@ import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
 import AddPlace from './pages/CalendarPage/components/AddPlace'
+import ChangeInfo from './pages/ChangeInfoPage/ChangeInfo'
+import ChangeNickname from './pages/ChangeNicknamePage/ChangeNickname'
+import ChangePassword from './pages/ChangePasswordPage/ChangePassword'
+import CheckPassword from './pages/CheckPasswordPage/CheckPassword'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
@@ -95,6 +99,22 @@ const router = createBrowserRouter([
       {
         path: 'my-info',
         element: <MyInfoEdit />,
+      },
+      {
+        path: 'change-nickname',
+        element: <ChangeNickname />,
+      },
+      {
+        path: 'check-password',
+        element: <CheckPassword />,
+      },
+      {
+        path: 'change-password',
+        element: <ChangePassword />,
+      },
+      {
+        path: 'change-info',
+        element: <ChangeInfo />,
       },
     ],
   },
