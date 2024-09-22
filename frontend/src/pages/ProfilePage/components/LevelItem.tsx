@@ -41,10 +41,14 @@ const LevelItem: React.FC<LevelItemProps> = ({ place, onClick }) => {
       onClick={() => onClick(place)}
       visited={place.isVisited}
     >
-      <L.PlaceImage
-        src={place.firstimage || '/img/default_pic.png'}
-        alt={place.place}
-      />
+      <L.PlaceCardContainer
+        isVisited={place.isVisited} // Pass the isVisited property
+      >
+        <L.PlaceImage
+          src={place.firstimage || '/img/default_pic.png'}
+          alt={place.place}
+        />
+      </L.PlaceCardContainer>
       <L.PlaceInfo>
         <L.PlaceName>{place.place}</L.PlaceName>
         <L.PlaceDescription>
