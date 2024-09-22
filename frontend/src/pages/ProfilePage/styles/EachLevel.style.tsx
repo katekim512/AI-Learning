@@ -30,7 +30,7 @@ export const Title = styled.h2`
 export const SectionHeader = styled.h2`
   font-size: 16px;
   color: #525fd4;
-  border-bottom: 2px solid #007aff;
+  border-bottom: 2px solid #525fd4;
   padding: 10px 20px;
 `
 
