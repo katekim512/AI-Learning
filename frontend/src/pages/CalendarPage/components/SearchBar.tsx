@@ -16,6 +16,7 @@ interface SearchBarProps {
   recommendedPlaces: RecommendPlace[] // 추천 장소 목록
   onFilteredPlaces: (places: RecommendPlace[]) => void // 필터링된 장소 전달
   getAreaAndSigunguName: (areacode: number, sigungucode: number) => string // 지역명과 시군구명 가져오기 함수
+  onSearchInput: (input: string) => void // 부모로 검색어 전달
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -23,10 +24,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
   recommendedPlaces,
   onFilteredPlaces,
   getAreaAndSigunguName,
+  onSearchInput,
 }) => {
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
+    // Notify parent component of the search term
+    onSearchInput(searchTerm)
+
+    // Filter places based on search term or show recommendedPlaces
     const filteredPlaces = searchTerm
       ? allPlaces.filter(place => {
           const areaAndSigunguName = getAreaAndSigunguName(
@@ -41,7 +47,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       : recommendedPlaces
 
     onFilteredPlaces(filteredPlaces)
-  }, [searchTerm, recommendedPlaces])
+  }, [searchTerm])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)

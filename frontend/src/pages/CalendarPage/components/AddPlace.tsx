@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import NoPlace from './NoPlace'
 import SearchBar from './SearchBar'
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
@@ -11,6 +12,7 @@ import authToken from '../../../stores/authToken'
 import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
+import { NoPlaceContainer } from '../styles/NoPlace.style'
 
 // const dummyImage = '/img/default_pic.png'
 
@@ -153,7 +155,8 @@ const AddPlace: React.FC = () => {
   )
 
   const [filteredPlaces, setFilteredPlaces] = useState<RecommendPlace[]>([]) // 필터링된 장소 상태
-
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchInput, setSearchInput] = useState('')
   const {
     data: allPlaces,
     isLoading: isAllPlacesLoading,
@@ -173,6 +176,9 @@ const AddPlace: React.FC = () => {
 
   //-----API 연결----
   useEffect(() => {
+    if (isAllPlacesLoading) {
+      setIsLoading(true)
+    }
     fetchPlaces()
   }, [token, date])
 
@@ -180,6 +186,7 @@ const AddPlace: React.FC = () => {
     if (!token || !date) return
 
     try {
+      setIsLoading(true)
       const requestPayload = { date }
       const response = await postRecommendPlace(token, requestPayload)
 
@@ -191,6 +198,8 @@ const AddPlace: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch recommended places:', error)
       setRecommendedPlaces([])
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -198,6 +207,10 @@ const AddPlace: React.FC = () => {
   // useEffect(() => {
   //   setRecommendedPlaces(dummyData)
   // }, [date, token])
+
+  const handleSearchInput = (input: string) => {
+    setSearchInput(input)
+  }
 
   const handleClick = (place: RecommendPlace) => {
     navigate(
@@ -249,24 +262,18 @@ const AddPlace: React.FC = () => {
           if (contentType.includes('application/json')) {
             const data = await response.json()
             if (data.response?.body?.items?.item) {
-              // 장소 항목들을 배열에 병합하고 'title'을 'place'로 매핑
               const places = data.response.body.items.item.map(
                 (item: OpenAPIPlace) => ({
                   contentid: item.contentid,
                   contenttypeid: item.contenttypeid,
                   areacode: Number(item.areacode),
                   sigungucode: item.sigungucode,
-                  place: item.title, // OpenAPI의 'title'을 'place'로 매핑
-                  firstimage: item.firstimage || '/img/default_pic.png', // 이미지가 없는 경우 더미 이미지 사용
+                  place: item.title,
+                  firstimage: item.firstimage || '/img/default_pic.png', // Default image if none available
                 }),
               )
 
               fetchedGpsPlaces = fetchedGpsPlaces.concat(places)
-
-              // 변환된 장소 목록에서 contentid 값만 콘솔에 출력
-              places.forEach((place: OpenAPIPlace) => {
-                console.log(`contentid: ${place.contentid}`)
-              })
             }
           } else {
             console.error('Expected JSON, but received:', await response.text())
@@ -280,10 +287,13 @@ const AddPlace: React.FC = () => {
       console.log('Places fetched by content type:', fetchedGpsPlaces)
     } catch (error) {
       console.error('Error fetching places by content type:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleGPSButtonClick = () => {
+    setIsLoading(true)
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -292,10 +302,12 @@ const AddPlace: React.FC = () => {
         },
         error => {
           console.error('Error getting location:', error)
+          setIsLoading(false)
         },
       )
     } else {
       console.error('Geolocation is not supported by this browser.')
+      setIsLoading(false)
     }
   }
 
@@ -319,6 +331,7 @@ const AddPlace: React.FC = () => {
             allPlaces={allPlaces?.data ?? []}
             recommendedPlaces={recommendedPlaces}
             onFilteredPlaces={setFilteredPlaces}
+            onSearchInput={handleSearchInput}
             getAreaAndSigunguName={getAreaAndSigunguName}
           />
         </L.Header>
@@ -329,28 +342,45 @@ const AddPlace: React.FC = () => {
             <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
             <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
-
-          <L.PlacesList>
-            {isAllPlacesLoading ? (
-              <Loading /> // Use Loading component here
-            ) : allPlacesError ? (
-              <div>Error occurred</div>
-            ) : filteredPlaces && filteredPlaces.length > 0 ? (
-              filteredPlaces.map((place, index) => (
+          {isLoading ? (
+            <NoPlaceContainer>
+              <Loading />
+            </NoPlaceContainer>
+          ) : allPlacesError ? (
+            <div>Error occurred</div> // Show error message if an error occurs
+          ) : searchInput ? (
+            // If search input is present, show filtered places
+            filteredPlaces.length > 0 ? (
+              <L.PlacesList>
+                {filteredPlaces.map((place, index) => (
+                  <PlaceItem
+                    key={place.contentid}
+                    place={place}
+                    index={index}
+                    onClick={() => handleClick(place)}
+                    onAddClick={e => handleAddButtonClick(e, place.contentid)}
+                  />
+                ))}
+              </L.PlacesList>
+            ) : (
+              <NoPlace /> // If no filtered results found
+            )
+          ) : recommendedPlaces.length > 0 ? (
+            // If no search input, show recommended places
+            <L.PlacesList>
+              {recommendedPlaces.map((place, index) => (
                 <PlaceItem
                   key={place.contentid}
                   place={place}
                   index={index}
-                  onClick={() => handleClick}
+                  onClick={() => handleClick(place)}
                   onAddClick={e => handleAddButtonClick(e, place.contentid)}
                 />
-              ))
-            ) : (
-              <L.LoadingOverlay>
-                <Loading />
-              </L.LoadingOverlay>
-            )}
-          </L.PlacesList>
+              ))}
+            </L.PlacesList>
+          ) : (
+            <NoPlace /> // If no recommended places found
+          )}
         </L.PlacesSection>
       </L.Container>
     </L.AppContainer>
