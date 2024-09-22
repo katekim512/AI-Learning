@@ -1,4 +1,7 @@
-export const getCityName = (areacode: number, sigungucode: number): string => {
+export const getCityAndSigunguName = (
+  areacode: number,
+  sigungucode: number,
+): string => {
   // areacode가 1, 2, 3, 4, 5, 6, 7, 8, 39인 경우
   const cityByAreaCode: { [key: number]: string } = {
     1: '서울',
@@ -9,16 +12,20 @@ export const getCityName = (areacode: number, sigungucode: number): string => {
     6: '부산',
     7: '울산',
     8: '세종',
+    31: '경기도',
+    32: '강원특별자치도',
+    33: '충청북도',
+    34: '충청남도',
+    35: '경상북도',
+    36: '경상남도',
+    37: '전북특별자치도',
+    38: '세종',
     39: '제주',
   }
 
-  if (cityByAreaCode[areacode]) {
-    return cityByAreaCode[areacode]
-  }
-
   // 특정 예외 처리
-  if (areacode === 36 && sigungucode === 3) return '경남고성'
-  if (areacode === 31 && sigungucode === 5) return '경기광주'
+  //   if (areacode === 36 && sigungucode === 3) return '경남고성'
+  //   if (areacode === 31 && sigungucode === 5) return '경기광주'
 
   // 시/군 이름에서 마지막 글자 제거하여 반환
   const sigunguNames: { [key: number]: { [key: number]: string } } = {
@@ -116,7 +123,7 @@ export const getCityName = (areacode: number, sigungucode: number): string => {
       2: '고양',
       3: '과천',
       4: '광명',
-      5: '광주', // 경기광주 처리됨
+      5: '경기광주', // 경기광주 처리됨
       6: '구리',
       7: '군포',
       8: '김포',
@@ -222,7 +229,7 @@ export const getCityName = (areacode: number, sigungucode: number): string => {
     36: {
       1: '거제',
       2: '거창',
-      3: '고성', // 경남고성 처리됨
+      3: '경남고성', // 경남고성 처리됨
       4: '김해',
       5: '남해',
       6: '마산',
@@ -289,5 +296,10 @@ export const getCityName = (areacode: number, sigungucode: number): string => {
     },
   }
 
-  return sigunguNames[areacode]?.[sigungucode] || ''
+  const cityName = cityByAreaCode[areacode] || '알 수 없음'
+  const sigunguName = sigunguNames[areacode]?.[sigungucode] || '알 수 없음'
+
+  const citySigungu = `${cityName} ${sigunguName}`
+
+  return citySigungu
 }

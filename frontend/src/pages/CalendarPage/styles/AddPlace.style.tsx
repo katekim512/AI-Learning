@@ -144,3 +144,14 @@ export const ReloadIcon = styled.button`
   top: 50%; /* 수직 중앙 정렬 */
   transform: translateY(-50%); /* 수직 중앙 정렬을 위한 보정 */
 `
+export const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh-6rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
+`

@@ -15,7 +15,7 @@ export const LoadingContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #fff;
+  background-color: transparent;
 `
 
 export const LoadingText = styled.div`

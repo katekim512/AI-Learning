@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import NoPlace from './NoPlace'
+import NoPlace2 from './NoPlace2'
+import SearchBar from './SearchBar'
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
 import BackButton from '../../../components/BackButton/BackButton'
+import Loading from '../../../components/Loading/Loading'
+import { useAllPlace } from '../../../hooks/useAllPlace'
 import authToken from '../../../stores/authToken'
+import { getCityAndSigunguName } from '../../../style/CityMapper2'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
+import { NoPlaceContainer } from '../styles/NoPlace.style'
+// const dummyImage = '/img/default_pic.png'
 
 interface RecommendPlace {
   contentid: number
@@ -145,7 +153,15 @@ const AddPlace: React.FC = () => {
   const [recommendedPlaces, setRecommendedPlaces] = useState<RecommendPlace[]>(
     [],
   )
-  const [searchTerm, setSearchTerm] = useState('') // 검색어 상태 추가
+
+  const [filteredPlaces, setFilteredPlaces] = useState<RecommendPlace[]>([]) // 필터링된 장소 상태
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchInput, setSearchInput] = useState('')
+  const {
+    data: allPlaces,
+    isLoading: isAllPlacesLoading,
+    error: allPlacesError,
+  } = useAllPlace() //전체 데이터 불러오기
 
   const formatDate = (dateString: string | null): string => {
     if (!dateString) {
@@ -160,6 +176,9 @@ const AddPlace: React.FC = () => {
 
   //-----API 연결----
   useEffect(() => {
+    if (isAllPlacesLoading) {
+      setIsLoading(true)
+    }
     fetchPlaces()
   }, [token, date])
 
@@ -167,6 +186,7 @@ const AddPlace: React.FC = () => {
     if (!token || !date) return
 
     try {
+      setIsLoading(true)
       const requestPayload = { date }
       const response = await postRecommendPlace(token, requestPayload)
 
@@ -178,13 +198,19 @@ const AddPlace: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch recommended places:', error)
       setRecommendedPlaces([])
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  // 더미 데이터를 상태로 설정
+  // 더미 데이터 불러오기
   // useEffect(() => {
   //   setRecommendedPlaces(dummyData)
   // }, [date, token])
+
+  const handleSearchInput = (input: string) => {
+    setSearchInput(input)
+  }
 
   const handleClick = (place: RecommendPlace) => {
     navigate(
@@ -223,7 +249,7 @@ const AddPlace: React.FC = () => {
     const radius = '5000' // 검색 반경 (10km)
     const serviceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
     const contentTypeIds = [12, 14, 15] // 검색할 contentTypeId 목록
-    let allPlaces: RecommendPlace[] = []
+    let fetchedGpsPlaces: RecommendPlace[] = []
 
     try {
       for (const contentTypeId of contentTypeIds) {
@@ -236,24 +262,18 @@ const AddPlace: React.FC = () => {
           if (contentType.includes('application/json')) {
             const data = await response.json()
             if (data.response?.body?.items?.item) {
-              // 장소 항목들을 배열에 병합하고 'title'을 'place'로 매핑
               const places = data.response.body.items.item.map(
                 (item: OpenAPIPlace) => ({
                   contentid: item.contentid,
                   contenttypeid: item.contenttypeid,
                   areacode: Number(item.areacode),
                   sigungucode: item.sigungucode,
-                  place: item.title, // OpenAPI의 'title'을 'place'로 매핑
-                  firstimage: item.firstimage || '/img/default_pic.png', // 이미지가 없는 경우 더미 이미지 사용
+                  place: item.title,
+                  firstimage: item.firstimage || '/img/default_pic.png', // Default image if none available
                 }),
               )
 
-              allPlaces = allPlaces.concat(places)
-
-              // 변환된 장소 목록에서 contentid 값만 콘솔에 출력
-              places.forEach((place: OpenAPIPlace) => {
-                console.log(`contentid: ${place.contentid}`)
-              })
+              fetchedGpsPlaces = fetchedGpsPlaces.concat(places)
             }
           } else {
             console.error('Expected JSON, but received:', await response.text())
@@ -263,14 +283,17 @@ const AddPlace: React.FC = () => {
         }
       }
 
-      setRecommendedPlaces(allPlaces)
-      console.log('Places fetched by content type:', allPlaces)
+      setRecommendedPlaces(fetchedGpsPlaces)
+      console.log('Places fetched by content type:', fetchedGpsPlaces)
     } catch (error) {
       console.error('Error fetching places by content type:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleGPSButtonClick = () => {
+    setIsLoading(true)
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -279,16 +302,14 @@ const AddPlace: React.FC = () => {
         },
         error => {
           console.error('Error getting location:', error)
+          setIsLoading(false)
         },
       )
     } else {
       console.error('Geolocation is not supported by this browser.')
+      setIsLoading(false)
     }
   }
-
-  const filteredPlaces = recommendedPlaces.filter(
-    place => place && place.place && place.place.includes(searchTerm),
-  )
 
   const handleReloadButtonClick = () => {
     fetchPlaces()
@@ -299,32 +320,59 @@ const AddPlace: React.FC = () => {
       <L.Container>
         <L.Header>
           <BackButton />
-          <L.SearchInput
-            type='text'
-            placeholder='원하는 장소 검색'
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+          <SearchBar
+            allPlaces={allPlaces?.data ?? []}
+            recommendedPlaces={recommendedPlaces}
+            onFilteredPlaces={setFilteredPlaces}
+            onSearchInput={handleSearchInput}
+            getCityAndSigunguName={getCityAndSigunguName}
           />
         </L.Header>
+
         <L.PlacesSection>
           <L.SectionTitle>
-            <L.BoldText>{formatDate(date)}</L.BoldText> 추천 장소
+            <L.BoldText>{formatDate(date)}</L.BoldText> 추천장소
             <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
             <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
-          <L.PlacesList>
-            {filteredPlaces.map((place, index) => {
-              return (
+          {isLoading ? (
+            <NoPlaceContainer>
+              <Loading />
+            </NoPlaceContainer>
+          ) : allPlacesError ? (
+            <div>Error occurred</div> // Show error message if an error occurs
+          ) : searchInput ? (
+            // If search input is present, show filtered places
+            filteredPlaces.length > 0 ? (
+              <L.PlacesList>
+                {filteredPlaces.map((place, index) => (
+                  <PlaceItem
+                    key={place.contentid}
+                    place={place}
+                    index={index}
+                    onClick={() => handleClick(place)}
+                    onAddClick={e => handleAddButtonClick(e, place.contentid)}
+                  />
+                ))}
+              </L.PlacesList>
+            ) : (
+              <NoPlace2 />
+            )
+          ) : recommendedPlaces.length > 0 ? (
+            <L.PlacesList>
+              {recommendedPlaces.map((place, index) => (
                 <PlaceItem
                   key={place.contentid}
                   place={place}
                   index={index}
-                  onClick={handleClick}
-                  onAddClick={handleAddButtonClick}
+                  onClick={() => handleClick(place)}
+                  onAddClick={e => handleAddButtonClick(e, place.contentid)}
                 />
-              )
-            })}
-          </L.PlacesList>
+              ))}
+            </L.PlacesList>
+          ) : (
+            <NoPlace />
+          )}
         </L.PlacesSection>
       </L.Container>
     </L.AppContainer>
