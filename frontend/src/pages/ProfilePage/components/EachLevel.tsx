@@ -17,7 +17,7 @@ interface Level {
   isVisited: boolean
 }
 
-const dummyImage = '/img/default_pic.png'
+//const dummyImage = '/img/default_pic.png'
 // 더미데이터
 // const dummyData: Level[] = [
 //   {
