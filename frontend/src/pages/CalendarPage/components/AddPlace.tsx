@@ -13,6 +13,7 @@ import { getCityName } from '../../../style/CityMapper'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
 import { NoPlaceContainer } from '../styles/NoPlace.style'
+import NoPlace2 from './NoPlace2'
 
 // const dummyImage = '/img/default_pic.png'
 
@@ -363,10 +364,9 @@ const AddPlace: React.FC = () => {
                 ))}
               </L.PlacesList>
             ) : (
-              <NoPlace /> // If no filtered results found
+              <NoPlace />
             )
           ) : recommendedPlaces.length > 0 ? (
-            // If no search input, show recommended places
             <L.PlacesList>
               {recommendedPlaces.map((place, index) => (
                 <PlaceItem
@@ -379,7 +379,7 @@ const AddPlace: React.FC = () => {
               ))}
             </L.PlacesList>
           ) : (
-            <NoPlace /> // If no recommended places found
+            <NoPlace2 />
           )}
         </L.PlacesSection>
       </L.Container>
