@@ -2,12 +2,6 @@ import { AxiosResponse } from 'axios'
 
 import { aiLearningAxios } from '../axiosInstance'
 
-// Request 바디의 인터페이스
-interface LevelRequest {
-  level: string
-}
-
-// Response 바디의 인터페이스
 interface LevelResponse {
   contentid: number
   contenttypeid: number
@@ -18,22 +12,16 @@ interface LevelResponse {
   isVisited: boolean
 }
 
-// POST 요청 함수
 export const postLevel = async (
   token: string,
-  recommends: LevelRequest,
+  level: string,
 ): Promise<AxiosResponse<LevelResponse> | null> => {
-  try {
-    const response = await aiLearningAxios.post<LevelResponse>(
-      'profile/level',
-      recommends,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    )
-    return response
-  } catch (error) {
-    console.error('Error uploading edits:', error)
-    return null
-  }
+  const response = await aiLearningAxios.post<LevelResponse>(
+    'profile/level',
+    { level },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  )
+  return response
 }
