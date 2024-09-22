@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import NoPlace from './NoPlace'
+import NoPlace2 from './NoPlace2'
 import SearchBar from './SearchBar'
 import { postRecommendPlace } from '../../../api/calendar/postRecommendPlace'
 import { postAddPlace } from '../../../api/place/postAddPlace'
@@ -9,12 +10,10 @@ import BackButton from '../../../components/BackButton/BackButton'
 import Loading from '../../../components/Loading/Loading'
 import { useAllPlace } from '../../../hooks/useAllPlace'
 import authToken from '../../../stores/authToken'
-import { getCityName } from '../../../style/CityMapper'
+import { getCityAndSigunguName } from '../../../style/CityMapper2'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
 import { NoPlaceContainer } from '../styles/NoPlace.style'
-import NoPlace2 from './NoPlace2'
-
 // const dummyImage = '/img/default_pic.png'
 
 interface RecommendPlace {
@@ -316,13 +315,6 @@ const AddPlace: React.FC = () => {
     fetchPlaces()
   }
 
-  const getAreaAndSigunguName = (
-    areacode: number,
-    sigungucode: number,
-  ): string => {
-    return getCityName(areacode, sigungucode)
-  }
-
   return (
     <L.AppContainer>
       <L.Container>
@@ -333,7 +325,7 @@ const AddPlace: React.FC = () => {
             recommendedPlaces={recommendedPlaces}
             onFilteredPlaces={setFilteredPlaces}
             onSearchInput={handleSearchInput}
-            getAreaAndSigunguName={getAreaAndSigunguName}
+            getCityAndSigunguName={getCityAndSigunguName}
           />
         </L.Header>
 
@@ -364,7 +356,7 @@ const AddPlace: React.FC = () => {
                 ))}
               </L.PlacesList>
             ) : (
-              <NoPlace />
+              <NoPlace2 />
             )
           ) : recommendedPlaces.length > 0 ? (
             <L.PlacesList>
@@ -379,7 +371,7 @@ const AddPlace: React.FC = () => {
               ))}
             </L.PlacesList>
           ) : (
-            <NoPlace2 />
+            <NoPlace />
           )}
         </L.PlacesSection>
       </L.Container>
