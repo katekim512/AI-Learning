@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+interface ScheduleContainerProps {
+  isSwiped: boolean
+}
+
 export const ContainerTotal = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,14 +87,26 @@ export const AdditionText = styled.p`
   margin-bottom: 1rem;
 `
 
-export const ScheduleContainer = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  position: relative;
-  margin-bottom: 0.7rem;
-`
+// export const ScheduleContainer = styled.div`
+//   box-sizing: border-box;
+//   width: 100%;
+//   display: flex;
+//   position: relative;
+//   margin-bottom: 0.7rem;
+// `
 
+export const ScheduleContainer = styled.div<ScheduleContainerProps>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 0.7rem;
+  position: relative; /* 삭제 버튼을 절대 위치로 설정하기 위해 필요 */
+  transform: ${({ isSwiped }) =>
+    isSwiped ? 'translateX(-50px)' : 'translateX(0)'};
+  transition: transform 0.3s ease;
+  width: 100%; /* 가로 길이 유지 */
+`
 export const DateBox = styled.p`
   background-color: #bfddff;
   width: 7rem;
@@ -169,4 +185,28 @@ export const BottomButton = styled.button`
   &:hover {
     background-color: #434cb1;
   }
+`
+
+export const DeleteButton = styled.button`
+  position: absolute;
+  right: 10px;
+  top: 40%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* ScheduleContainer와 같은 높이로 설정 */
+`
+
+export const MinusCircleIcon = styled.div`
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d20000' d='M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m5 11H7v-2h10z'/%3E%3C/svg%3E");
+  margin-right: 8px; /* Space between icon and text */
 `
