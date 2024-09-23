@@ -14,62 +14,62 @@ const AISchedule3 = () => {
   const navigate = useNavigate()
   const [scheduleInfo, setScheduleInfo] = useState<AISchedule[]>([])
 
-  const dummyScheduleData = [
-    {
-      date: '2024-10-24',
-      areacode: 4,
-      sigungucode: 4,
-      place: '불국사',
-    },
-    {
-      date: '2024-10-30',
-      areacode: 4,
-      sigungucode: 4,
-      place: '석굴암',
-    },
-    {
-      date: '2024-11-03',
-      areacode: 4,
-      sigungucode: 4,
-      place: '불국사',
-    },
-    {
-      date: '2024-11-07',
-      areacode: 2,
-      sigungucode: 1,
-      place: '경복궁',
-    },
-    {
-      date: '2024-11-10',
-      areacode: 3,
-      sigungucode: 3,
-      place: '남산타워',
-    },
-    {
-      date: '2024-11-15',
-      areacode: 5,
-      sigungucode: 5,
-      place: '한라산',
-    },
-    {
-      date: '2024-11-20',
-      areacode: 6,
-      sigungucode: 6,
-      place: '광안리 해수욕장',
-    },
-    {
-      date: '2024-11-25',
-      areacode: 7,
-      sigungucode: 7,
-      place: '동대문 디자인 플라자',
-    },
-    {
-      date: '2024-12-01',
-      areacode: 8,
-      sigungucode: 8,
-      place: '제주도 성산일출봉',
-    },
-  ]
+  // const dummyScheduleData = [
+  //   {
+  //     date: '2024-10-24',
+  //     areacode: 4,
+  //     sigungucode: 4,
+  //     place: '불국사',
+  //   },
+  //   {
+  //     date: '2024-10-30',
+  //     areacode: 4,
+  //     sigungucode: 4,
+  //     place: '석굴암',
+  //   },
+  //   {
+  //     date: '2024-11-03',
+  //     areacode: 4,
+  //     sigungucode: 4,
+  //     place: '불국사',
+  //   },
+  //   {
+  //     date: '2024-11-07',
+  //     areacode: 2,
+  //     sigungucode: 1,
+  //     place: '경복궁',
+  //   },
+  //   {
+  //     date: '2024-11-10',
+  //     areacode: 3,
+  //     sigungucode: 3,
+  //     place: '남산타워',
+  //   },
+  //   {
+  //     date: '2024-11-15',
+  //     areacode: 5,
+  //     sigungucode: 5,
+  //     place: '한라산',
+  //   },
+  //   {
+  //     date: '2024-11-20',
+  //     areacode: 6,
+  //     sigungucode: 6,
+  //     place: '광안리 해수욕장',
+  //   },
+  //   {
+  //     date: '2024-11-25',
+  //     areacode: 7,
+  //     sigungucode: 7,
+  //     place: '동대문 디자인 플라자',
+  //   },
+  //   {
+  //     date: '2024-12-01',
+  //     areacode: 8,
+  //     sigungucode: 8,
+  //     place: '제주도 성산일출봉',
+  //   },
+  // ]
 
   // API에서 스케줄 정보를 가져와 상태를 초기화
   useEffect(() => {
@@ -89,36 +89,18 @@ const AISchedule3 = () => {
     fetchSchedule()
   }, [token])
 
-  // const getSecheduleData = async () => {
-  //   if (token) {
-  //     const successResponse = await getSchedule(token)
-
-  //     if (successResponse && successResponse.data) {
-  //       const updatedSchedule = successResponse.data.map(item => ({
-  //         ...item,
-  //         city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
-  //       }))
-  //       setScheduleInfo(updatedSchedule)
-  //     }
-  //   }
+  // 더미 데이터를 사용하여 상태를 초기화
+  // const getDummyScheduleData = async () => {
+  //   const updatedSchedule = dummyScheduleData.map(item => ({
+  //     ...item,
+  //     city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
+  //   }))
+  //   setScheduleInfo(updatedSchedule)
   // }
 
   // useEffect(() => {
-  //   getSecheduleData()
+  //   getDummyScheduleData()
   // }, [])
-
-  // 더미 데이터를 사용하여 상태를 초기화
-  const getDummyScheduleData = async () => {
-    const updatedSchedule = dummyScheduleData.map(item => ({
-      ...item,
-      city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
-    }))
-    setScheduleInfo(updatedSchedule)
-  }
-
-  useEffect(() => {
-    getDummyScheduleData()
-  }, [])
 
   // 드래그 앤 드롭을 통해 장소만 교환하는 함수
   const moveSchedule = (dragIndex: number, hoverIndex: number) => {
