@@ -69,12 +69,6 @@ const AISchedule3 = () => {
       sigungucode: 8,
       place: '제주도 성산일출봉',
     },
-    {
-      date: '2024-12-05',
-      areacode: 9,
-      sigungucode: 9,
-      place: '해운대 해수욕장',
-    },
   ]
 
   // API에서 스케줄 정보를 가져와 상태를 초기화

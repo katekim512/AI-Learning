@@ -82,6 +82,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   }
 
   const handleDelete = () => {
+    setIsSwiped(false) // ScheduleItem을 원래 자리로 되돌림
     onDelete(index) // Trigger delete on button press
   }
 
