@@ -102,14 +102,20 @@ export const ScheduleContainer = styled.div<ScheduleContainerProps>`
 export const DateBox = styled.p`
   background-color: #bfddff;
   width: 7rem;
+  height: 2rem; // 높이를 명시적으로 지정
   border-radius: 15px;
-  padding: 0.6rem;
-  padding-top: 0.9rem;
   color: #545454;
   font-size: 0.8rem;
   font-weight: 600;
-  text-align: center;
   margin-right: 0.5rem;
+
+  // Flexbox를 사용하여 내용을 중앙 정렬
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // 텍스트가 여러 줄일 경우를 대비한 설정
+  text-align: center;
 `
 
 export const PlaceBox = styled.button`
@@ -119,6 +125,7 @@ export const PlaceBox = styled.button`
   align-items: center; /* 세로 정렬 */
   justify-content: flex-start;
   width: 100%;
+  height: 2rem;
   border-radius: 15px;
   border: none;
   padding: 0.6rem;
