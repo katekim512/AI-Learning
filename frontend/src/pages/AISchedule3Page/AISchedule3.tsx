@@ -5,9 +5,9 @@ import Schedule from './components/Schedule'
 import * as L from './styles/AISchedule3.style'
 import { getSchedule, AISchedule } from '../../api/schedule/getSchedule'
 import { postEdit } from '../../api/schedule/postEdit'
-import BackButton from '../../components/BackButton/BackButton'
 import authToken from '../../stores/authToken'
 import { getCityName } from '../../style/CityMapper'
+import BackButton from '../AISchedule1Page/components/BackButton/BackButton'
 
 const AISchedule3 = () => {
   const token = authToken.getAccessToken()
