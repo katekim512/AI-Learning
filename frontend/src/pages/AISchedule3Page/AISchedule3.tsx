@@ -1,3 +1,5 @@
+// import { Icon } from '@iconify/react'
+// import peopleChatIcon from '@iconify-icons/fluent/people-chat-16-filled'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,62 +16,84 @@ const AISchedule3 = () => {
   const navigate = useNavigate()
   const [scheduleInfo, setScheduleInfo] = useState<AISchedule[]>([])
 
-  // const dummyScheduleData = [
-  //   {
-  //     date: '2024-10-24',
-  //     areacode: 4,
-  //     sigungucode: 4,
-  //     place: '불국사',
-  //   },
-  //   {
-  //     date: '2024-10-30',
-  //     areacode: 4,
-  //     sigungucode: 4,
-  //     place: '석굴암',
-  //   },
-  //   {
-  //     date: '2024-11-03',
-  //     areacode: 4,
-  //     sigungucode: 4,
-  //     place: '불국사',
-  //   },
-  //   {
-  //     date: '2024-11-07',
-  //     areacode: 2,
-  //     sigungucode: 1,
-  //     place: '경복궁',
-  //   },
-  //   {
-  //     date: '2024-11-10',
-  //     areacode: 3,
-  //     sigungucode: 3,
-  //     place: '남산타워',
-  //   },
-  //   {
-  //     date: '2024-11-15',
-  //     areacode: 5,
-  //     sigungucode: 5,
-  //     place: '한라산',
-  //   },
-  //   {
-  //     date: '2024-11-20',
-  //     areacode: 6,
-  //     sigungucode: 6,
-  //     place: '광안리 해수욕장',
-  //   },
-  //   {
-  //     date: '2024-11-25',
-  //     areacode: 7,
-  //     sigungucode: 7,
-  //     place: '동대문 디자인 플라자',
-  //   },
-  //   {
-  //     date: '2024-12-01',
-  //     areacode: 8,
-  //     sigungucode: 8,
-  //     place: '제주도 성산일출봉',
-  //   },
-  // ]
+  const GradientIcon = () => (
+    <svg
+      width='24'
+      height='24'
+      viewBox='0 0 24 24'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      style={{ marginRight: '5px' }}
+    >
+      <defs>
+        <linearGradient id='gradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+          <stop offset='0%' stopColor='#00c6ff' />
+          <stop offset='100%' stopColor='#0072ff' />
+        </linearGradient>
+      </defs>
+      <path
+        d='M12 3C6.5 3 2 6.58 2 11C2.05 13.15 3.06 15.17 4.75 16.5C4.75 17.1 4.33 18.67 2 21C4.37 20.89 6.64 20 8.47 18.5C9.61 18.83 10.81 19 12 19C17.5 19 22 15.42 22 11C22 6.58 17.5 3 12 3ZM12 17C7.58 17 4 14.31 4 11C4 7.69 7.58 5 12 5C16.42 5 20 7.69 20 11C20 14.31 16.42 17 12 17Z'
+        fill='url(#gradient)'
+      />
+    </svg>
+  )
+
+  const dummyScheduleData = [
+    {
+      date: '2024-10-24',
+      areacode: 4,
+      sigungucode: 4,
+      place: '불국사',
+    },
+    {
+      date: '2024-10-30',
+      areacode: 4,
+      sigungucode: 4,
+      place: '석굴암',
+    },
+    {
+      date: '2024-11-03',
+      areacode: 4,
+      sigungucode: 4,
+      place: '불국사',
+    },
+    {
+      date: '2024-11-07',
+      areacode: 2,
+      sigungucode: 1,
+      place: '경복궁',
+    },
+    {
+      date: '2024-11-10',
+      areacode: 3,
+      sigungucode: 3,
+      place: '남산타워',
+    },
+    {
+      date: '2024-11-15',
+      areacode: 5,
+      sigungucode: 5,
+      place: '한라산',
+    },
+    {
+      date: '2024-11-20',
+      areacode: 6,
+      sigungucode: 6,
+      place: '광안리 해수욕장',
+    },
+    {
+      date: '2024-11-25',
+      areacode: 7,
+      sigungucode: 7,
+      place: '동대문 디자인 플라자',
+    },
+    {
+      date: '2024-12-01',
+      areacode: 8,
+      sigungucode: 8,
+      place: '제주도 성산일출봉',
+    },
+  ]
 
   // API에서 스케줄 정보를 가져와 상태를 초기화
   useEffect(() => {
@@ -89,18 +113,18 @@ const AISchedule3 = () => {
     fetchSchedule()
   }, [token])
 
-  // 더미 데이터를 사용하여 상태를 초기화
-  // const getDummyScheduleData = async () => {
-  //   const updatedSchedule = dummyScheduleData.map(item => ({
-  //     ...item,
-  //     city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
-  //   }))
-  //   setScheduleInfo(updatedSchedule)
-  // }
+  //더미 데이터를 사용하여 상태를 초기화
+  const getDummyScheduleData = async () => {
+    const updatedSchedule = dummyScheduleData.map(item => ({
+      ...item,
+      city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
+    }))
+    setScheduleInfo(updatedSchedule)
+  }
 
-  // useEffect(() => {
-  //   getDummyScheduleData()
-  // }, [])
+  useEffect(() => {
+    getDummyScheduleData()
+  }, [])
 
   // 드래그 앤 드롭을 통해 장소만 교환하는 함수
   const moveSchedule = (dragIndex: number, hoverIndex: number) => {
@@ -149,6 +173,11 @@ const AISchedule3 = () => {
     navigate('/calendar')
   }
 
+  const handleGuideRequest = () => {
+    // 가이드 요청 로직
+    console.log('가이드 요청')
+  }
+
   return (
     <>
       <BackButton />
@@ -169,6 +198,10 @@ const AISchedule3 = () => {
             moveSchedule={moveSchedule}
             handleDelete={handleDelete}
           />
+          <L.GuideRequestButton onClick={() => handleGuideRequest()}>
+            <GradientIcon />
+            해당 일정으로 가이드를 구하고 싶나요?
+          </L.GuideRequestButton>
         </L.Container>
       </L.ContainerTotal>
       <L.BottomButton onClick={handleComplete}>완료</L.BottomButton>
