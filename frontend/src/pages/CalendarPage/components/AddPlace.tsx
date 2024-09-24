@@ -14,7 +14,6 @@ import { getCityAndSigunguName } from '../../../style/CityMapper2'
 import PlaceItem from '../../RecommendPage/components/PlaceItem'
 import * as L from '../styles/AddPlace.style'
 import { NoPlaceContainer } from '../styles/NoPlace.style'
-// const dummyImage = '/img/default_pic.png'
 
 interface RecommendPlace {
   contentid: number
@@ -33,113 +32,6 @@ interface OpenAPIPlace {
   title: string // OpenAPI의 장소 이름 필드
   firstimage?: string
 }
-
-// const dummyData: RecommendPlace[] = [
-//   {
-//     contentid: 1,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '불국사',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 2,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '석굴암',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 3,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '동궁과 월지',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 4,
-//     contenttypeid: 14,
-//     areacode: 35,
-//     sigungucode: 2,
-//     place: '경주 대릉원',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 5,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 3,
-//     place: '첨성대',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 6,
-//     contenttypeid: 15,
-//     areacode: 35,
-//     sigungucode: 4,
-//     place: '포석정',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 7,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 5,
-//     place: '경주 남산',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 8,
-//     contenttypeid: 16,
-//     areacode: 35,
-//     sigungucode: 6,
-//     place: '문무대왕릉',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 9,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 7,
-//     place: '경주 오릉',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 10,
-//     contenttypeid: 14,
-//     areacode: 35,
-//     sigungucode: 8,
-//     place: '경주 국립공원',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 11,
-//     contenttypeid: 13,
-//     areacode: 35,
-//     sigungucode: 9,
-//     place: '경주 월정교',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 12,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 10,
-//     place: '경주 황리단길',
-//     firstimage: dummyImage,
-//   },
-//   {
-//     contentid: 13,
-//     contenttypeid: 12,
-//     areacode: 35,
-//     sigungucode: 11,
-//     place: '경주 보문단지',
-//     firstimage: dummyImage,
-//   },
-// ]
 
 const AddPlace: React.FC = () => {
   const token = authToken.getAccessToken()
@@ -174,7 +66,6 @@ const AddPlace: React.FC = () => {
     }
   }
 
-  //-----API 연결----
   useEffect(() => {
     if (isAllPlacesLoading) {
       setIsLoading(true)
@@ -203,11 +94,6 @@ const AddPlace: React.FC = () => {
     }
   }
 
-  // 더미 데이터 불러오기
-  // useEffect(() => {
-  //   setRecommendedPlaces(dummyData)
-  // }, [date, token])
-
   const handleSearchInput = (input: string) => {
     setSearchInput(input)
   }
@@ -233,7 +119,11 @@ const AddPlace: React.FC = () => {
     try {
       const response = await postAddPlace(token, contentid, date)
       if (response) {
-        console.log('Place added successfully:', response.data.message)
+        navigate('/calendar', {
+          state: {
+            selectedDate: date, // date는 추가된 날짜
+          },
+        })
       } else {
         console.error('Failed to add place.')
       }

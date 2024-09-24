@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
@@ -11,15 +11,30 @@ import useVisitedList from '../../hooks/useVisitedList'
 
 const Calendar = () => {
   const navigate = useNavigate()
-  const { refetch: refetchUser } = useUser() // refetch 함수를 사용하여 로그인 후 유저 정보를 갱신
-  const { refetch: refetchLikeList } = useLikeList() // 좋아요 리스트 갱신
-  const { refetch: refetchVisitedList } = useVisitedList() // 방문장소 리스트 갱신
+  const location = useLocation()
+
+  // selectedDate는 AddPlace에서 전달된 값
+  const selectedDate = location.state?.selectedDate || null
+  const { refetch: refetchUser } = useUser()
+  const { refetch: refetchLikeList } = useLikeList()
+  const { refetch: refetchVisitedList } = useVisitedList()
 
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
+
+  // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
+  useEffect(() => {
+    if (selectedDate) {
+      const [year, month] = selectedDate.split('-')
+      setCurrentDate({
+        year: Number(year),
+        month: Number(month),
+      })
+    }
+  }, [selectedDate])
 
   useEffect(() => {
     saveInfos()
@@ -85,7 +100,6 @@ const Calendar = () => {
 
   const handleSwipeRight = () => {
     if (currentDate.year === 2024 && currentDate.month === 1) {
-      // 2024년 1월 이전으로 못 넘어가게 막음
       return
     }
 
@@ -128,7 +142,11 @@ const Calendar = () => {
             &nbsp;&nbsp;AI 교육여행
           </L.AIScheduleButton>
         </L.HeaderSection>
-        <MainCalendar year={currentDate.year} month={currentDate.month} />
+        <MainCalendar
+          year={currentDate.year}
+          month={currentDate.month}
+          selectedDate={selectedDate}
+        />
       </div>
     </>
   )
