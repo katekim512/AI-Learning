@@ -12,9 +12,8 @@ import useVisitedList from '../../hooks/useVisitedList'
 const Calendar = () => {
   const navigate = useNavigate()
   const location = useLocation()
-
-  // selectedDate는 AddPlace에서 전달된 값
   const selectedDate = location.state?.selectedDate || null
+
   const { refetch: refetchUser } = useUser()
   const { refetch: refetchLikeList } = useLikeList()
   const { refetch: refetchVisitedList } = useVisitedList()
@@ -33,19 +32,24 @@ const Calendar = () => {
         year: Number(year),
         month: Number(month),
       })
+    } else {
+      // selectedDate가 없을 때만 현재 날짜로 설정
+      setCurrentDate({
+        year: today.getFullYear(),
+        month: today.getMonth() + 1,
+      })
     }
   }, [selectedDate])
-
-  useEffect(() => {
-    saveInfos()
-    setCurrentDate({ year: today.getFullYear(), month: today.getMonth() + 1 })
-  }, [])
 
   const saveInfos = async () => {
     await refetchUser()
     await refetchLikeList()
     await refetchVisitedList()
   }
+
+  useEffect(() => {
+    saveInfos()
+  }, [])
 
   const handleAIScheduleButton = () => {
     navigate('/ai-schedule-step1')
