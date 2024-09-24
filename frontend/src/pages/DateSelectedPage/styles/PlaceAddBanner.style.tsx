@@ -36,6 +36,7 @@ export const SelectedButton = styled.button`
   border-radius: 1.5rem;
   background-color: #525fd4;
   color: white;
+  white-space: nowrap;
   font-size: 0.9rem;
   font-weight: 600;
 `
