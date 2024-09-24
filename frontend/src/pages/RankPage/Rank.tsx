@@ -78,19 +78,6 @@ const Rank: React.FC = () => {
     fetchVisitedPlaces()
   }, [])
 
-  // useEffect(() => {
-  //   const fetchMockData = () => {
-  //     setTop100Places(mocktop100Places)
-
-  //     const visitedIds = new Set(
-  //       mockVisitedPlaces.map(place => place.contentid),
-  //     )
-  //     setVisitedPlaces(visitedIds)
-  //   }
-
-  //   fetchMockData()
-  // }, [])
-
   return (
     <L.AppContainer>
       <L.Title>
