@@ -12,6 +12,7 @@ import * as L from '../styles/Calendar.style'
 interface MainCalendarProps {
   year: number
   month: number
+  selectedDate?: string
 }
 
 interface Holiday {
@@ -19,7 +20,11 @@ interface Holiday {
   name: string
 }
 
-const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
+const MainCalendar: React.FC<MainCalendarProps> = ({
+  year,
+  month,
+  selectedDate,
+}) => {
   const token = authToken.getAccessToken()
   const today = new Date()
 
@@ -35,8 +40,8 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
   const [daySectionHeight, setDaySectionHeight] = useState<number>(0)
   const [schedule, setSchedule] = useState<CalendarSchedule[]>([])
   const [holidays, setHolidays] = useState<Holiday[]>([])
-  const [selectedDay, setSelectedDay] = useState<string>('')
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const [selectedDay, setSelectedDay] = useState<string>(selectedDate || '')
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(!!selectedDate)
 
   const fetchHolidayInfo = async () => {
     try {
@@ -270,6 +275,7 @@ const MainCalendar: React.FC<MainCalendarProps> = ({ year, month }) => {
 MainCalendar.propTypes = {
   year: PropTypes.number.isRequired,
   month: PropTypes.number.isRequired,
+  selectedDate: PropTypes.string,
 }
 
 export default MainCalendar
