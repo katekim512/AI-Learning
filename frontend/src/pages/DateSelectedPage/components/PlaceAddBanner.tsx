@@ -31,7 +31,11 @@ const PlaceAddBanner: React.FC<PlaceAddBannerProps> = ({
       selectedDay,
     )
     if (successResponse) {
-      navigate('/calendar')
+      navigate('/calendar', {
+        state: {
+          selectedDate: selectedDay, // date는 추가된 날짜
+        },
+      })
     }
   }
 
