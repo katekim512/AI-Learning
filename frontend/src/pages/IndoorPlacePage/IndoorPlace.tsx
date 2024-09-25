@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-// import { useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import IndoorPlaceItem from './components/IndoorPlaceItem'
 import * as L from './styles/IndoorPlace.style'
-//import { postRecommendPlace } from '../../api/calendar/postRecommendPlace'
 import {
   DateSchedule,
   PlacePreviewInfo,
@@ -48,32 +46,6 @@ const IndoorPlace: React.FC = () => {
 
   const [indoorPlaces, setIndoorPlaces] = useState<RecommendPlace[]>([])
 
-  // const { isLoading: isIndoorPlacesLoading } = useQuery(
-  //   ['indoorPlaces', date],
-  //   () => postIndoor(token, date as string),
-  //   {
-  //     enabled: !!token && !!date,
-  //     onSuccess: response => {
-  //       if (response && response.data) {
-  //         setIndoorPlaces(response.data)
-  //       }
-  //     },
-  //     onError: error => {
-  //       console.error('Error fetching indoor places:', error)
-  //     },
-  //   },
-  // )
-  // // 원래 스케줄 가져오기
-  // const { isLoading: isScheduleLoading } = useQuery(
-  //   ['daySchedule', date],
-  //   () => postTimelineDay(token, date as string),
-  //   {
-  //     enabled: !!token && !!date,
-  //     select: response => response?.data,
-  //     onSuccess: data => setDaySchedule(data),
-  //   },
-  // )
-
   const [filteredPlaces, setFilteredPlaces] = useState<RecommendPlace[]>([]) // 필터링된 장소 상태
   const [isLoading, setIsLoading] = useState(false)
   const [searchInput, setSearchInput] = useState('')
@@ -109,27 +81,6 @@ const IndoorPlace: React.FC = () => {
 
     fetchData()
   }, [token, date, setDaySchedule])
-
-  // const formatDate = (dateString: string | null): string => {
-  //   if (!dateString) {
-  //     return '날짜 없음'
-  //   } else {
-  //     const date = new Date(dateString)
-  //     const month = date.getMonth() + 1
-  //     const day = date.getDate()
-  //     return `${month}월 ${day}일`
-  //   }
-  // }
-
-  // const { isLoading: isScheduleLoading } = useQuery(
-  //   ['daySchedule', date],
-  //   () => postTimelineDay(token, date as string),
-  //   {
-  //     enabled: !!token && !!date,
-  //     select: response => response?.data,
-  //     onSuccess: data => setDaySchedule(data),
-  //   }
-  // )
 
   const fetchPlaces = async () => {
     if (token && date) {
