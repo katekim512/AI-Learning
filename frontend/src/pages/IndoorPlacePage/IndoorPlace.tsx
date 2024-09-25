@@ -32,15 +32,6 @@ interface RecommendPlace {
   firstimage: string
 }
 
-interface OpenAPIPlace {
-  contentid: number
-  contenttypeid: number
-  areacode: number
-  sigungucode: number
-  title: string // OpenAPI의 장소 이름 필드
-  firstimage?: string
-}
-
 const IndoorPlace: React.FC = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate()
@@ -226,75 +217,6 @@ const IndoorPlace: React.FC = () => {
     }
   }
 
-  const fetchPlacesByContentType = async (
-    latitude: number,
-    longitude: number,
-  ) => {
-    const radius = '5000' // 검색 반경 (10km)
-    const serviceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
-    const contentTypeIds = [12, 14, 15] // 검색할 contentTypeId 목록
-    let fetchedGpsPlaces: RecommendPlace[] = []
-
-    try {
-      for (const contentTypeId of contentTypeIds) {
-        const url = `https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AILearning&_type=json&listYN=Y&arrange=A&mapX=${longitude}&mapY=${latitude}&radius=${radius}&contentTypeId=${contentTypeId}`
-
-        const response = await fetch(url)
-
-        if (response.ok) {
-          const contentType = response.headers.get('content-type') || ''
-          if (contentType.includes('application/json')) {
-            const data = await response.json()
-            if (data.response?.body?.items?.item) {
-              const places = data.response.body.items.item.map(
-                (item: OpenAPIPlace) => ({
-                  contentid: item.contentid,
-                  contenttypeid: item.contenttypeid,
-                  areacode: Number(item.areacode),
-                  sigungucode: item.sigungucode,
-                  place: item.title,
-                  firstimage: item.firstimage || '/img/default_pic.png', // Default image if none available
-                }),
-              )
-
-              fetchedGpsPlaces = fetchedGpsPlaces.concat(places)
-            }
-          } else {
-            console.error('Expected JSON, but received:', await response.text())
-          }
-        } else {
-          console.error('Failed to fetch places:', response.statusText)
-        }
-      }
-
-      setIndoorPlaces(fetchedGpsPlaces)
-      console.log('Places fetched by content type:', fetchedGpsPlaces)
-    } catch (error) {
-      console.error('Error fetching places by content type:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleGPSButtonClick = () => {
-    setIsLoading(true)
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const { latitude, longitude } = position.coords
-          fetchPlacesByContentType(latitude, longitude)
-        },
-        error => {
-          console.error('Error getting location:', error)
-          setIsLoading(false)
-        },
-      )
-    } else {
-      console.error('Geolocation is not supported by this browser.')
-      setIsLoading(false)
-    }
-  }
-
   const handleReloadButtonClick = () => {
     fetchPlaces()
   }
@@ -316,7 +238,6 @@ const IndoorPlace: React.FC = () => {
         <L.PlacesSection>
           <L.SectionTitle>
             실내장소 추천
-            <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
             <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
           {isLoading ? (
