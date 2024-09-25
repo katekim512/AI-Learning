@@ -209,12 +209,12 @@ export const MinusCircleIcon = styled.div`
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d20000' d='M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m5 11H7v-2h10z'/%3E%3C/svg%3E");
   margin-right: 8px; /* Space between icon and text */
 `
-export const GradientIcon = styled.span`
-  background: linear-gradient(to right, #00c6ff, #0072ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-`
+// export const GradientIcon = styled.span`
+//   background: linear-gradient(to right, #00c6ff, #0072ff);
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   display: inline-block;
+// `
 
 export const GuideRequestButton = styled.button`
   padding: 0 0 0 5px; /* top, right, bottom, left */
