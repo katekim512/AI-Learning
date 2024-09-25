@@ -30,6 +30,15 @@ interface RecommendPlace {
   firstimage: string
 }
 
+interface OpenAPIPlace {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  title: string // OpenAPI의 장소 이름 필드
+  firstimage?: string
+}
+
 const IndoorPlace: React.FC = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate()
@@ -61,16 +70,17 @@ const IndoorPlace: React.FC = () => {
 
       setIsLoading(true)
       try {
-        // 실내 장소 가져오기
-        const indoorResponse = await postIndoor(token, date)
-        if (indoorResponse && indoorResponse.data) {
-          setIndoorPlaces(indoorResponse.data)
-        }
-
         // 일정 가져오기
         const scheduleResponse = await postTimelineDay(token, date)
         if (scheduleResponse && scheduleResponse.data) {
           setDaySchedule(scheduleResponse.data)
+          console.log('DaySchedule: ', scheduleResponse.data)
+        }
+
+        // 실내 장소 가져오기
+        const indoorResponse = await postIndoor(token, date)
+        if (indoorResponse && indoorResponse.data) {
+          setIndoorPlaces(indoorResponse.data)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -81,6 +91,14 @@ const IndoorPlace: React.FC = () => {
 
     fetchData()
   }, [token, date, setDaySchedule])
+
+  const findOriginalPlaceName = () => {
+    if (!daySchedule || !contentid) return ''
+    const originalPlace = daySchedule.info.find(
+      place => place.contentid.toString() === contentid,
+    )
+    return originalPlace ? originalPlace.place : ''
+  }
 
   const fetchPlaces = async () => {
     if (token && date) {
@@ -109,18 +127,15 @@ const IndoorPlace: React.FC = () => {
   }
 
   const handleFixButtonClick = async (
-    e: React.MouseEvent,
     newPlace: RecommendPlace,
+    originalPlaceName: string,
   ) => {
-    e.stopPropagation()
-
     if (!date || !daySchedule || !contentid) {
       console.error('Date, day schedule, or contentid is null or undefined.')
       return
     }
 
     try {
-      // URL의 contentid와 일치하는 장소 찾기
       const indexToReplace = daySchedule.info.findIndex(
         place => place.contentid.toString() === contentid,
       )
@@ -130,19 +145,18 @@ const IndoorPlace: React.FC = () => {
         return
       }
 
-      // 새로운 장소 정보 생성
       const newPlaceInfo: PlacePreviewInfo = {
         contentid: newPlace.contentid,
         contenttypeid: newPlace.contenttypeid,
         areacode: newPlace.areacode,
         sigungucode: newPlace.sigungucode,
         place: newPlace.place,
-        order: daySchedule.info[indexToReplace].order, // 기존 순서 유지
+        order: daySchedule.info[indexToReplace].order,
         firstimage: newPlace.firstimage,
-        mapx: 0, // 이 값은 RecommendPlace에 없으므로 기본값 설정
-        mapy: 0, // 이 값은 RecommendPlace에 없으므로 기본값 설정
+        mapx: 0,
+        mapy: 0,
       }
-      // 새로운 일정 생성
+
       const updatedSchedule: DateSchedule = {
         ...daySchedule,
         info: [
@@ -155,6 +169,9 @@ const IndoorPlace: React.FC = () => {
       const response = await postTimelineFix(token, updatedSchedule)
 
       if (response && response.data) {
+        console.log(
+          `장소가 ${originalPlaceName}에서 ${newPlace.place}로 변경되었습니다.`,
+        )
         navigate('/calendar', {
           state: {
             selectedDate: date,
@@ -165,6 +182,75 @@ const IndoorPlace: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating place:', error)
+    }
+  }
+
+  const fetchPlacesByContentType = async (
+    latitude: number,
+    longitude: number,
+  ) => {
+    const radius = '5000' // 검색 반경 (10km)
+    const serviceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
+    const contentTypeIds = [12, 14, 15] // 검색할 contentTypeId 목록
+    let fetchedGpsPlaces: RecommendPlace[] = []
+
+    try {
+      for (const contentTypeId of contentTypeIds) {
+        const url = `https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AILearning&_type=json&listYN=Y&arrange=A&mapX=${longitude}&mapY=${latitude}&radius=${radius}&contentTypeId=${contentTypeId}`
+
+        const response = await fetch(url)
+
+        if (response.ok) {
+          const contentType = response.headers.get('content-type') || ''
+          if (contentType.includes('application/json')) {
+            const data = await response.json()
+            if (data.response?.body?.items?.item) {
+              const places = data.response.body.items.item.map(
+                (item: OpenAPIPlace) => ({
+                  contentid: item.contentid,
+                  contenttypeid: item.contenttypeid,
+                  areacode: Number(item.areacode),
+                  sigungucode: item.sigungucode,
+                  place: item.title,
+                  firstimage: item.firstimage || '/img/default_pic.png', // Default image if none available
+                }),
+              )
+
+              fetchedGpsPlaces = fetchedGpsPlaces.concat(places)
+            }
+          } else {
+            console.error('Expected JSON, but received:', await response.text())
+          }
+        } else {
+          console.error('Failed to fetch places:', response.statusText)
+        }
+      }
+
+      setIndoorPlaces(fetchedGpsPlaces)
+      console.log('Places fetched by content type:', fetchedGpsPlaces)
+    } catch (error) {
+      console.error('Error fetching places by content type:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleGPSButtonClick = () => {
+    setIsLoading(true)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords
+          fetchPlacesByContentType(latitude, longitude)
+        },
+        error => {
+          console.error('Error getting location:', error)
+          setIsLoading(false)
+        },
+      )
+    } else {
+      console.error('Geolocation is not supported by this browser.')
+      setIsLoading(false)
     }
   }
 
@@ -189,6 +275,7 @@ const IndoorPlace: React.FC = () => {
         <L.PlacesSection>
           <L.SectionTitle>
             실내장소 추천
+            <L.gpsIcon onClick={handleGPSButtonClick}></L.gpsIcon>
             <L.ReloadIcon onClick={handleReloadButtonClick}></L.ReloadIcon>
           </L.SectionTitle>
           {isLoading ? (
@@ -196,9 +283,8 @@ const IndoorPlace: React.FC = () => {
               <Loading />
             </NoPlaceContainer>
           ) : allPlacesError ? (
-            <div>Error occurred</div> // Show error message if an error occurs
+            <div>Error occurred</div>
           ) : searchInput ? (
-            // If search input is present, show filtered places
             filteredPlaces.length > 0 ? (
               <L.PlacesList>
                 {filteredPlaces.map((place, index) => (
@@ -206,8 +292,9 @@ const IndoorPlace: React.FC = () => {
                     key={place.contentid}
                     place={place}
                     index={index}
-                    onClick={() => handleClick(place)}
-                    onFixClick={e => handleFixButtonClick(e, place)}
+                    originalPlaceName={findOriginalPlaceName()}
+                    onClick={handleClick}
+                    onFixClick={handleFixButtonClick}
                   />
                 ))}
               </L.PlacesList>
@@ -221,8 +308,9 @@ const IndoorPlace: React.FC = () => {
                   key={place.contentid}
                   place={place}
                   index={index}
-                  onClick={() => handleClick(place)}
-                  onFixClick={e => handleFixButtonClick(e, place)}
+                  originalPlaceName={findOriginalPlaceName()}
+                  onClick={handleClick}
+                  onFixClick={handleFixButtonClick}
                 />
               ))}
             </L.PlacesList>
