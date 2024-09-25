@@ -130,7 +130,7 @@ const EachLevel: React.FC = () => {
       const response = await postLevel(token, level)
 
       if (response && response.data) {
-        setLevelPlaces([response.data])
+        setLevelPlaces(response.data)
       } else {
         setLevelPlaces([])
       }
