@@ -15,8 +15,8 @@ interface LevelResponse {
 export const postLevel = async (
   token: string,
   level: string,
-): Promise<AxiosResponse<LevelResponse> | null> => {
-  const response = await aiLearningAxios.post<LevelResponse>(
+): Promise<AxiosResponse<LevelResponse[]> | null> => {
+  const response = await aiLearningAxios.post(
     'profile/level',
     { level },
     {
