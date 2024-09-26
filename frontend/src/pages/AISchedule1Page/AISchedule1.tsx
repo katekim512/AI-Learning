@@ -71,6 +71,7 @@ const AISchedule1: React.FC = () => {
               '전국',
               '거주 지역 인근',
               '서울・수도권',
+              '강원도권',
               '경상도권',
               '전라도권',
               '충청도권',
@@ -242,6 +243,12 @@ const AISchedule1: React.FC = () => {
             className={location.includes('서울・수도권') ? 'selected' : ''}
           >
             서울・수도권
+          </S.Button>
+          <S.Button
+            onClick={() => handleLocationClick('강원도권')}
+            className={location.includes('강원도권') ? 'selected' : ''}
+          >
+            강원도권
           </S.Button>
           <S.Button
             onClick={() => handleLocationClick('경상도권')}

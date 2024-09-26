@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+interface ScheduleContainerProps {
+  isSwiped: boolean
+}
+
 export const ContainerTotal = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,7 +49,7 @@ export const Container = styled.div`
   ); /* 화면 높이에서 Container1과 버튼의 높이를 제외한 값 */
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  //gap: 1.6rem;
   padding: 2rem;
   padding-top: 1rem;
   overflow-y: auto;
@@ -83,25 +87,35 @@ export const AdditionText = styled.p`
   margin-bottom: 1rem;
 `
 
-export const ScheduleContainer = styled.div`
-  box-sizing: border-box;
-  width: 100%;
+export const ScheduleContainer = styled.div<ScheduleContainerProps>`
   display: flex;
-  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
   margin-bottom: 0.7rem;
+  position: relative; /* 삭제 버튼을 절대 위치로 설정하기 위해 필요 */
+  transform: ${({ isSwiped }) =>
+    isSwiped ? 'translateX(-50px)' : 'translateX(0)'};
+  transition: transform 0.3s ease;
+  width: 100%; /* 가로 길이 유지 */
 `
-
 export const DateBox = styled.p`
   background-color: #bfddff;
   width: 7rem;
+  height: 2rem; // 높이를 명시적으로 지정
   border-radius: 15px;
-  padding: 0.6rem;
-  padding-top: 0.9rem;
   color: #545454;
   font-size: 0.8rem;
   font-weight: 600;
-  text-align: center;
   margin-right: 0.5rem;
+
+  // Flexbox를 사용하여 내용을 중앙 정렬
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // 텍스트가 여러 줄일 경우를 대비한 설정
+  text-align: center;
 `
 
 export const PlaceBox = styled.button`
@@ -111,6 +125,7 @@ export const PlaceBox = styled.button`
   align-items: center; /* 세로 정렬 */
   justify-content: flex-start;
   width: 100%;
+  height: 2rem;
   border-radius: 15px;
   border: none;
   padding: 0.6rem;
@@ -169,4 +184,66 @@ export const BottomButton = styled.button`
   &:hover {
     background-color: #434cb1;
   }
+`
+
+export const DeleteButton = styled.button`
+  position: absolute;
+  right: 10px;
+  top: 40%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* ScheduleContainer와 같은 높이로 설정 */
+`
+
+export const MinusCircleIcon = styled.div`
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d20000' d='M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m5 11H7v-2h10z'/%3E%3C/svg%3E");
+  margin-right: 8px; /* Space between icon and text */
+`
+// export const GradientIcon = styled.span`
+//   background: linear-gradient(to right, #00c6ff, #0072ff);
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   display: inline-block;
+// `
+
+export const GuideRequestButton = styled.button`
+  padding: 0 0 0 5px; /* top, right, bottom, left */
+  margin-top: 0px;
+  background: transparent; // 배경을 투명하게 설정
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  position: relative; // z-index 컨텍스트를 생성합니다
+  z-index: 0;
+
+  // 텍스트에만 그라데이션 적용
+  background-image: linear-gradient(to right, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #0072ff; /* 텍스트 색상을 투명하게 설정하여 그라데이션이 보이도록 함 */
+
+  &:hover {
+    text-decoration: none;
+  }
+`
+export const Icon = styled.button`
+  background: linear-gradient(45deg, #f3ec78, #af4261);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 24px;
+  height: 24px;
+  margin-right: px;
 `

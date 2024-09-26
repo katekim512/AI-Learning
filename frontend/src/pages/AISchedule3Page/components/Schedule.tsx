@@ -10,9 +10,14 @@ import { AISchedule } from '../../../api/schedule/getSchedule'
 interface ScheduleProps {
   scheduleInfo: AISchedule[]
   moveSchedule: (dragIndex: number, hoverIndex: number) => void
+  handleDelete: (index: number) => void
 }
 
-const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo, moveSchedule }) => {
+const Schedule: React.FC<ScheduleProps> = ({
+  scheduleInfo,
+  moveSchedule,
+  handleDelete,
+}) => {
   // 모바일 장치에서는 TouchBackend를, 그렇지 않으면 HTML5Backend를 사용
   const isMobile = () => {
     const ua = navigator.userAgent
@@ -33,6 +38,7 @@ const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo, moveSchedule }) => {
     delay: 50,
     delayTouchStart: 100,
   }
+
   return (
     <DndProvider backend={backendForDND} options={backendOptions}>
       <div>
@@ -42,6 +48,7 @@ const Schedule: React.FC<ScheduleProps> = ({ scheduleInfo, moveSchedule }) => {
             index={index}
             item={item}
             moveSchedule={moveSchedule}
+            onDelete={handleDelete}
           />
         ))}
       </div>
