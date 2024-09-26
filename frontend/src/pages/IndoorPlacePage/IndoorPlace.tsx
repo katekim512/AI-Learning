@@ -70,11 +70,6 @@ const IndoorPlace: React.FC = () => {
 
       setIsLoading(true)
       try {
-        console.log('contentid:', Number(contentid), 'date:', date)
-        const indoorResponse = await postIndoor(token, date, Number(contentid))
-        if (indoorResponse && indoorResponse.data) {
-          setIndoorPlaces(indoorResponse.data)
-        }
         // 일정 가져오기
         const scheduleResponse = await postTimelineDay(token, date)
         if (scheduleResponse && scheduleResponse.data) {
@@ -83,11 +78,11 @@ const IndoorPlace: React.FC = () => {
         }
 
         // 실내 장소 가져오기
-        // const indoorResponse = await postIndoor(token, date, Number(contentid))
-        // console.log('contentid : ', { contentid })
-        // if (indoorResponse && indoorResponse.data) {
-        //   setIndoorPlaces(indoorResponse.data)
-        // }
+        console.log('contentid:', Number(contentid), 'date:', date)
+        const indoorResponse = await postIndoor(token, date, Number(contentid))
+        if (indoorResponse && indoorResponse.data) {
+          setIndoorPlaces(indoorResponse.data)
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
