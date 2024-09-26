@@ -1,4 +1,4 @@
-import peopleList16Filled from '@iconify-icons/fluent/people-list-16-filled'
+import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -200,7 +200,8 @@ const AISchedule3 = () => {
             handleDelete={handleDelete}
           />
           <L.GuideRequestButton onClick={() => handleGuideRequest()}>
-            <L.GradientIcon icon={peopleList16Filled} />
+            {/* <L.GradientIcon icon={peopleList16Filled} /> */}
+            <Icon icon='fluent:people-chat-16-filled' width='24' height='24' />
             해당 일정으로 가이드를 구하고 싶나요?
           </L.GuideRequestButton>
         </L.Container>

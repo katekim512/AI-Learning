@@ -1,14 +1,4 @@
-import { Icon } from '@iconify/react'
 import styled from 'styled-components'
-
-export const GradientIcon = styled(Icon)`
-  background: linear-gradient(45deg, #f3ec78, #af4261);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  width: 24px;
-  height: 24px;
-  margin-right: 5px;
-`
 
 interface ScheduleContainerProps {
   isSwiped: boolean
@@ -234,6 +224,7 @@ export const GuideRequestButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   display: flex;
+  gap: 5px;
   align-items: center;
   position: relative; // z-index 컨텍스트를 생성합니다
   z-index: 0;
@@ -247,4 +238,12 @@ export const GuideRequestButton = styled.button`
   &:hover {
     text-decoration: none;
   }
+`
+export const Icon = styled.button`
+  background: linear-gradient(45deg, #f3ec78, #af4261);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 24px;
+  height: 24px;
+  margin-right: px;
 `
