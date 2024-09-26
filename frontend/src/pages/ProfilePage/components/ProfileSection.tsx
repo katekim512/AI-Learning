@@ -27,7 +27,7 @@ const ProfileSection = () => {
   }
 
   const handleTestAPI = async () => {
-    const response = await postIndoor(token, '2024-10-12')
+    const response = await postIndoor(token, '2024-10-12', 126508)
     if (response) console.log(response.data)
   }
 

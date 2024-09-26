@@ -78,7 +78,8 @@ const IndoorPlace: React.FC = () => {
         }
 
         // 실내 장소 가져오기
-        const indoorResponse = await postIndoor(token, date)
+        console.log('contentid:', Number(contentid), 'date:', date)
+        const indoorResponse = await postIndoor(token, date, Number(contentid))
         if (indoorResponse && indoorResponse.data) {
           setIndoorPlaces(indoorResponse.data)
         }

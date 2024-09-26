@@ -14,10 +14,11 @@ interface RecommendPlace {
 export const postIndoor = async (
   token: string,
   date: string,
+  contentid: number,
 ): Promise<AxiosResponse<RecommendPlace[]> | null> => {
   const response = await aiLearningAxios.post(
     'place/indoor',
-    { date },
+    { date, contentid },
     {
       headers: { Authorization: `Bearer ${token}` },
     },
