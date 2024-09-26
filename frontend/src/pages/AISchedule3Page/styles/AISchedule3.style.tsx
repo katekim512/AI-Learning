@@ -1,4 +1,14 @@
+import { Icon } from '@iconify/react'
 import styled from 'styled-components'
+
+export const GradientIcon = styled(Icon)`
+  background: linear-gradient(45deg, #f3ec78, #af4261);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+`
 
 interface ScheduleContainerProps {
   isSwiped: boolean
@@ -219,18 +229,20 @@ export const MinusCircleIcon = styled.div`
 export const GuideRequestButton = styled.button`
   padding: 0 0 0 5px; /* top, right, bottom, left */
   margin-top: 0px;
-  background: none;
+  background: transparent; // 배경을 투명하게 설정
   border: none;
   cursor: pointer;
-  text-decoration: underline;
   font-size: 14px;
   display: flex;
   align-items: center;
-  background: linear-gradient(to right, #00c6ff, #0072ff);
+  position: relative; // z-index 컨텍스트를 생성합니다
+  z-index: 0;
+
+  // 텍스트에만 그라데이션 적용
+  background-image: linear-gradient(to right, #00c6ff, #0072ff);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
+  color: #0072ff; /* 텍스트 색상을 투명하게 설정하여 그라데이션이 보이도록 함 */
 
   &:hover {
     text-decoration: none;

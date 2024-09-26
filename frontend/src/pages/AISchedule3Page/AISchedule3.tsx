@@ -1,5 +1,4 @@
-import { Icon } from '@iconify/react'
-// import peopleChatIcon from '@iconify-icons/fluent/people-chat-16-filled'
+import peopleList16Filled from '@iconify-icons/fluent/people-list-16-filled'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,6 +14,8 @@ const AISchedule3 = () => {
   const token = authToken.getAccessToken()
   const navigate = useNavigate()
   const [scheduleInfo, setScheduleInfo] = useState<AISchedule[]>([])
+  // const iconUrl =
+  //   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M8 5.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M11.5 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4M8 9.5q.001-.263.085-.498L8 9H3a1.5 1.5 0 0 0-1.5 1.5v.075s0 2.925 4 2.925c1.21 0 2.055-.268 2.644-.642q.093-.196.238-.358a1.5 1.5 0 0 1-.382-1c0-.384.144-.735.382-1A1.5 1.5 0 0 1 8 9.5M9.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z'/%3E%3C/svg%3E"
 
   // const GradientIcon = () => (
   //   <svg
@@ -199,7 +200,7 @@ const AISchedule3 = () => {
             handleDelete={handleDelete}
           />
           <L.GuideRequestButton onClick={() => handleGuideRequest()}>
-            <Icon icon='fluent:people-chat-16-filled' width='24' height='24' />
+            <L.GradientIcon icon={peopleList16Filled} />
             해당 일정으로 가이드를 구하고 싶나요?
           </L.GuideRequestButton>
         </L.Container>
