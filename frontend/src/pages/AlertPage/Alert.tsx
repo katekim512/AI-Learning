@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as S from './styles/Alert.style'
-import { getRecentPlace, AlertPlace } from '../../api/profile/getAlertList'
+import { getAlertPlace, AlertPlace } from '../../api/profile/getAlertList'
 import BackButton from '../../components/BackButton/BackButton'
 import authToken from '../../stores/authToken'
+import { useWeatherAlert } from '../../stores/useWeatherAlert'
 
 const Alert: React.FC = () => {
   const navigate = useNavigate()
@@ -43,166 +44,67 @@ const Alert: React.FC = () => {
   }
 
   //더미데이터
-  const dummyAlerts: AlertPlace[] = [
-    {
-      date: '2024-09-25',
-      weather: 1,
-      contentid: 126508,
-      place: '경복궁',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 1,
-    },
-    {
-      date: '2024-09-26',
-      weather: 3,
-      contentid: 67890,
-      place: '남산타워',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 2,
-    },
-    {
-      date: '2024-09-29',
-      weather: 4,
-      contentid: 13579,
-      place: '롯데월드',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 15,
-      areacode: 1,
-      sigungucode: 3,
-    },
-    {
-      date: '2024-09-30',
-      weather: 2,
-      contentid: 246810,
-      place: '서울숲',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 16,
-      areacode: 1,
-      sigungucode: 4,
-    },
-    {
-      date: '2024-10-10',
-      weather: 3,
-      contentid: 54321,
-      place: '명동',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 5,
-    },
-    {
-      date: '2024-10-14',
-      weather: 1,
-      contentid: 98765,
-      place: '동대문 디자인 플라자',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 6,
-    },
-    {
-      date: '2024-10-18',
-      weather: 2,
-      contentid: 112233,
-      place: '한강공원',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 15,
-      areacode: 1,
-      sigungucode: 7,
-    },
-    {
-      date: '2024-10-21',
-      weather: 4,
-      contentid: 445566,
-      place: '이태원',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 8,
-    },
-    {
-      date: '2024-10-25',
-      weather: 1,
-      contentid: 778899,
-      place: '홍대 거리',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 9,
-    },
-    {
-      date: '2024-10-28',
-      weather: 3,
-      contentid: 123456,
-      place: '삼청동 카페 거리',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 15,
-      areacode: 1,
-      sigungucode: 10,
-    },
-    {
-      date: '2024-11-02',
-      weather: 4,
-      contentid: 654321,
-      place: '서울대공원',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 11,
-    },
-    {
-      date: '2024-11-05',
-      weather: 2,
-      contentid: 111222,
-      place: '잠실 종합운동장',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 12,
-    },
-    {
-      date: '2024-11-08',
-      weather: 1,
-      contentid: 333444,
-      place: '노량진 수산시장',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 15,
-      areacode: 1,
-      sigungucode: 13,
-    },
-    {
-      date: '2024-11-12',
-      weather: 3,
-      contentid: 555666,
-      place: '코엑스',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 14,
-    },
-    {
-      date: '2024-11-15',
-      weather: 4,
-      contentid: 777888,
-      place: 'DDP',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 15,
-    },
-  ]
+  //   const dummyData: AlertPlace[] = [
+  //     {
+  //       date: '2024-09-25',
+  //       weather: 1,
+  //       contentid: 126508,
+  //       place: '경복궁',
+  //       firstimage: '/img/default_pic.png',
+  //       contenttypeid: 12,
+  //       areacode: 1,
+  //       sigungucode: 1,
+  //     },
+  //     {
+  //       date: '2024-09-26',
+  //       weather: 3,
+  //       contentid: 67890,
+  //       place: '남산타워',
+  //       firstimage: '/img/default_pic.png',
+  //       contenttypeid: 14,
+  //       areacode: 1,
+  //       sigungucode: 2,
+  //     },
+  //     {
+  //       date: '2024-09-28',
+  //       weather: 4,
+  //       contentid: 3070550,
+  //       place: '감천계곡',
+  //       firstimage: '/img/default_pic.png',
+  //       contenttypeid: 15,
+  //       areacode: 1,
+  //       sigungucode: 3,
+  //     },
+  //     {
+  //       date: '2024-09-30',
+  //       weather: 2,
+  //       contentid: 3030149,
+  //       place: '포항 해상스카이워크',
+  //       firstimage: '/img/default_pic.png',
+  //       contenttypeid: 16,
+  //       areacode: 1,
+  //       sigungucode: 4,
+  //     },
+  //     {
+  //       date: '2024-10-01',
+  //       weather: 2,
+  //       contentid: 2715601,
+  //       place: '가덕도',
+  //       firstimage: '/img/default_pic.png',
+  //       contenttypeid: 16,
+  //       areacode: 1,
+  //       sigungucode: 4,
+  //     },
+  //   ]
 
   useEffect(() => {
     const fetchAlerts = async () => {
       const token = authToken.getAccessToken()
       try {
-        const response = await getRecentPlace(token)
+        const response = await getAlertPlace(token)
         if (response && response.data) {
           setAlerts(response.data)
+          console.log('알림 리스트 받아오기 성공', response.data)
         }
       } catch (error) {
         console.error('Failed to fetch alerts:', error)
@@ -210,12 +112,12 @@ const Alert: React.FC = () => {
     }
 
     fetchAlerts()
-  }, [])
+  }, [useWeatherAlert().lastCalendarVisit])
 
-  //더미데이터 사용
-  useEffect(() => {
-    setAlerts(dummyAlerts)
-  }, [])
+  //   //더미데이터 사용
+  //   useEffect(() => {
+  //     setAlerts(dummyData)
+  //   }, [])
 
   const getWeatherIcon = (weather: number) => {
     switch (weather) {
@@ -261,21 +163,21 @@ const Alert: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchAlerts = async () => {
-      const token = authToken.getAccessToken()
-      try {
-        const response = await getRecentPlace(token)
-        if (response && response.data) {
-          setAlerts(response.data)
-        }
-      } catch (error) {
-        console.error('Failed to fetch alerts:', error)
-      }
-    }
+  //   useEffect(() => {
+  //     const fetchAlerts = async () => {
+  //       const token = authToken.getAccessToken()
+  //       try {
+  //         const response = await getAlertPlace(token)
+  //         if (response && response.data) {
+  //           setAlerts(response.data)
+  //         }
+  //       } catch (error) {
+  //         console.error('Failed to fetch alerts:', error)
+  //       }
+  //     }
 
-    fetchAlerts()
-  }, [])
+  //     fetchAlerts()
+  //   }, [])
 
   return (
     <S.Container>

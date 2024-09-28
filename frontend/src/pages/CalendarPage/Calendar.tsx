@@ -5,20 +5,19 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
-import { getRecentPlace, AlertPlace } from '../../api/profile/getAlertList'
+import { getAlertPlace, AlertPlace } from '../../api/profile/getAlertList'
 import IndoorAlertPopUp from '../../components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
+import { useAlertStore } from '../../stores/useFutureAlerts'
 import { useWeatherAlert } from '../../stores/useWeatherAlert'
-
 const Calendar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
   const [showPopup, setShowPopup] = useState(false)
-  const [alertPlaces, setAlertPlaces] = useState<AlertPlace[]>([])
 
   const { refetch: refetchUser } = useUser()
   const { refetch: refetchLikeList } = useLikeList()
@@ -31,85 +30,95 @@ const Calendar = () => {
     resetDailyCheck,
   } = useWeatherAlert()
 
+  const { futureAlerts, setFutureAlerts } = useAlertStore()
+  console.log(futureAlerts)
+
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
 
-  // 더미 데이터는 그대로 유지
-  const dummyData: AlertPlace[] = [
-    {
-      date: '2024-09-25',
-      weather: 1,
-      contentid: 126508,
-      place: '경복궁',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 1,
-    },
-    {
-      date: '2024-09-26',
-      weather: 3,
-      contentid: 67890,
-      place: '남산타워',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 1,
-      sigungucode: 2,
-    },
-    {
-      date: '2024-09-28',
-      weather: 4,
-      contentid: 3070550,
-      place: '감천계곡',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 15,
-      areacode: 1,
-      sigungucode: 3,
-    },
-    {
-      date: '2024-09-30',
-      weather: 2,
-      contentid: 3030149,
-      place: '포항 해상스카이워크',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 16,
-      areacode: 1,
-      sigungucode: 4,
-    },
-    {
-      date: '2024-10-01',
-      weather: 2,
-      contentid: 2715601,
-      place: '가덕도',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 16,
-      areacode: 1,
-      sigungucode: 4,
-    },
-  ]
+  // // 더미 데이터는 그대로 유지
+  // const dummyData: AlertPlace[] = [
+  //   {
+  //     date: '2024-09-26',
+  //     weather: 3,
+  //     contentid: 67890,
+  //     place: '남산타워',
+  //     firstimage: '/img/default_pic.png',
+  //     contenttypeid: 14,
+  //     areacode: 1,
+  //     sigungucode: 2,
+  //   },
+  //   {
+  //     date: '2024-09-28',
+  //     weather: 4,
+  //     contentid: 3070550,
+  //     place: '감천계곡',
+  //     firstimage: '/img/default_pic.png',
+  //     contenttypeid: 15,
+  //     areacode: 1,
+  //     sigungucode: 3,
+  //   },
+  //   {
+  //     date: '2024-09-30',
+  //     weather: 2,
+  //     contentid: 127914,
+  //     place: '연산온천파크',
+  //     firstimage: '/img/default_pic.png',
+  //     contenttypeid: 16,
+  //     areacode: 1,
+  //     sigungucode: 4,
+  //   },
+  //   {
+  //     date: '2024-10-01',
+  //     weather: 2,
+  //     contentid: 2589659,
+  //     place: '올리바인 스파',
+  //     firstimage: '/img/default_pic.png',
+  //     contenttypeid: 16,
+  //     areacode: 1,
+  //     sigungucode: 4,
+  //   },
+  //   {
+  //     date: '2024-10-02',
+  //     weather: 1,
+  //     contentid: 2564458,
+  //     place: '안동계명산자휴양림',
+  //     firstimage: '/img/default_pic.png',
+  //     contenttypeid: 12,
+  //     areacode: 1,
+  //     sigungucode: 1,
+  //   },
+  // ]
+
   //API 이용-------
   useEffect(() => {
     const fetchAlertPlaces = async () => {
       const token = authToken.getAccessToken()
       try {
-        const response = await getRecentPlace(token)
+        const response = await getAlertPlace(token)
         if (response && response.data) {
           const today = new Date()
           today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
 
-          const futureAlerts = response.data.filter((place: AlertPlace) => {
+          const newFutureAlerts = response.data.filter((place: AlertPlace) => {
             const placeDate = new Date(place.date)
             return placeDate >= today
           })
 
-          setAlertPlaces(futureAlerts)
+          setFutureAlerts(newFutureAlerts)
 
-          if (futureAlerts.length > 0 && !hasCheckedAlertToday) {
-            setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+          if (newFutureAlerts.length > 0 && !hasCheckedAlertToday) {
+            //setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
           }
+
+          // Zustand 스토어의 내용을 콘솔에 출력
+          console.log(
+            'Zustand futureAlerts:',
+            useAlertStore.getState().futureAlerts,
+          )
         }
       } catch (error) {
         console.error('알림 장소 가져오기 실패:', error)
@@ -123,37 +132,47 @@ const Calendar = () => {
       'hasCheckedAlertToday 상태:',
       useWeatherAlert.getState().hasCheckedAlertToday,
     )
-  }, [setLastCalendarVisit, resetDailyCheck, hasCheckedAlertToday])
+  }, [
+    setLastCalendarVisit,
+    // resetDailyCheck,
+    // hasCheckedAlertToday,
+    // setFutureAlerts,
+  ])
 
   //더미데이트 이용
-  useEffect(() => {
-    const fetchAlertPlaces = async () => {
-      try {
-        const response = dummyData
-        const today = new Date()
-        today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
+  // useEffect(() => {
+  //   const fetchAlertPlaces = async () => {
+  //     try {
+  //       const today = new Date()
+  //       today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
 
-        const futureAlerts = response.filter((place: AlertPlace) => {
-          const placeDate = new Date(place.date)
-          return placeDate >= today
-        })
+  //       const newFutureAlerts = dummyData.filter((place: AlertPlace) => {
+  //         const placeDate = new Date(place.date)
+  //         return placeDate >= today
+  //       })
 
-        setAlertPlaces(futureAlerts)
+  //       setFutureAlerts(newFutureAlerts)
 
-        if (futureAlerts.length > 0) {
-          setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
-        }
-      } catch (error) {
-        console.error('알림 장소 가져오기 실패:', error)
-      }
-    }
+  //       if (newFutureAlerts.length > 0) {
+  //         setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+  //       }
 
-    fetchAlertPlaces()
-    console.log(
-      'hasCheckedAlertToday 상태:',
-      useWeatherAlert.getState().hasCheckedAlertToday,
-    )
-  }, [])
+  //       // Zustand 스토어의 내용을 콘솔에 출력
+  //       console.log(
+  //         'Zustand futureAlerts:',
+  //         useAlertStore.getState().futureAlerts,
+  //       )
+  //     } catch (error) {
+  //       console.error('알림 장소 가져오기 실패:', error)
+  //     }
+  //   }
+
+  //   fetchAlertPlaces()
+  //   console.log(
+  //     'hasCheckedAlertToday 상태:',
+  //     useWeatherAlert.getState().hasCheckedAlertToday,
+  //   )
+  // }, [setFutureAlerts])
   //--------------------------------
 
   // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
@@ -297,7 +316,7 @@ const Calendar = () => {
       </div>
       {showPopup && !hasCheckedAlertToday && (
         <IndoorAlertPopUp
-          alertPlaces={alertPlaces}
+          // alertPlaces={futureAlerts}
           onClose={handleClosePopup}
         />
       )}

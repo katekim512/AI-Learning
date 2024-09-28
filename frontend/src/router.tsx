@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'indoorAlertPopUp',
-        element: <IndoorAlertPopUp alertPlaces={[]} onClose={() => {}} />,
+        element: <IndoorAlertPopUp onClose={() => {}} />,
       },
       {
         path: 'addplace/:date',

@@ -13,7 +13,7 @@ export interface AlertPlace {
   sigungucode: number
 }
 
-export const getRecentPlace = async (
+export const getAlertPlace = async (
   token: string,
 ): Promise<AxiosResponse<AlertPlace[]> | null> => {
   const response = await aiLearningAxios.get('profile/alert-list', {
