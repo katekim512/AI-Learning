@@ -46,12 +46,13 @@ export const Donut = ({
         cx='32.5' /* 중심점 조정 */
         cy='32.5'
         r={radius}
-        stroke='#4caf50'
+        stroke='#525FD4'
         strokeWidth='6' /* 선 두께 줄임 */
         fill='transparent'
         strokeDasharray={`${circumference} ${circumference}`}
         strokeDashoffset={offset}
         style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+        transform='rotate(-90 32.5 32.5)' /* 12시 방향에서 시작하게 회전 */
       />
       <foreignObject x='15' y='15' width='35' height='35'>
         <div
