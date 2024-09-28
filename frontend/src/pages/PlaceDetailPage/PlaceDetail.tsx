@@ -13,6 +13,7 @@ import ContentType15 from './components/ContentType/ContentType15'
 import MiddleMenuBar from './components/MiddleMenuBar'
 import PlaceMap from './components/PlaceMap'
 import RestaurantList from './components/RestaurantList'
+import StudyPlan from './components/StudyPlan/StudyPlan'
 import * as L from './styles/PlaceDetail.style'
 import { postAddVisited } from '../../api/calendar/postAddVisited'
 import { postLike } from '../../api/calendar/postLike'
@@ -294,6 +295,7 @@ const PlaceDetail = () => {
           )}
           {placeDetail && (
             <>
+              <StudyPlan title={placeDetail.title} />
               <AccomodationList
                 areacode={placeDetail.areacode!}
                 sigungucode={placeDetail.sigungucode!}
