@@ -101,11 +101,13 @@ const AISchedule3 = () => {
     const fetchSchedule = async () => {
       const response = await getSchedule(token)
       if (response && response.data) {
+        console.log('Raw API response:', response.data)
         const updatedSchedule = response.data.map(item => ({
           ...item,
           city: getCityName(item.areacode, item.sigungucode), // city 값을 설정
         }))
         setScheduleInfo(updatedSchedule)
+        console.log('Updated schedule with city names:', updatedSchedule)
       } else {
         console.error('Failed to fetch schedule data.')
       }

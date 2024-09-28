@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import AlertPopUp2 from '../../../components/AlertPopUp/AlertPopUp2/AlertPopUp2'
+import AlertPopUp3 from '../../../components/AlertPopUp/AlertPopUp3/AlertPopUp3'
+import IndoorAlertPopUp2 from '../../../components/AlertPopUp/IndoorAlertPopUp2/IndoorAlertPopUp2'
+import { useAlertStore } from '../../../stores/useFutureAlerts'
 import { getCityName } from '../../../style/CityMapper'
 import * as L from '../styles/IndoorPlaceItem.style'
-
 interface RecommendPlace {
   contentid: number
   contenttypeid: number
@@ -13,14 +15,26 @@ interface RecommendPlace {
   firstimage: string
 }
 
+interface PlacePreviewInfo {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  place: string
+  order: number
+  firstimage: string
+  mapx: number
+  mapy: number
+}
+
 interface PlaceItemProps {
   place: RecommendPlace
   index: number
-  originalPlaceName: string // 이전 장소의 이름을 위한 새로운 prop
+  originalPlace: PlacePreviewInfo | null // 변경된 부분
   onClick: (place: RecommendPlace) => void
   onFixClick: (
     place: RecommendPlace,
-    originalPlaceName: string,
+    originalPlace: PlacePreviewInfo | null,
   ) => Promise<void>
 }
 
@@ -36,28 +50,43 @@ const getContentTypeDescription = (contenttypeid: number | string): string => {
       return '기타'
   }
 }
+
 const IndoorPlaceItem: React.FC<PlaceItemProps> = ({
   place,
   index,
-  originalPlaceName,
+  originalPlace,
   onClick,
   onFixClick,
 }) => {
   const [showAlert, setShowAlert] = useState(false)
+  const [showIndoorPopUp2, setShowIndoorPopUp2] = useState(false)
   const cityName = getCityName(place.areacode, place.sigungucode)
+  const navigate = useNavigate()
+  const { futureAlerts } = useAlertStore()
 
   const handleFixButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation() // 이벤트 버블링 방지
+    e.stopPropagation()
     setShowAlert(true)
   }
 
   const handleConfirm = async () => {
     setShowAlert(false)
-    await onFixClick(place, originalPlaceName)
+    await onFixClick(place, originalPlace)
+
+    if (futureAlerts.length > 0) {
+      setShowIndoorPopUp2(true)
+    } else {
+      navigate('/calendar')
+    }
   }
 
   const handleCancel = () => {
     setShowAlert(false)
+  }
+
+  const handleCloseIndoorPopUp2 = () => {
+    setShowIndoorPopUp2(false)
+    navigate('/calendar')
   }
 
   return (
@@ -77,11 +106,14 @@ const IndoorPlaceItem: React.FC<PlaceItemProps> = ({
         <L.FixButton onClick={handleFixButtonClick}>변경</L.FixButton>
       </L.PlaceItem>
       {showAlert && (
-        <AlertPopUp2
-          message={`${originalPlaceName}를 ${place.place}로 변경하시겠습니까?`}
+        <AlertPopUp3
+          message={`${originalPlace?.place || '현재 장소'}를 ${place.place}로 변경하시겠습니까?`}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />
+      )}
+      {showIndoorPopUp2 && (
+        <IndoorAlertPopUp2 onClose={handleCloseIndoorPopUp2} />
       )}
     </>
   )

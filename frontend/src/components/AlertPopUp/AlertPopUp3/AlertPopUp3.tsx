@@ -1,15 +1,15 @@
 import React from 'react'
 
-import * as L from './AlertPopUp2.styles/AlerPopUp2.style' // 스타일 컴포넌트 임포트
+import * as L from './AlertPopUp3.styles/AlerPopUp3.style' // 스타일 컴포넌트 임포트
 
 // Props 타입 정의
-interface AlertPopUp2Props {
+interface AlertPopUp3Props {
   message: string
   onConfirm: () => void
   onCancel: () => void
 }
 
-const AlertPopUp2: React.FC<AlertPopUp2Props> = ({
+const AlertPopUp3: React.FC<AlertPopUp3Props> = ({
   message,
   onConfirm,
   onCancel,
@@ -34,4 +34,4 @@ const AlertPopUp2: React.FC<AlertPopUp2Props> = ({
   )
 }
 
-export default AlertPopUp2
+export default AlertPopUp3
