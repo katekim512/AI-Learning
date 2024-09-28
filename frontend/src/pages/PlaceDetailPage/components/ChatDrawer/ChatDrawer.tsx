@@ -8,10 +8,12 @@ import * as L from '../../styles/ChatDrawer.style'
 
 const ChatDrawer = ({
   contentid,
+  overview,
   isopen,
   onclose,
 }: {
   contentid: string
+  overview: string
   isopen: boolean
   onclose: () => void
 }) => {
@@ -46,7 +48,8 @@ const ChatDrawer = ({
     <L.DrawerContainer isopen={isopen}>
       <DrawerButton onClick={onclose} />
       <ChatMessages /> {/* 메시지 목록 컴포넌트 */}
-      <ChatInput contentid={contentid} /> {/* 사용자 입력 컴포넌트 */}
+      <ChatInput contentid={contentid} overview={overview} />
+      {/* 사용자 입력 컴포넌트 */}
     </L.DrawerContainer>
   )
 }

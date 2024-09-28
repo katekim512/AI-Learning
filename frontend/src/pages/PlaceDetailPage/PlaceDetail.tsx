@@ -321,6 +321,8 @@ const PlaceDetail = () => {
       {drawerOpen && (
         <ChatDrawer
           contentid={contentid!}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+          overview={placeDetail?.overview!}
           isopen={drawerOpen}
           onclose={handleChatButtonClick}
         />
