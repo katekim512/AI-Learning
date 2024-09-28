@@ -36,14 +36,14 @@ const ChatInput = ({ contentid }: { contentid: string }) => {
               Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-              model: 'gpt-3.5-turbo',
+              model: 'gpt-4o',
               messages: [
                 {
                   role: 'user',
-                  content: `${input} 한국어로 대답해주고, 반말로 아이가 쉽게 이해하도록 설명해줘! 친구처럼!`,
+                  content: `${input}이라는 질문에 답변해주면 돼. 역사적으로 사실이 맞는지 검증하고 대체적으로 대한민국 사람들이 인지하고 있는 정보로 답변해줘! 한국어로 대답해주고, 반말로 아이가 쉽게 이해하도록 설명해줘! 친구에게 설명해준다고 생각하고 답변을 작성해줘!`,
                 },
               ],
-              max_tokens: 200,
+              max_tokens: 1000,
             }),
           },
         )
