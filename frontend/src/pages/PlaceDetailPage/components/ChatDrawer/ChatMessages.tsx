@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react'
 
+import {
+  Dot,
+  DotsWrapper,
+} from '../../../../components/Loading/styles/Loading.style'
 import { useChatStore } from '../../../../stores/useChatStore'
 import * as L from '../../styles/ChatDrawer.style'
 
@@ -29,7 +33,15 @@ const ChatMessages = () => {
           <L.MessageText>{message.text}</L.MessageText>
         </L.MessageBubble>
       ))}
-      {isLoading && <L.LoadingBubble>로딩 중...</L.LoadingBubble>}
+      {isLoading && (
+        <L.LoadingBubble>
+          <DotsWrapper>
+            <Dot delay='0s' />
+            <Dot delay='0.4s' />
+            <Dot delay='0.8s' />
+          </DotsWrapper>
+        </L.LoadingBubble>
+      )}
       <div ref={messagesEndRef} />
     </L.MessagesContainer>
   )

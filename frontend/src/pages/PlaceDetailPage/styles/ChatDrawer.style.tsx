@@ -64,7 +64,7 @@ export const LoadingBubble = styled.div`
   align-self: flex-start;
   font-size: 14px;
   color: #777;
-  padding: 8px 12px;
+  padding: 12px 12px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
