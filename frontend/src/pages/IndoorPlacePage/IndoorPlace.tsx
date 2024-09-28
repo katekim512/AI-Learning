@@ -109,17 +109,17 @@ const IndoorPlace: React.FC = () => {
     fetchData()
   }, [token, date, contentid, setDaySchedule])
 
-  const findOriginalPlaceName = () => {
+  const findOriginalPlace = () => {
     if (!daySchedule || !daySchedule.info || !contentid) {
       console.log('daySchedule or contentid is null/undefined', {
         daySchedule,
         contentid,
       })
-      return ''
+      return null
     }
 
     const originalPlace = daySchedule.info.find(
-      place => place.contentid && place.contentid.toString() === contentid,
+      place => place.contentid && place.contentid === Number(contentid),
     )
 
     if (!originalPlace) {
@@ -127,10 +127,10 @@ const IndoorPlace: React.FC = () => {
         contentid,
         dayScheduleInfo: daySchedule.info,
       })
-      return ''
+      return null
     }
 
-    return originalPlace.place || ''
+    return originalPlace
   }
 
   const fetchPlaces = async () => {
@@ -161,7 +161,7 @@ const IndoorPlace: React.FC = () => {
 
   const handleFixButtonClick = async (
     newPlace: RecommendPlace,
-    originalPlaceName: string,
+    originalPlace: PlacePreviewInfo | null,
   ) => {
     if (!date || !daySchedule || !contentid) {
       console.error('Date, day schedule, or contentid is null or undefined.')
@@ -189,7 +189,9 @@ const IndoorPlace: React.FC = () => {
 
     try {
       const indexToReplace = daySchedule.info.findIndex(
-        place => place.contentid && place.contentid.toString() === contentid,
+        place =>
+          place.contentid &&
+          place.contentid.toString() === contentid.toString(),
       )
 
       if (indexToReplace === -1) {
@@ -222,20 +224,8 @@ const IndoorPlace: React.FC = () => {
 
       if (response && response.data) {
         console.log(
-          `장소가 ${originalPlaceName}에서 ${newPlace.place}로 변경되었습니다.`,
+          `장소가 ${originalPlace?.place || '원래 장소'}에서 ${newPlace.place}로 변경되었습니다.`,
         )
-
-        // // Zustand 스토어 업데이트
-        // const updatedFutureAlerts = futureAlerts.filter(
-        //   alert => alert.contentid !== Number(contentid),
-        // )
-        // setFutureAlerts(updatedFutureAlerts)
-
-        // // 업데이트된 Zustand 스토어의 futureAlerts 값을 콘솔에 출력
-        // console.log(
-        //   'Updated Zustand futureAlerts:',
-        //   useAlertStore.getState().futureAlerts,
-        // )
 
         navigate('/calendar', {
           state: {
@@ -357,7 +347,7 @@ const IndoorPlace: React.FC = () => {
                     key={place.contentid}
                     place={place}
                     index={index}
-                    originalPlaceName={findOriginalPlaceName()}
+                    originalPlace={findOriginalPlace()}
                     onClick={handleClick}
                     onFixClick={handleFixButtonClick}
                   />
@@ -375,7 +365,7 @@ const IndoorPlace: React.FC = () => {
                       key={place.contentid || index}
                       place={place}
                       index={index}
-                      originalPlaceName={findOriginalPlaceName()}
+                      originalPlace={findOriginalPlace()}
                       onClick={handleClick}
                       onFixClick={handleFixButtonClick}
                     />

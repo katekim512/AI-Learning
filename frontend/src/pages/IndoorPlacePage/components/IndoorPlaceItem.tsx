@@ -15,14 +15,26 @@ interface RecommendPlace {
   firstimage: string
 }
 
+interface PlacePreviewInfo {
+  contentid: number
+  contenttypeid: number
+  areacode: number
+  sigungucode: number
+  place: string
+  order: number
+  firstimage: string
+  mapx: number
+  mapy: number
+}
+
 interface PlaceItemProps {
   place: RecommendPlace
   index: number
-  originalPlaceName: string // 이전 장소의 이름을 위한 새로운 prop
+  originalPlace: PlacePreviewInfo | null // 변경된 부분
   onClick: (place: RecommendPlace) => void
   onFixClick: (
     place: RecommendPlace,
-    originalPlaceName: string,
+    originalPlace: PlacePreviewInfo | null,
   ) => Promise<void>
 }
 
@@ -38,10 +50,11 @@ const getContentTypeDescription = (contenttypeid: number | string): string => {
       return '기타'
   }
 }
+
 const IndoorPlaceItem: React.FC<PlaceItemProps> = ({
   place,
   index,
-  originalPlaceName,
+  originalPlace,
   onClick,
   onFixClick,
 }) => {
@@ -58,7 +71,7 @@ const IndoorPlaceItem: React.FC<PlaceItemProps> = ({
 
   const handleConfirm = async () => {
     setShowAlert(false)
-    await onFixClick(place, originalPlaceName)
+    await onFixClick(place, originalPlace)
 
     if (futureAlerts.length > 0) {
       setShowIndoorPopUp2(true)
@@ -94,7 +107,7 @@ const IndoorPlaceItem: React.FC<PlaceItemProps> = ({
       </L.PlaceItem>
       {showAlert && (
         <AlertPopUp3
-          message={`${originalPlaceName}를 ${place.place}로 변경하시겠습니까?`}
+          message={`${originalPlace?.place || '현재 장소'}를 ${place.place}로 변경하시겠습니까?`}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />
