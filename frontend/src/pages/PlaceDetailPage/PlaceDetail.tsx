@@ -1,21 +1,25 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 
+import AccomodationList from './components/AccomodationList'
 import ChatDrawer from './components/ChatDrawer/ChatDrawer'
-import ContentType12 from './components/ContentType12'
-import ContentType14 from './components/ContentType14'
-import ContentType15 from './components/ContentType15'
+import ContentType12 from './components/ContentType/ContentType12'
+import ContentType14 from './components/ContentType/ContentType14'
+import ContentType15 from './components/ContentType/ContentType15'
 import MiddleMenuBar from './components/MiddleMenuBar'
 import PlaceMap from './components/PlaceMap'
+import RestaurantList from './components/RestaurantList'
 import * as L from './styles/PlaceDetail.style'
 import { postAddVisited } from '../../api/calendar/postAddVisited'
 import { postLike } from '../../api/calendar/postLike'
 import { postPlaceLike } from '../../api/calendar/postPlaceLike'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
+import useLockBodyScroll from '../../hooks/useLockBodyScroll'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
 import { getCityName } from '../../style/CityMapper'
@@ -163,8 +167,10 @@ const PlaceDetail = () => {
   const handleChatButtonClick = () => {
     if (drawerOpen) {
       setDrawerOpen(false)
+      useLockBodyScroll(false)
     } else {
       setDrawerOpen(true)
+      useLockBodyScroll(true)
     }
   }
 
@@ -286,6 +292,19 @@ const PlaceDetail = () => {
           {Number(contenttypeid) === 15 && (
             <ContentType15 contentid={contentid!} />
           )}
+          {placeDetail && (
+            <>
+              <AccomodationList
+                areacode={placeDetail.areacode!}
+                sigungucode={placeDetail.sigungucode!}
+              />
+              <RestaurantList
+                areacode={placeDetail.areacode!}
+                sigungucode={placeDetail.sigungucode!}
+              />
+            </>
+          )}
+          <br></br>
         </L.OverviewContainer>
         <L.ChatButton onClick={handleChatButtonClick}>
           <Icon
