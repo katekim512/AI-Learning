@@ -5,6 +5,7 @@ import IndoorAlertPopUp from './components/AlertPopUp/IndoorAlertPopUp/IndoorAle
 import AISchedule1 from './pages/AISchedule1Page/AISchedule1'
 import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
+import Alert from './pages/AlertPage/Alert'
 import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <Profile />,
+      },
+      {
+        path: 'alert',
+        element: <Alert />,
       },
       {
         path: 'eachlevel/:level',
