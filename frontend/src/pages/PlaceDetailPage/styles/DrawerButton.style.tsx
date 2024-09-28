@@ -13,6 +13,7 @@ export const StyledIcon = styled.div`
   font-size: 2rem;
   display: flex;
   justify-content: center;
+  margin-top: 0.3rem;
   align-items: center;
   transform: rotate(180deg);
   transition: transform 0.3s ease;

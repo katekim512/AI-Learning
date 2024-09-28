@@ -1,4 +1,3 @@
-import calendarIcon from '@iconify/icons-mdi/calendar'
 import { Icon } from '@iconify/react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -161,7 +160,7 @@ const AISchedule1: React.FC = () => {
               {startDate || 'Select Start Date'}
             </S.DateButton>
             <Icon
-              icon={calendarIcon}
+              icon='mdi:calendar'
               onClick={() => handleCalendarIconClick('start')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
@@ -170,7 +169,7 @@ const AISchedule1: React.FC = () => {
               {endDate || 'Select End Date'}
             </S.DateButton>
             <Icon
-              icon={calendarIcon}
+              icon='mdi:calendar'
               onClick={() => handleCalendarIconClick('end')}
               style={{ cursor: 'pointer', marginLeft: '10px' }}
             />
@@ -181,7 +180,7 @@ const AISchedule1: React.FC = () => {
           <S.Label>
             어느 주기로{' '}
             <Icon
-              icon={calendarIcon}
+              icon='mdi:calendar'
               style={{ cursor: 'pointer' }}
               onClick={() => handleCalendarIconClick2()}
             />

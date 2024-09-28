@@ -1,7 +1,3 @@
-import calendarIcon from '@iconify/icons-heroicons/calendar-solid'
-import profileIcon from '@iconify/icons-heroicons/user-20-solid'
-import rankingIcon from '@iconify/icons-icon-park-solid/five-star-badge'
-import recommendationIcon from '@iconify/icons-majesticons/map-marker-area'
 import { Icon } from '@iconify/react'
 import React, { useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
@@ -11,25 +7,25 @@ import { useMenuStore } from '../../stores/useBottomMenuStore'
 
 const icons = [
   {
-    icon: calendarIcon,
+    icon: 'heroicons-solid:calendar',
     path: '/calendar',
     alt: '캘린더',
     label: '캘린더',
   },
   {
-    icon: recommendationIcon,
+    icon: 'majesticons:map-marker-area',
     path: '/recommend-place',
     alt: '장소추천',
     label: '장소추천',
   },
   {
-    icon: rankingIcon,
+    icon: 'icon-park-solid:five-star-badge',
     path: '/ranking-place',
     alt: '순위',
     label: '순위',
   },
   {
-    icon: profileIcon,
+    icon: 'heroicons-solid:user',
     path: '/profile',
     alt: '프로필',
     label: '프로필',
@@ -65,4 +61,5 @@ const BottomNav: React.FC = () => {
     </MenuBar>
   )
 }
+
 export default BottomNav

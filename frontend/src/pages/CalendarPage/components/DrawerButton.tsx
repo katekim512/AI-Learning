@@ -1,4 +1,3 @@
-import arrowUp from '@iconify/icons-iconamoon/arrow-up-2-thin'
 import { Icon } from '@iconify/react'
 import PropTypes from 'prop-types'
 
@@ -16,7 +15,7 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
   return (
     <StyledButton onClick={onToggleHeight}>
       <StyledIcon isRotated={isRotated}>
-        <Icon icon={arrowUp} />
+        <Icon icon='oui:arrow-up' style={{ color: 'black', height: '24px' }} />
       </StyledIcon>
     </StyledButton>
   )
