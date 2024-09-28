@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import App from './App'
+import IndoorAlertPopUp from './components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import AISchedule1 from './pages/AISchedule1Page/AISchedule1'
 import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
@@ -55,6 +56,12 @@ const router = createBrowserRouter([
       {
         path: 'calendar',
         element: <Calendar />,
+      },
+      {
+        path: 'indoorAlertPopUp',
+        element: (
+          <IndoorAlertPopUp message='실내 알림 메시지' onClose={() => {}} />
+        ),
       },
       {
         path: 'addplace/:date',
