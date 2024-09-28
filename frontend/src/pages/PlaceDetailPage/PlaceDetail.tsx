@@ -21,6 +21,7 @@ import { postPlaceLike } from '../../api/calendar/postPlaceLike'
 import BackButton from '../../components/BackButton/BackButton'
 import useLikeList from '../../hooks/useLikeList'
 import useLockBodyScroll from '../../hooks/useLockBodyScroll'
+import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
 import { getCityName } from '../../style/CityMapper'
@@ -49,6 +50,7 @@ const PlaceDetail = () => {
   const [likeInfo, setLikeInfo] = useState<number>(0)
   const { likeList, refetch: refetchLikeList } = useLikeList()
   const [isLiked, setIsLiked] = useState<boolean>(false)
+  const { refetch: refetchUser } = useUser()
   const { visitedList, refetch: refetchVisitedList } = useVisitedList()
   const [isVisited, setIsVisited] = useState<boolean>(false)
   const [showMap, setShowMap] = useState<boolean>(false)
@@ -157,6 +159,7 @@ const PlaceDetail = () => {
     try {
       await postAddVisited(token, Number(contentid))
       await refetchVisitedList()
+      await refetchUser()
       setIsVisited(!isVisited)
     } catch (error) {
       console.error('Error toggling visited:', error)
