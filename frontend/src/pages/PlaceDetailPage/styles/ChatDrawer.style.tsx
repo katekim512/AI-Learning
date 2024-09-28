@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const DrawerContainer = styled.div<{ isOpen: boolean }>`
+export const DrawerContainer = styled.div<{ isopen: boolean }>`
   width: 100%;
   max-width: 400px;
   height: calc(100vh - 5rem);
@@ -11,7 +11,7 @@ export const DrawerContainer = styled.div<{ isOpen: boolean }>`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   transition: transform 0.4s ease-in-out;
-  transform: translateY(${props => (props.isOpen ? '0' : '100%')});
+  transform: translateY(${props => (props.isopen ? '0' : '100%')});
   z-index: 1000;
   will-change: transform;
 `
@@ -64,7 +64,7 @@ export const LoadingBubble = styled.div`
   align-self: flex-start;
   font-size: 14px;
   color: #777;
-  padding: 8px 12px;
+  padding: 12px 12px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);

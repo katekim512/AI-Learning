@@ -3,9 +3,15 @@ import { useState } from 'react'
 import { useChatStore } from '../../../../stores/useChatStore'
 import * as L from '../../styles/ChatDrawer.style'
 
-const ChatInput = ({ contentid }: { contentid: string }) => {
+const ChatInput = ({
+  contentid,
+  overview,
+}: {
+  contentid: string
+  overview: string
+}) => {
   const [input, setInput] = useState('')
-  const { addMessage, setLoading } = useChatStore()
+  const { addMessage, setLoading, chatHistories } = useChatStore()
 
   const handleSendMessage = async () => {
     if (!input.trim()) return
@@ -26,7 +32,20 @@ const ChatInput = ({ contentid }: { contentid: string }) => {
 
     const fetchChatGPTResponse = async (retryCount = 3): Promise<void> => {
       try {
-        // ChatGPT API 호출
+        const previousMessages = chatHistories[contentid] || []
+
+        // 기존 대화 내역을 ChatGPT API 메시지 형식에 맞게 변환
+        const messagesForGPT = previousMessages.map(message => ({
+          role: message.sender === 'user' ? 'user' : 'assistant',
+          content: message.text,
+        }))
+
+        // 사용자의 현재 입력 추가
+        messagesForGPT.push({
+          role: 'user',
+          content: `너는 다음 장소에 대한 전문가로 해당 장소와 관련된 질문에 답변해주는 챗봇 아링이야! ${overview} 장소에 대한 설명 이해했으면, ${input}이라는 질문에 답변해주면 돼. 역사적으로 사실이 맞는지 검증하고 대체적으로 대한민국 사람들이 인지하고 있는 정보로 한국어로 답변해줘! 반말로 아이가 쉽게 이해할 수 있게 설명해줘! 근데 ${input} <- 이 질문이 해당 장소와 큰 연관이 없거나 쓸데없는 질문인 경우 다른 질문 해달라고 해줘!`,
+        })
+
         const response = await fetch(
           'https://api.openai.com/v1/chat/completions',
           {
@@ -36,14 +55,9 @@ const ChatInput = ({ contentid }: { contentid: string }) => {
               Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-              model: 'gpt-3.5-turbo',
-              messages: [
-                {
-                  role: 'user',
-                  content: `${input} 한국어로 대답해주고, 반말로 아이가 쉽게 이해하도록 설명해줘! 친구처럼!`,
-                },
-              ],
-              max_tokens: 200,
+              model: 'gpt-4',
+              messages: messagesForGPT,
+              max_tokens: 1000,
             }),
           },
         )

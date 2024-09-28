@@ -59,6 +59,8 @@ const PlaceDetail = () => {
   const menubarRef = useRef<HTMLDivElement>(null)
   const [menuButtonWidth, setMenuButtonWidth] = useState<number>(0)
 
+  useLockBodyScroll(drawerOpen)
+
   useEffect(() => {
     if (menubarRef.current) {
       const menubarWidth = menubarRef.current.offsetWidth
@@ -166,13 +168,7 @@ const PlaceDetail = () => {
   }
 
   const handleChatButtonClick = () => {
-    if (drawerOpen) {
-      setDrawerOpen(false)
-      useLockBodyScroll(false)
-    } else {
-      setDrawerOpen(true)
-      useLockBodyScroll(true)
-    }
+    setDrawerOpen(!drawerOpen)
   }
 
   const getContentTypeText = (contenttypeid: number) => {
@@ -295,7 +291,10 @@ const PlaceDetail = () => {
           )}
           {placeDetail && (
             <>
-              <StudyPlan title={placeDetail.title} />
+              <StudyPlan
+                title={placeDetail.title}
+                overview={placeDetail.overview}
+              />
               <AccomodationList
                 areacode={placeDetail.areacode!}
                 sigungucode={placeDetail.sigungucode!}
@@ -322,8 +321,10 @@ const PlaceDetail = () => {
       {drawerOpen && (
         <ChatDrawer
           contentid={contentid!}
-          isOpen={drawerOpen}
-          onClose={handleChatButtonClick}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+          overview={placeDetail?.overview!}
+          isopen={drawerOpen}
+          onclose={handleChatButtonClick}
         />
       )}
     </>
