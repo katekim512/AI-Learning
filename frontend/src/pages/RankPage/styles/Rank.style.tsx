@@ -33,7 +33,7 @@ export const PlacesContainer = styled.main`
 
 export const PlaceCardContainer = styled.div<{ selected: boolean }>`
   width: 20%;
-  height: 11%;
+  height: 10%;
   aspect-ratio: 1;
   background-color: ${props => (props.selected ? '#b3d8c3' : '#eeeeee;')};
   border-radius: 10px;
