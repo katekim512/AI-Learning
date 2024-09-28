@@ -59,6 +59,8 @@ const PlaceDetail = () => {
   const menubarRef = useRef<HTMLDivElement>(null)
   const [menuButtonWidth, setMenuButtonWidth] = useState<number>(0)
 
+  useLockBodyScroll(drawerOpen)
+
   useEffect(() => {
     if (menubarRef.current) {
       const menubarWidth = menubarRef.current.offsetWidth
@@ -166,13 +168,7 @@ const PlaceDetail = () => {
   }
 
   const handleChatButtonClick = () => {
-    if (drawerOpen) {
-      setDrawerOpen(false)
-      useLockBodyScroll(false)
-    } else {
-      setDrawerOpen(true)
-      useLockBodyScroll(true)
-    }
+    setDrawerOpen(!drawerOpen)
   }
 
   const getContentTypeText = (contenttypeid: number) => {
