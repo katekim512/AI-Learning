@@ -25,18 +25,24 @@ export const ModalContainer = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
+  top: 7px;
   right: 10px;
   background: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
 `
 
 export const Message = styled.p`
-  margin-bottom: 7px;
+  margin-bottom: 10px;
   font-size: 16px;
   font-weight: bold;
+  color: #333;
+  text-align: left;
+`
+export const SmallMessage = styled.p`
+  margin-bottom: 20px;
+  font-size: 12px;
   color: #333;
   text-align: left;
 `
@@ -46,7 +52,7 @@ export const LocationContainer = styled.div`
   flex-direction: column; // 세로 방향으로 아이템 배치
   justify-content: center; // 세로 방향 중앙 정렬
   align-items: center; // 가로 방향 중앙 정렬
-  margin: 20px 0;
+  margin: 10px 0;
   width: 100%;
   border-radius: 10px;
   background-color: transparent;
@@ -70,4 +76,27 @@ export const NavigateButton = styled.button`
   &:hover {
     background-color: #4e67e0;
   }
+`
+export const DateGroup = styled.div`
+  margin: 15px 0px;
+`
+
+export const DateHeader = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 7px;
+`
+
+export const DateText = styled.span`
+  font-weight: bold;
+  margin-right: 5px;
+  color: #525fd4;
+  font-size: 16px;
+`
+
+export const WeatherText = styled.span`
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
 `

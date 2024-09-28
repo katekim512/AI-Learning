@@ -4,61 +4,74 @@ import { useNavigate } from 'react-router-dom'
 import ChangePlaceItem from './components/ChangePlaceItem'
 import * as L from './styles/IndoorAlertPopUp.style'
 import { AlertPlace } from '../../../api/profile/getAlertList'
-import authToken from '../../../stores/authToken'
 
 // Props 타입 정의
 interface AlertPopUp1Props {
-  message: string
-  onClose: () => void // X 버튼 클릭 시 팝업 닫기
+  alertPlaces: AlertPlace[]
+  onClose: () => void
 }
 
-const IndoorAlertPopUp: React.FC<AlertPopUp1Props> = ({ message, onClose }) => {
+const IndoorAlertPopUp: React.FC<AlertPopUp1Props> = ({
+  alertPlaces,
+  onClose,
+}) => {
   const navigate = useNavigate()
+  const [groupedAlerts, setGroupedAlerts] = useState<{
+    [key: string]: AlertPlace[]
+  }>({})
+  //   const token = authToken.getAccessToken()
 
-  const [places, setPlaces] = useState<AlertPlace[]>([])
-  const token = authToken.getAccessToken()
-  const dummyData: AlertPlace[] = [
-    {
-      date: '2023-06-15',
-      weather: 1,
-      contentid: 12345,
-      place: '서울 롯데월드',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 12,
-      areacode: 1,
-      sigungucode: 1,
-    },
-    {
-      date: '2023-06-16',
-      weather: 2,
-      contentid: 67890,
-      place: '부산 해운대 아쿠아리움',
-      firstimage: '/img/default_pic.png',
-      contenttypeid: 14,
-      areacode: 6,
-      sigungucode: 2,
-    },
-  ]
-  //API 이용-------
-  //   useEffect(() => {
-  //     const fetchPlaces = async () => {
-  //       try {
-  //         const response = await getRecentPlace(token)
-  //         if (response && response.data) {
-  //           setPlaces(response.data)
-  //         }
-  //       } catch (error) {
-  //         console.error('장소 데이터를 가져오는 데 실패했습니다:', error)
-  //       }
-  //     }
+  const getDateDifference = (dateString: string) => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const alertDate = new Date(dateString)
+    alertDate.setHours(0, 0, 0, 0)
+    const diffTime = alertDate.getTime() - today.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-  //     fetchPlaces()
-  //   }, [])
+    if (diffDays === 0) return '오늘'
+    if (diffDays === 1) return '내일'
+    if (diffDays === 2) return '모레'
+    if (diffDays > 2 && diffDays <= 7) return `${diffDays}일 뒤에`
+    return `${alertDate.getMonth() + 1}월 ${alertDate.getDate()}일`
+  }
+
+  const getWeatherText = (weather: number) => {
+    switch (weather) {
+      case 1:
+        return '비가'
+      case 2:
+        return '비/눈이'
+      case 3:
+        return '눈이'
+      case 4:
+        return '소나기가'
+      default:
+        return '날씨 변화가'
+    }
+  }
 
   //더미데이터 이용-----
   useEffect(() => {
-    setPlaces(dummyData)
-  }, [token])
+    // 오늘 날짜와 이후의 모든 알림 찾기
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const filteredAndGroupedAlerts = alertPlaces
+      .filter(alert => new Date(alert.date) >= today)
+      .reduce(
+        (acc, alert) => {
+          if (!acc[alert.date]) {
+            acc[alert.date] = []
+          }
+          acc[alert.date].push(alert)
+          return acc
+        },
+        {} as { [key: string]: AlertPlace[] },
+      )
+
+    setGroupedAlerts(filteredAndGroupedAlerts)
+  }, [alertPlaces])
 
   const handleClick = (place: AlertPlace) => {
     // IndoorPlace 페이지로 이동
@@ -71,30 +84,40 @@ const IndoorAlertPopUp: React.FC<AlertPopUp1Props> = ({ message, onClose }) => {
     })
   }
 
-  const handleNavigate = () => {
-    navigate('/IndoorPlace')
+  if (Object.keys(groupedAlerts).length === 0) {
+    return null // 표시할 알림이 없으면 아무것도 렌더링하지 않음
+  }
+
+  const handleClose = () => {
+    onClose()
   }
 
   return (
     <L.Overlay>
       <L.ModalContainer>
-        <L.CloseButton onClick={onClose}>×</L.CloseButton> {/* X 버튼 */}
-        <L.Message>{message}</L.Message>
-        <L.Message>예정된 일정을 변경해볼까요?</L.Message>
-        <L.LocationContainer>
-          <L.LocationInfo>
-            {places.map(place => (
-              <ChangePlaceItem
-                key={place.contentid}
-                place={place}
-                onClick={() => handleClick(place)}
-              />
-            ))}
-          </L.LocationInfo>
-        </L.LocationContainer>
-        <L.NavigateButton onClick={handleNavigate}>
-          실내장소 보러가기
-        </L.NavigateButton>
+        <L.CloseButton onClick={handleClose}>×</L.CloseButton>
+        <L.Message>예정된 일정들을 변경해볼까요?</L.Message>
+        <L.SmallMessage>변경하고 싶은 일정을 선택해보세요!</L.SmallMessage>
+        {Object.entries(groupedAlerts).map(([date, alerts]) => (
+          <L.DateGroup key={date}>
+            <L.DateHeader>
+              <L.DateText>{getDateDifference(date)}</L.DateText>
+              <L.WeatherText>
+                {getWeatherText(alerts[0].weather)} 올 예정이에요
+              </L.WeatherText>
+            </L.DateHeader>
+            <L.LocationContainer>
+              {alerts.map(alert => (
+                <L.LocationInfo key={alert.contentid}>
+                  <ChangePlaceItem
+                    place={alert}
+                    onClick={() => handleClick(alert)}
+                  />
+                </L.LocationInfo>
+              ))}
+            </L.LocationContainer>
+          </L.DateGroup>
+        ))}
       </L.ModalContainer>
     </L.Overlay>
   )

@@ -5,14 +5,19 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
+import { getRecentPlace, AlertPlace } from '../../api/profile/getAlertList'
+import IndoorAlertPopUp from '../../components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
+import authToken from '../../stores/authToken'
 
 const Calendar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
+  const [showPopup, setShowPopup] = useState(false)
+  const [alertPlaces, setAlertPlaces] = useState<AlertPlace[]>([])
 
   const { refetch: refetchUser } = useUser()
   const { refetch: refetchLikeList } = useLikeList()
@@ -23,6 +28,114 @@ const Calendar = () => {
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
+
+  // 더미 데이터는 그대로 유지
+  const dummyData: AlertPlace[] = [
+    {
+      date: '2024-09-25',
+      weather: 1,
+      contentid: 126508,
+      place: '경복궁',
+      firstimage: '/img/default_pic.png',
+      contenttypeid: 12,
+      areacode: 1,
+      sigungucode: 1,
+    },
+    {
+      date: '2024-09-26',
+      weather: 3,
+      contentid: 67890,
+      place: '남산타워',
+      firstimage: '/img/default_pic.png',
+      contenttypeid: 14,
+      areacode: 1,
+      sigungucode: 2,
+    },
+    {
+      date: '2024-09-29',
+      weather: 4,
+      contentid: 13579,
+      place: '롯데월드',
+      firstimage: '/img/default_pic.png',
+      contenttypeid: 15,
+      areacode: 1,
+      sigungucode: 3,
+    },
+    {
+      date: '2024-09-30',
+      weather: 2,
+      contentid: 246810,
+      place: '서울숲',
+      firstimage: '/img/default_pic.png',
+      contenttypeid: 16,
+      areacode: 1,
+      sigungucode: 4,
+    },
+    {
+      date: '2024-09-30',
+      weather: 2,
+      contentid: 246810,
+      place: '건대입구',
+      firstimage: '/img/default_pic.png',
+      contenttypeid: 16,
+      areacode: 1,
+      sigungucode: 4,
+    },
+  ]
+  //API 이용-------
+  useEffect(() => {
+    const fetchAlertPlaces = async () => {
+      const token = authToken.getAccessToken()
+      try {
+        const response = await getRecentPlace(token)
+        if (response && response.data) {
+          const today = new Date()
+          today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
+
+          const futureAlerts = response.data.filter((place: AlertPlace) => {
+            const placeDate = new Date(place.date)
+            return placeDate >= today
+          })
+
+          setAlertPlaces(futureAlerts)
+
+          if (futureAlerts.length > 0) {
+            setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+          }
+        }
+      } catch (error) {
+        console.error('알림 장소 가져오기 실패:', error)
+      }
+    }
+
+    fetchAlertPlaces()
+  }, [])
+
+  //더미데이트 이용
+  useEffect(() => {
+    const fetchAlertPlaces = async () => {
+      try {
+        const response = dummyData
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
+
+        const futureAlerts = response.filter((place: AlertPlace) => {
+          const placeDate = new Date(place.date)
+          return placeDate >= today
+        })
+
+        setAlertPlaces(futureAlerts)
+
+        if (futureAlerts.length > 0) {
+          setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+        }
+      } catch (error) {
+        console.error('알림 장소 가져오기 실패:', error)
+      }
+    }
+
+    fetchAlertPlaces()
+  }, [])
 
   // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
   useEffect(() => {
@@ -121,6 +234,10 @@ const Calendar = () => {
     delta: 10,
   })
 
+  const handleClosePopup = () => {
+    setShowPopup(false)
+  }
+
   return (
     <>
       <div {...handlers}>
@@ -152,6 +269,12 @@ const Calendar = () => {
           selectedDate={selectedDate}
         />
       </div>
+      {showPopup && (
+        <IndoorAlertPopUp
+          alertPlaces={alertPlaces}
+          onClose={handleClosePopup}
+        />
+      )}
     </>
   )
 }
