@@ -59,7 +59,8 @@ export const Button1 = styled.button`
   padding-right: 15px;
   font-size: 15px;
   cursor: pointer;
-  border-right: 0.5px solid #525fd4;
+  border-right: 1px solid #525fd4;
+  color: black;
 `
 
 export const Button2 = styled.button`
@@ -71,5 +72,6 @@ export const Button2 = styled.button`
   padding-left: 15px;
   font-size: 15px;
   cursor: pointer;
-  border-left: 0.5px solid #525fd4;
+  border-left: 0px solid #525fd4;
+  color: black;
 `

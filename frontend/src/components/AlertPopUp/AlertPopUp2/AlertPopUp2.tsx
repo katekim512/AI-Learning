@@ -24,7 +24,7 @@ const AlertPopUp2: React.FC<AlertPopUp2Props> = ({
           <L.Divider />
           <L.ButtonContainer>
             <L.Button1 className='no' onClick={onCancel}>
-              아니요
+              아니오
             </L.Button1>
             <L.Button2 onClick={onConfirm}>네</L.Button2>
           </L.ButtonContainer>
