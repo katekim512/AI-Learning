@@ -16,7 +16,7 @@ export const Overlay = styled.div`
 export const ModalContainer = styled.div`
   background-color: white;
   border-radius: 10px; /* 둥근 모서리 */
-  width: 300px;
+  width: 80%;
   padding: 20px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -43,34 +43,18 @@ export const Message = styled.p`
 
 export const LocationContainer = styled.div`
   display: flex;
+  flex-direction: column; // 세로 방향으로 아이템 배치
+  justify-content: center; // 세로 방향 중앙 정렬
+  align-items: center; // 가로 방향 중앙 정렬
   margin: 20px 0;
-  padding: 10px;
+  width: 100%;
   border-radius: 10px;
-  background-color: #f5f5f5;
-  align-items: center;
-`
-
-export const LocationImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
-  margin-right: 10px;
+  background-color: transparent;
 `
 
 export const LocationInfo = styled.div`
-  text-align: left;
-`
-
-export const LocationName = styled.p`
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-`
-
-export const LocationDescription = styled.p`
-  font-size: 12px;
-  color: #666;
-  margin: 0;
+  text-align: center;
+  width: 100%;
 `
 
 export const NavigateButton = styled.button`

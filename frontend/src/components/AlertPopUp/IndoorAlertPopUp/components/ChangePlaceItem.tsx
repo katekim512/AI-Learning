@@ -36,16 +36,16 @@ const ChangePlaceItem: React.FC<PlaceItemProps> = ({ place, onClick }) => {
 
   return (
     <L.PlaceItem key={place.contentid} onClick={() => onClick(place.contentid)}>
-      <L.PlaceImage
-        src={place.firstimage || '/img/default_pic.png'}
-        alt={place.place}
-      />
       <L.PlaceInfo>
         <L.PlaceName>{place.place}</L.PlaceName>
         <L.PlaceDescription>
           {`${cityName} · ${getContentTypeDescription(place.contenttypeid)}`}
         </L.PlaceDescription>
       </L.PlaceInfo>
+      <L.PlaceImage
+        src={place.firstimage || '/img/default_pic.png'}
+        alt={place.place}
+      />
     </L.PlaceItem>
   )
 }
