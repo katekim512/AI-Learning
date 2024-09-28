@@ -74,6 +74,23 @@ const ChangeInfo = () => {
               </option>
             ))}
           </L.Select>
+          <L.Label>사는 곳</L.Label>
+          <L.Select
+            name='year'
+            id='year'
+            value={userInfo?.birth}
+            onChange={handleSelectChange}
+            required
+          >
+            <option value='' disabled>
+              출생연도
+            </option>
+            {years.map(year => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </L.Select>
         </L.InputWrapper>
         <L.BottomButton onClick={handleComplete}>완료</L.BottomButton>
       </L.Container>
