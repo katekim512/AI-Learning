@@ -24,6 +24,13 @@ const icons = [
     alt: '순위',
     label: '순위',
   },
+
+  {
+    icon: 'fluent:people-chat-16-filled',
+    path: '/guide',
+    alt: '가이드',
+    label: '가이드',
+  },
   {
     icon: 'heroicons-solid:user',
     path: '/profile',
