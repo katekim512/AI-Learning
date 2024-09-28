@@ -5,7 +5,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { checkEmail } from '../../../api/auth/postCheckEmail'
 import { checkNickname } from '../../../api/auth/postCheckNickname'
 import { register } from '../../../api/auth/postRegister'
-import { cities } from '../styles/City.list'
+import {
+  getAreaNames,
+  getSigunguByAreacode,
+  Sigungu,
+} from '../../../datas/RegisterCityMapper'
 import * as L from '../styles/Register.style'
 
 const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
@@ -19,7 +23,8 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     email: accessToken ? emailFromKakao : '',
     nickname: '',
     year: 2024,
-    city: '',
+    areacode: 0,
+    sigungucode: 0,
     password: '',
     checkedPassword: '',
   })
@@ -46,6 +51,10 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     { length: currentYear - startYear + 1 },
     (_, i) => currentYear - i,
   )
+
+  const [selectedArea, setSelectedArea] = useState('') // 선택한 지역
+  const [selectedSigungu, setSelectedSigungu] = useState('') // 선택한 시군구
+  const [sigunguList, setSigunguList] = useState<Sigungu[]>([]) // 해당 지역의 시군구 목록
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -161,6 +170,42 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     }
   }, [signupForm.password, signupForm.checkedPassword])
 
+  // 지역 선택 핸들러
+  const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedAreaname = e.target.value
+    setSelectedArea(selectedAreaname) // 선택한 지역을 상태로 설정
+    const sigungus = getSigunguByAreacode(selectedAreaname) // 시군구 목록 가져오기
+    setSigunguList(sigungus) // 해당 시군구 목록 설정
+
+    // 시군구 선택 초기화
+    setSelectedSigungu('')
+
+    // 선택한 지역의 첫 번째 시군구를 기본값으로 설정 (필요한 경우)
+    if (sigungus.length > 0) {
+      setSignupForm({
+        ...signupForm,
+        areacode: sigungus[0].areacode, // 선택한 지역의 areacode 설정
+        sigungucode: 0, // 시군구 선택을 초기화
+      })
+    }
+  }
+
+  // 시군구 선택 핸들러
+  const handleSigunguChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSigunguName = e.target.value
+    setSelectedSigungu(selectedSigunguName)
+
+    const selectedSigungu = sigunguList.find(
+      sigungu => sigungu.sigunguname === selectedSigunguName,
+    )
+    if (selectedSigungu) {
+      setSignupForm({
+        ...signupForm,
+        sigungucode: selectedSigungu.sigungucode, // 선택한 시군구의 sigungucode 설정
+      })
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -170,9 +215,12 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
         signupForm.nickname,
         signupForm.password,
         signupForm.year,
-        signupForm.city,
+        signupForm.areacode,
+        signupForm.sigungucode,
         accessToken,
       )
+
+      console.log(signupForm.areacode)
 
       if (registerResult) {
         // setOpenModal(true)
@@ -255,24 +303,39 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
         </L.Select>
       </L.InputWrapper>
       <L.InputWrapper>
-        <L.Label>사는 곳</L.Label>
+        <L.Label>사는 지역</L.Label>
         <L.Select
-          name='city'
-          id='city'
-          value={signupForm.city}
-          onChange={handleSelectChange}
+          name='area'
+          value={selectedArea}
+          onChange={handleAreaChange}
           required
         >
           <option value='' disabled>
-            도시
+            지역 선택
           </option>
-          {cities.map(city => (
-            <option key={city} value={city}>
-              {city}
+          {getAreaNames().map(area => (
+            <option key={area} value={area}>
+              {area}
+            </option>
+          ))}
+        </L.Select>
+        <L.Select
+          name='sigungu'
+          value={selectedSigungu}
+          onChange={handleSigunguChange}
+          required
+        >
+          <option value='' disabled>
+            시/군/구 선택
+          </option>
+          {sigunguList.map(sigungu => (
+            <option key={sigungu.sigungucode} value={sigungu.sigunguname}>
+              {sigungu.sigunguname}
             </option>
           ))}
         </L.Select>
       </L.InputWrapper>
+
       <L.InputWrapper>
         <L.Label>비밀번호</L.Label>
         <L.Input

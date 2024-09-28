@@ -59,11 +59,12 @@ export const Input = styled.input`
 export const Select = styled.select`
   width: 40%;
   max-width: 400px;
-  padding: 1rem;
+  padding: 0.7rem;
   background-color: #f9fafb;
   border: 1px solid #d1d5db;
   color: #1a202c;
   border-radius: 0.375rem;
+  margin-right: 0.5rem;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   box-sizing: border-box;

@@ -11,7 +11,8 @@ export const register = async (
   nickname: string,
   password: string,
   birth: number,
-  city: string,
+  areacode: number,
+  sigungucode: number,
   accessToken?: string,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post('members/signup', {
@@ -19,7 +20,8 @@ export const register = async (
     nickname,
     password,
     birth,
-    city,
+    areacode,
+    sigungucode,
     accessToken,
   })
   return response.data

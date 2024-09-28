@@ -62,6 +62,7 @@ export const CreateAccountSection = styled.div`
 export const BottomButton = styled.button`
   border: none;
   background-color: white;
+  color: black;
   cursor: pointer;
 `
 
