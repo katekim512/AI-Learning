@@ -318,8 +318,8 @@ const PlaceDetail = () => {
       {drawerOpen && (
         <ChatDrawer
           contentid={contentid!}
-          isOpen={drawerOpen}
-          onClose={handleChatButtonClick}
+          isopen={drawerOpen}
+          onclose={handleChatButtonClick}
         />
       )}
     </>

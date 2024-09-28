@@ -8,12 +8,12 @@ import * as L from '../../styles/ChatDrawer.style'
 
 const ChatDrawer = ({
   contentid,
-  isOpen,
-  onClose,
+  isopen,
+  onclose,
 }: {
   contentid: string
-  isOpen: boolean
-  onClose: () => void
+  isopen: boolean
+  onclose: () => void
 }) => {
   const { addMessage, setMessages, chatHistories, clearMessages } =
     useChatStore()
@@ -36,15 +36,15 @@ const ChatDrawer = ({
   }
 
   useEffect(() => {
-    if (isOpen) {
+    if (isopen) {
       initializeMessages()
     }
     // 의존성 배열에 함수가 아닌 값만 추가하여 무한 반복을 방지
-  }, [isOpen, contentid])
+  }, [isopen, contentid])
 
   return (
-    <L.DrawerContainer isOpen={isOpen}>
-      <DrawerButton onClick={onClose} />
+    <L.DrawerContainer isopen={isopen}>
+      <DrawerButton onClick={onclose} />
       <ChatMessages /> {/* 메시지 목록 컴포넌트 */}
       <ChatInput contentid={contentid} /> {/* 사용자 입력 컴포넌트 */}
     </L.DrawerContainer>
