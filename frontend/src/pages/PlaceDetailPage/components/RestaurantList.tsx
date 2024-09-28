@@ -14,7 +14,7 @@ interface Props {
   sigungucode: number
 }
 
-const AccomodationList: React.FC<Props> = ({ areacode, sigungucode }) => {
+const RestaurantList: React.FC<Props> = ({ areacode, sigungucode }) => {
   const [data, setData] = useState<AccomodationData[]>([])
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const AccomodationList: React.FC<Props> = ({ areacode, sigungucode }) => {
       try {
         const myServiceKey = process.env.REACT_APP_TOURISM_SERVICE_KEY
         const response = await fetch(
-          `https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=${myServiceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AILearning&_type=json&listYN=Y&arrange=O&contentTypeId=32&areaCode=${areacode}&sigunguCode=${sigungucode}&cat1=B02`,
+          `https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=${myServiceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AILearning&_type=json&listYN=Y&arrange=O&contentTypeId=39&areaCode=${areacode}&sigunguCode=${sigungucode}&cat1=A05`,
         )
         const result = await response.json()
         if (result.response.body.items.item) {
@@ -42,7 +42,7 @@ const AccomodationList: React.FC<Props> = ({ areacode, sigungucode }) => {
     <>
       <br></br>
       <br></br>
-      <L.OverviewTitle>주변 숙박 장소들이에요!</L.OverviewTitle>
+      <L.OverviewTitle>주변 음식점들이에요!</L.OverviewTitle>
       {data.slice(0, 3).map((item, index) => (
         <AccomodationItem key={index} item={item} />
       ))}
@@ -50,4 +50,4 @@ const AccomodationList: React.FC<Props> = ({ areacode, sigungucode }) => {
   )
 }
 
-export default AccomodationList
+export default RestaurantList

@@ -10,7 +10,7 @@ interface PlaceBoxItemProps {
   }
 }
 
-const AccomodationItem: React.FC<PlaceBoxItemProps> = ({ item }) => {
+const PlaceItem: React.FC<PlaceBoxItemProps> = ({ item }) => {
   const handleClick = () => {
     //
   }
@@ -28,4 +28,4 @@ const AccomodationItem: React.FC<PlaceBoxItemProps> = ({ item }) => {
   )
 }
 
-export default AccomodationItem
+export default PlaceItem

@@ -12,6 +12,7 @@ import ContentType14 from './components/ContentType/ContentType14'
 import ContentType15 from './components/ContentType/ContentType15'
 import MiddleMenuBar from './components/MiddleMenuBar'
 import PlaceMap from './components/PlaceMap'
+import RestaurantList from './components/RestaurantList'
 import * as L from './styles/PlaceDetail.style'
 import { postAddVisited } from '../../api/calendar/postAddVisited'
 import { postLike } from '../../api/calendar/postLike'
@@ -292,10 +293,16 @@ const PlaceDetail = () => {
             <ContentType15 contentid={contentid!} />
           )}
           {placeDetail && (
-            <AccomodationList
-              areacode={placeDetail.areacode!}
-              sigungucode={placeDetail.sigungucode!}
-            />
+            <>
+              <AccomodationList
+                areacode={placeDetail.areacode!}
+                sigungucode={placeDetail.sigungucode!}
+              />
+              <RestaurantList
+                areacode={placeDetail.areacode!}
+                sigungucode={placeDetail.sigungucode!}
+              />
+            </>
           )}
           <br></br>
         </L.OverviewContainer>
