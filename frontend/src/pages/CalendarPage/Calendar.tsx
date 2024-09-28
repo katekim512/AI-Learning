@@ -11,6 +11,7 @@ import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
+import { useWeatherAlert } from '../../stores/useWeatherAlert'
 
 const Calendar = () => {
   const navigate = useNavigate()
@@ -22,6 +23,13 @@ const Calendar = () => {
   const { refetch: refetchUser } = useUser()
   const { refetch: refetchLikeList } = useLikeList()
   const { refetch: refetchVisitedList } = useVisitedList()
+
+  const {
+    setLastCalendarVisit,
+    setHasCheckedAlertToday,
+    hasCheckedAlertToday,
+    resetDailyCheck,
+  } = useWeatherAlert()
 
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
@@ -52,10 +60,10 @@ const Calendar = () => {
       sigungucode: 2,
     },
     {
-      date: '2024-09-29',
+      date: '2024-09-28',
       weather: 4,
-      contentid: 13579,
-      place: '롯데월드',
+      contentid: 3070550,
+      place: '감천계곡',
       firstimage: '/img/default_pic.png',
       contenttypeid: 15,
       areacode: 1,
@@ -64,18 +72,18 @@ const Calendar = () => {
     {
       date: '2024-09-30',
       weather: 2,
-      contentid: 246810,
-      place: '서울숲',
+      contentid: 3030149,
+      place: '포항 해상스카이워크',
       firstimage: '/img/default_pic.png',
       contenttypeid: 16,
       areacode: 1,
       sigungucode: 4,
     },
     {
-      date: '2024-09-30',
+      date: '2024-10-01',
       weather: 2,
-      contentid: 246810,
-      place: '건대입구',
+      contentid: 2715601,
+      place: '가덕도',
       firstimage: '/img/default_pic.png',
       contenttypeid: 16,
       areacode: 1,
@@ -99,7 +107,7 @@ const Calendar = () => {
 
           setAlertPlaces(futureAlerts)
 
-          if (futureAlerts.length > 0) {
+          if (futureAlerts.length > 0 && !hasCheckedAlertToday) {
             setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
           }
         }
@@ -108,8 +116,14 @@ const Calendar = () => {
       }
     }
 
+    setLastCalendarVisit(new Date().toISOString())
+    resetDailyCheck()
     fetchAlertPlaces()
-  }, [])
+    console.log(
+      'hasCheckedAlertToday 상태:',
+      useWeatherAlert.getState().hasCheckedAlertToday,
+    )
+  }, [setLastCalendarVisit, resetDailyCheck, hasCheckedAlertToday])
 
   //더미데이트 이용
   useEffect(() => {
@@ -135,7 +149,12 @@ const Calendar = () => {
     }
 
     fetchAlertPlaces()
+    console.log(
+      'hasCheckedAlertToday 상태:',
+      useWeatherAlert.getState().hasCheckedAlertToday,
+    )
   }, [])
+  //--------------------------------
 
   // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
   useEffect(() => {
@@ -236,6 +255,13 @@ const Calendar = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false)
+    setHasCheckedAlertToday(true)
+
+    // 상태 변경 후 바로 콘솔에 출력
+    console.log(
+      'hasCheckedAlertToday 상태:',
+      useWeatherAlert.getState().hasCheckedAlertToday,
+    )
   }
 
   return (
@@ -269,7 +295,7 @@ const Calendar = () => {
           selectedDate={selectedDate}
         />
       </div>
-      {showPopup && (
+      {showPopup && !hasCheckedAlertToday && (
         <IndoorAlertPopUp
           alertPlaces={alertPlaces}
           onClose={handleClosePopup}

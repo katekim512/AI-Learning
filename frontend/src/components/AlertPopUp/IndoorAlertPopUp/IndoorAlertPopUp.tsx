@@ -19,7 +19,6 @@ const IndoorAlertPopUp: React.FC<AlertPopUp1Props> = ({
   const [groupedAlerts, setGroupedAlerts] = useState<{
     [key: string]: AlertPlace[]
   }>({})
-  //   const token = authToken.getAccessToken()
 
   const getDateDifference = (dateString: string) => {
     const today = new Date()

@@ -6,6 +6,7 @@ import * as L from './styles/Rank.style'
 import { getRank } from '../../api/rank/getRank'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
+import { useWeatherAlert } from '../../stores/useWeatherAlert'
 
 interface Place {
   contentid: number
@@ -54,6 +55,7 @@ const Rank: React.FC = () => {
   const { visitedList } = useVisitedList()
   const [visitedPlaces, setVisitedPlaces] = useState<Set<number>>(new Set())
   const [top100Places, setTop100Places] = useState<Place[]>([])
+  const { setHasCheckedAlertToday } = useWeatherAlert()
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -76,6 +78,10 @@ const Rank: React.FC = () => {
 
     fetchPlaces()
     fetchVisitedPlaces()
+
+    // hasCheckedAlertToday를 false로 리셋
+    setHasCheckedAlertToday(false)
+    console.log('hasCheckedAlertToday 상태가 false로 리셋되었습니다.')
   }, [])
 
   return (
