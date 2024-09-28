@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import * as L from '../styles/PlaceDetail.style'
+import * as L from '../../styles/PlaceDetail.style'
 
 interface ContentType14Data {
   scale: string
