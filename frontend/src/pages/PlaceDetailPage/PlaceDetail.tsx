@@ -291,7 +291,10 @@ const PlaceDetail = () => {
           )}
           {placeDetail && (
             <>
-              <StudyPlan title={placeDetail.title} />
+              <StudyPlan
+                title={placeDetail.title}
+                overview={placeDetail.overview}
+              />
               <AccomodationList
                 areacode={placeDetail.areacode!}
                 sigungucode={placeDetail.sigungucode!}

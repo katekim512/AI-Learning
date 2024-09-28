@@ -6,9 +6,10 @@ import * as L from '../../styles/PlaceDetail.style'
 
 interface Props {
   title: string
+  overview: string
 }
 
-const StudyPlan: React.FC<Props> = ({ title }) => {
+const StudyPlan: React.FC<Props> = ({ title, overview }) => {
   const { data: userInfo } = useUser()
   const [plan, setPlan] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -24,7 +25,7 @@ const StudyPlan: React.FC<Props> = ({ title }) => {
         setLoading(true)
         const age = calculateAge(userInfo.birth)
         try {
-          const placePlan = await fetchPlacePlan(title, age)
+          const placePlan = await fetchPlacePlan(title, overview, age)
           setPlan(placePlan)
         } catch (error) {
           console.error('Failed to fetch learning plan:', error)
