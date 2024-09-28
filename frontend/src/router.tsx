@@ -15,6 +15,7 @@ import ChangeNickname from './pages/ChangeNicknamePage/ChangeNickname'
 import ChangePassword from './pages/ChangePasswordPage/ChangePassword'
 import CheckPassword from './pages/CheckPasswordPage/CheckPassword'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
+import Guide from './pages/GuidePage/Guide'
 import IndoorPlace from './pages/IndoorPlacePage/IndoorPlace'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: 'indoorplace/:date/:contentid',
         element: <IndoorPlace />,
+      },
+      {
+        path: 'guide',
+        element: <Guide />,
       },
       {
         path: 'profile',

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
@@ -226,7 +225,7 @@ const PlaceDetail = () => {
         </L.Title>
         <L.Title>
           <Icon
-            icon={mapMarker}
+            icon='icons-majesticons:map-marker'
             width='18'
             height='18'
             style={{ color: '#BCBCBC' }}

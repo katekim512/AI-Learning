@@ -17,6 +17,7 @@ export const StyledIcon = styled.div<StyledIconProps>`
   font-size: 2rem;
   display: flex;
   justify-content: center;
+  margin-top: 0.3rem;
   align-items: center;
   transform: ${({ isRotated }) =>
     isRotated ? 'rotate(180deg)' : 'rotate(0deg)'};
