@@ -1,3 +1,11 @@
+// 시/군/구의 타입 정의
+export interface Sigungu {
+  areacode: number
+  areaname: string
+  sigungucode: number
+  sigunguname: string
+}
+
 // 지역 및 시군구 데이터
 export const areas = [
   { areacode: 1, areaname: '서울', sigungucode: 1, sigunguname: '강남구' },

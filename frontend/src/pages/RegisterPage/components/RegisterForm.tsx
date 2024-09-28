@@ -8,16 +8,9 @@ import { register } from '../../../api/auth/postRegister'
 import {
   getAreaNames,
   getSigunguByAreacode,
+  Sigungu,
 } from '../../../datas/RegisterCityMapper'
 import * as L from '../styles/Register.style'
-
-// 시/군/구의 타입 정의
-interface Sigungu {
-  areacode: number
-  areaname: string
-  sigungucode: number
-  sigunguname: string
-}
 
 const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const navigate = useNavigate()

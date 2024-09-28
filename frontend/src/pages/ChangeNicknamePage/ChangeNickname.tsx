@@ -58,8 +58,9 @@ const ChangeNickname = () => {
         const response = await postUserUpdate(
           token,
           nickname,
-          userInfo?.birth,
-          userInfo?.city,
+          userInfo.birth,
+          userInfo.areacode,
+          userInfo.sigungucode,
         )
         if (response?.data) {
           await refetch()

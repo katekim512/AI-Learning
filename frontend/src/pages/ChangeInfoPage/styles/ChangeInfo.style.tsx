@@ -44,6 +44,7 @@ export const Select = styled.select`
   border: 1px solid #d1d5db;
   color: #1a202c;
   border-radius: 0.375rem;
+  margin-right: 0.5rem;
   margin-bottom: 2rem;
   font-size: 0.9rem;
   box-sizing: border-box;

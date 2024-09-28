@@ -10,11 +10,12 @@ export const postUserUpdate = async (
   token: string,
   nickname: string,
   birth: number,
-  city: string,
+  areacode: number,
+  sigungucode: number,
 ): Promise<AxiosResponse<SuccessResponse> | null> => {
   const response = await aiLearningAxios.post(
     'profile/user-update',
-    { nickname, birth, city },
+    { nickname, birth, areacode, sigungucode },
     {
       headers: { Authorization: `Bearer ${token}` },
     },
