@@ -62,12 +62,13 @@ export const Section = styled.div`
 
 export const Label = styled.label`
   color: black;
-  display: block;
+  display: flex;
+  align-items: center;
   margin-bottom: 5px;
   font-size: 1.1rem;
   font-weight: 700;
+  gap: 10px;
 `
-
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
