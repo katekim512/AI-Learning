@@ -196,14 +196,13 @@ export const FlowWrap = styled.div<FlowWrapProps>`
   }
 `
 
-export const IconContainer = styled.div`
-  flex-shrink: 0; // 크기 고정
-  width: 18px; // 아이콘 너비
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const IconContainer = styled.span`
+  color: #545454;
+  justify-content: flex-start;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 10px;
 `
-
 export const BottomButton = styled.button`
   position: absolute;
   align-items: center;
