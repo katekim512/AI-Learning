@@ -1,8 +1,17 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 interface ScheduleContainerProps {
   isSwiped: boolean
 }
+
+const textLoop = keyframes`
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+`
 
 export const ContainerTotal = styled.div`
   display: flex;
@@ -101,7 +110,7 @@ export const ScheduleContainer = styled.div<ScheduleContainerProps>`
 `
 export const DateBox = styled.p`
   background-color: #bfddff;
-  width: 7rem;
+  width: 25%;
   height: 2rem; // 높이를 명시적으로 지정
   border-radius: 15px;
   color: #545454;
@@ -113,9 +122,6 @@ export const DateBox = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  // 텍스트가 여러 줄일 경우를 대비한 설정
-  text-align: center;
 `
 
 export const PlaceBox = styled.button`
@@ -123,8 +129,8 @@ export const PlaceBox = styled.button`
   position: relative;
   display: flex; /* Flexbox 사용 */
   align-items: center; /* 세로 정렬 */
-  justify-content: flex-start;
-  width: 100%;
+  justify-content: flex-start; /* 좌측 정렬 유지 */
+  width: 73%;
   height: 2rem;
   border-radius: 15px;
   border: none;
@@ -133,35 +139,71 @@ export const PlaceBox = styled.button`
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
+  text-align: left; /* 텍스트 좌측 정렬 */
 `
 
-export const CityBox = styled.p`
-  background-color: #525fd4;
-  border-radius: 8px;
-  padding: 0.3rem;
+export const CityBox = styled.div`
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
   color: white;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-right: 0rem; /* 오른쪽 여백 추가 */
-`
+  margin-right: 8px;
 
+  // 텍스트를 한 줄로 유지하고 넘치는 부분을 처리
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  // 내용에 맞게 자동으로 크기 조절
+  display: inline-block;
+  min-width: 35px; // 최소 너비 설정
+  max-width: 60px; // 최대 너비 설정
+`
 export const PlaceName = styled.span`
-  //flex-grow: 1; /* 남은 공간을 차지 */
-  margin-left: 20px;
-  color: #545454;
-  justify-content: flex-start;
+  flex: 1; // 남은 공간을 모두 차지
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.8rem;
   font-weight: 600;
-  //width: 100px;
+  color: #545454;
+  margin-left: 10px;
+  margin-right: 10px; // 아이콘과의 간격
+
+  &:hover {
+    color: #000;
+  }
 `
 
-export const IconContainer = styled.span`
-  color: #545454;
-  justify-content: flex-start;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-left: auto;
+interface FlowWrapProps {
+  shouldFlow: boolean
+}
+
+export const FlowWrap = styled.div<FlowWrapProps>`
+  display: inline-block;
+  padding-right: ${props =>
+    props.shouldFlow ? '50px' : '0'}; // 텍스트 사이의 간격
+  animation: ${props =>
+    props.shouldFlow
+      ? css`
+          ${textLoop} 10s linear infinite
+        `
+      : 'none'};
+
+  &:hover {
+    cursor: pointer;
+    animation-play-state: paused;
+  }
 `
+
+export const IconContainer = styled.div`
+  flex-shrink: 0; // 크기 고정
+  width: 18px; // 아이콘 너비
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export const BottomButton = styled.button`
   position: absolute;
   align-items: center;
