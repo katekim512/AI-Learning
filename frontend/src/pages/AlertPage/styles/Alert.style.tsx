@@ -22,9 +22,15 @@ export const Header = styled.div`
 `
 
 export const Title = styled.h1`
+  width: 100%;
   font-size: 18px;
   font-weight: bold;
+  padding-right: 0.9rem;
   margin: 0 auto;
+  text-align: center; // 텍스트 중앙 정렬
+  display: flex; // Flexbox 사용
+  justify-content: center; // 수평 중앙 정렬
+  align-items: center; // 수직 중앙 정렬 (필요한 경우)
 `
 
 export const BoldText = styled.span`
