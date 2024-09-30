@@ -40,61 +40,6 @@ const Calendar: React.FC = () => {
     month: today.getMonth() + 1,
   })
 
-  // // 더미 데이터는 그대로 유지
-  // const dummyData: AlertPlace[] = [
-  //   {
-  //     date: '2024-09-26',
-  //     weather: 3,
-  //     contentid: 67890,
-  //     place: '남산타워',
-  //     firstimage: '/img/default_pic.png',
-  //     contenttypeid: 14,
-  //     areacode: 1,
-  //     sigungucode: 2,
-  //   },
-  //   {
-  //     date: '2024-09-28',
-  //     weather: 4,
-  //     contentid: 3070550,
-  //     place: '감천계곡',
-  //     firstimage: '/img/default_pic.png',
-  //     contenttypeid: 15,
-  //     areacode: 1,
-  //     sigungucode: 3,
-  //   },
-  //   {
-  //     date: '2024-09-30',
-  //     weather: 2,
-  //     contentid: 127914,
-  //     place: '연산온천파크',
-  //     firstimage: '/img/default_pic.png',
-  //     contenttypeid: 16,
-  //     areacode: 1,
-  //     sigungucode: 4,
-  //   },
-  //   {
-  //     date: '2024-10-01',
-  //     weather: 2,
-  //     contentid: 2589659,
-  //     place: '올리바인 스파',
-  //     firstimage: '/img/default_pic.png',
-  //     contenttypeid: 16,
-  //     areacode: 1,
-  //     sigungucode: 4,
-  //   },
-  //   {
-  //     date: '2024-10-02',
-  //     weather: 1,
-  //     contentid: 2564458,
-  //     place: '안동계명산자휴양림',
-  //     firstimage: '/img/default_pic.png',
-  //     contenttypeid: 12,
-  //     areacode: 1,
-  //     sigungucode: 1,
-  //   },
-  // ]
-
-  //API 이용-------
   useEffect(() => {
     const fetchAlertPlaces = async () => {
       const token = authToken.getAccessToken()
@@ -102,7 +47,7 @@ const Calendar: React.FC = () => {
         const response = await getAlertPlace(token)
         if (response && response.data) {
           const today = new Date()
-          today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
+          today.setHours(0, 0, 0, 0)
 
           const newFutureAlerts = response.data.filter((place: AlertPlace) => {
             const placeDate = new Date(place.date)
@@ -112,14 +57,8 @@ const Calendar: React.FC = () => {
           setFutureAlerts(newFutureAlerts)
 
           if (newFutureAlerts.length > 0 && !hasCheckedAlertToday) {
-            setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+            setShowPopup(true)
           }
-
-          // Zustand 스토어의 내용을 콘솔에 출력
-          console.log(
-            'Zustand futureAlerts:',
-            useAlertStore.getState().futureAlerts,
-          )
         }
       } catch (error) {
         console.error('알림 장소 가져오기 실패:', error)
@@ -129,52 +68,12 @@ const Calendar: React.FC = () => {
     setLastCalendarVisit(new Date().toISOString())
     resetDailyCheck()
     fetchAlertPlaces()
+
     console.log(
-      'hasCheckedAlertToday 상태:',
+      'hasCheckedAlertToday:',
       useWeatherAlert.getState().hasCheckedAlertToday,
     )
-  }, [
-    setLastCalendarVisit,
-    // resetDailyCheck,
-    // hasCheckedAlertToday,
-    // setFutureAlerts,
-  ])
-
-  //더미데이트 이용
-  // useEffect(() => {
-  //   const fetchAlertPlaces = async () => {
-  //     try {
-  //       const today = new Date()
-  //       today.setHours(0, 0, 0, 0) // 오늘 날짜의 시작으로 설정
-
-  //       const newFutureAlerts = dummyData.filter((place: AlertPlace) => {
-  //         const placeDate = new Date(place.date)
-  //         return placeDate >= today
-  //       })
-
-  //       setFutureAlerts(newFutureAlerts)
-
-  //       if (newFutureAlerts.length > 0) {
-  //         setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
-  //       }
-
-  //       // Zustand 스토의 내용을 콘솔에 출력
-  //       console.log(
-  //         'Zustand futureAlerts:',
-  //         useAlertStore.getState().futureAlerts,
-  //       )
-  //     } catch (error) {
-  //       console.error('알림 장소 가져오기 실패:', error)
-  //     }
-  //   }
-
-  //   fetchAlertPlaces()
-  //   console.log(
-  //     'hasCheckedAlertToday 상태:',
-  //     useWeatherAlert.getState().hasCheckedAlertToday,
-  //   )
-  // }, [setFutureAlerts])
-  //--------------------------------
+  }, [setLastCalendarVisit])
 
   // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
   useEffect(() => {
@@ -185,7 +84,6 @@ const Calendar: React.FC = () => {
         month: Number(month),
       })
     } else {
-      // selectedDate가 없을 때만 현재 날짜로 설정
       setCurrentDate({
         year: today.getFullYear(),
         month: today.getMonth() + 1,
@@ -278,12 +176,15 @@ const Calendar: React.FC = () => {
     setShowPopup(false)
     setHasCheckedAlertToday(true)
 
-    // 상태 변경 후 바로 콘솔에 출력
     console.log(
-      'hasCheckedAlertToday 상태:',
+      'hasCheckedAlertToday:',
       useWeatherAlert.getState().hasCheckedAlertToday,
     )
   }
+
+  useEffect(() => {
+    console.log('showPopup:', showPopup)
+  }, [showPopup])
 
   return (
     <>
@@ -317,10 +218,7 @@ const Calendar: React.FC = () => {
         />
       </div>
       {showPopup && !hasCheckedAlertToday && (
-        <IndoorAlertPopUp
-          // alertPlaces={futureAlerts}
-          onClose={handleClosePopup}
-        />
+        <IndoorAlertPopUp onClose={handleClosePopup} />
       )}
     </>
   )

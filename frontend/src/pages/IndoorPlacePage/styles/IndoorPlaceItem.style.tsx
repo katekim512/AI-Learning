@@ -104,6 +104,7 @@ export const PlaceDescription = styled.p`
 export const FixButton = styled.button`
   background-color: #f0f0f0;
   border: none;
+  margin-left: 5px;
   padding: 5px 13px;
   font-size: 13px;
   cursor: pointer;
