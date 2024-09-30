@@ -4,10 +4,12 @@ export const Button = styled.button`
   color: black;
   background-color: #f0f0f0;
   border: none;
-  padding: 9px 20px;
-  margin: 5px;
   border-radius: 20px;
+  padding: 9px 20px;
+  margin: 5px 8px 9px 0; // 상 우 하 좌 순서
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 
   &.selected {
     background-color: #525fd4;
@@ -17,32 +19,42 @@ export const Button = styled.button`
 export const DateInputContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 7px 0px;
-  width: 100%;
+  justify-content: center;
+  padding: 7px;
 `
+// export const DateInput = styled.input.attrs({ type: 'date' })`
+//   color: black;
+//   border: 1px solid #ddd;
+//   border-radius: 8px;
+//   padding: 6px;
+//   font-size: 14px;
+//   background-color: #fafafa;
+//   transition:
+//     border-color 0.3s ease,
+//     box-shadow 0.3s ease;
 
-export const DateGroup = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1;
-`
+//   &:focus {
+//     border-color: #007bff;
+//     box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.25);
+//     outline: none;
+//   }
+
+//   &::-webkit-calendar-picker-indicator {
+//     display: none;
+//   }
+// `
 
 export const DateButton = styled.button`
   color: black;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 6px 20px;
+  padding: 6px 16px;
   font-size: 14px;
   background-color: #fafafa;
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
   cursor: pointer;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 
   &:focus {
     border-color: #007bff;
@@ -52,8 +64,10 @@ export const DateButton = styled.button`
 `
 
 export const Separator = styled.span`
-  margin: 0 10px;
-  font-size: 14px;
+  font-size: 1.2rem;
+  color: #333;
+  margin-right: 10px;
+  margin-left: 10px;
 `
 
 export const Section = styled.div`
@@ -62,13 +76,12 @@ export const Section = styled.div`
 
 export const Label = styled.label`
   color: black;
-  display: flex;
-  align-items: center;
+  display: block;
   margin-bottom: 5px;
   font-size: 1.1rem;
   font-weight: 700;
-  gap: 10px;
 `
+
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
