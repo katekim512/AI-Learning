@@ -2,8 +2,7 @@ import React from 'react'
 
 import GuideBox from './components/GuideBox'
 import * as L from './styles/Guide.style'
-// import { getPattern } from '../../api/profile/getPattern'
-import { postMessage } from '../../api/guide/postMessage'
+import { getPattern } from '../../api/profile/getPattern'
 import { useUser } from '../../hooks/useUser'
 import authToken from '../../stores/authToken'
 
@@ -13,8 +12,8 @@ const Guide: React.FC = () => {
 
   const handleAPITest = async () => {
     if (token) {
-      const successResponse = await postMessage(token, 1234)
-      console.log(successResponse?.data)
+      const successResponse = await getPattern(token)
+      console.log(successResponse)
     }
   }
 
