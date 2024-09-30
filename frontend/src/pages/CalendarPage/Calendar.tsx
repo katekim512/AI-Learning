@@ -12,8 +12,9 @@ import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
 import { useAlertStore } from '../../stores/useFutureAlerts'
+import { useScheduleStore, initialState } from '../../stores/useScheduleStore'
 import { useWeatherAlert } from '../../stores/useWeatherAlert'
-const Calendar = () => {
+const Calendar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
@@ -111,7 +112,7 @@ const Calendar = () => {
           setFutureAlerts(newFutureAlerts)
 
           if (newFutureAlerts.length > 0 && !hasCheckedAlertToday) {
-            //setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
+            setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
           }
 
           // Zustand 스토어의 내용을 콘솔에 출력
@@ -157,7 +158,7 @@ const Calendar = () => {
   //         setShowPopup(true) // 미래 알림이 있을 경우에만 팝업 표시
   //       }
 
-  //       // Zustand 스토어의 내용을 콘솔에 출력
+  //       // Zustand 스토의 내용을 콘솔에 출력
   //       console.log(
   //         'Zustand futureAlerts:',
   //         useAlertStore.getState().futureAlerts,
@@ -203,6 +204,7 @@ const Calendar = () => {
   }, [])
 
   const handleAIScheduleButton = () => {
+    useScheduleStore.setState(initialState)
     navigate('/ai-schedule-step1')
   }
 

@@ -95,16 +95,21 @@ interface ScheduleState {
   setDescription: (description: string) => void
 }
 
-export const useScheduleStore = create<ScheduleState>(set => ({
+// 초기 상태 정의
+export const initialState = {
   startDate: getCurrentDate(),
   endDate: getFutureDate(29),
   dates: [],
   location: [],
   travelStyle: [],
   description: '',
-  frequency: '매주', // 초기 빈도 설정
+  frequency: '매주',
   dayOfWeek: '토요일',
   isScheduleConfirmed: false,
+}
+
+export const useScheduleStore = create<ScheduleState>(set => ({
+  ...initialState,
   setStartDate: date =>
     set(() => {
       const newEndDate = calculateEndDate(date, 29) // 시작일 + 29일
@@ -150,4 +155,16 @@ export const useScheduleStore = create<ScheduleState>(set => ({
     }),
   setTravelStyle: style => set({ travelStyle: style }),
   setDescription: description => set({ description }),
+  resetStore: () =>
+    set({
+      startDate: getCurrentDate(),
+      endDate: getFutureDate(29),
+      dates: [],
+      location: [],
+      travelStyle: [],
+      description: '',
+      frequency: '매주',
+      dayOfWeek: '토요일',
+      isScheduleConfirmed: false,
+    }),
 }))
