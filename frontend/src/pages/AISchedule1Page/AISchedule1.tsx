@@ -156,23 +156,27 @@ const AISchedule1: React.FC = () => {
           <S.Label>얼마나</S.Label>
 
           <S.DateInputContainer>
-            <S.DateButton onClick={() => handleCalendarIconClick('start')}>
-              {startDate || 'Select Start Date'}
-            </S.DateButton>
-            <Icon
-              icon='mdi:calendar'
-              onClick={() => handleCalendarIconClick('start')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
+            <S.DateGroup>
+              <S.DateButton onClick={() => handleCalendarIconClick('start')}>
+                {startDate || 'Select Start Date'}
+              </S.DateButton>
+              <Icon
+                icon='mdi:calendar'
+                onClick={() => handleCalendarIconClick('start')}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </S.DateGroup>
             <S.Separator>~</S.Separator>
-            <S.DateButton onClick={() => handleCalendarIconClick('end')}>
-              {endDate || 'Select End Date'}
-            </S.DateButton>
-            <Icon
-              icon='mdi:calendar'
-              onClick={() => handleCalendarIconClick('end')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
+            <S.DateGroup>
+              <S.DateButton onClick={() => handleCalendarIconClick('end')}>
+                {endDate || 'Select End Date'}
+              </S.DateButton>
+              <Icon
+                icon='mdi:calendar'
+                onClick={() => handleCalendarIconClick('end')}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </S.DateGroup>
           </S.DateInputContainer>
         </S.Section>
 

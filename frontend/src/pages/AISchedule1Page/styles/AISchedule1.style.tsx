@@ -4,10 +4,12 @@ export const Button = styled.button`
   color: black;
   background-color: #f0f0f0;
   border: none;
-  padding: 9px 20px;
-  margin: 5px;
   border-radius: 20px;
+  padding: 9px 20px;
+  margin: 5px 8px 9px 0; // 상 우 하 좌 순서
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 
   &.selected {
     background-color: #525fd4;
@@ -17,8 +19,14 @@ export const Button = styled.button`
 export const DateInputContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 7px;
+  justify-content: space-between;
+  padding: 7px 0px;
+  width: 100%;
+`
+export const DateGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
 `
 // export const DateInput = styled.input.attrs({ type: 'date' })`
 //   color: black;
