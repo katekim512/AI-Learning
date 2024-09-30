@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import React from 'react'
 
-import * as L from './styles/InfoBanner.style'
+import * as L from './styles/InfoBannerNoX.style'
 
 interface InfoBannerProps {
   text: string
