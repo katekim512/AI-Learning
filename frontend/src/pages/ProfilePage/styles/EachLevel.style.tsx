@@ -15,9 +15,10 @@ export const ButtonContainer = styled.div`
 
 export const Section1 = styled.div`
   margin-top: 0px;
+  margin-bottom: 20px;
 `
 export const Section2 = styled.div`
-  margin-top: 40px;
+  margin-top: 20px;
 `
 
 export const Title = styled.h2`
@@ -74,4 +75,11 @@ export const Location = styled.span`
   font-size: 12px;
   color: #666;
   margin-top: 3px;
+`
+
+export const NoVisitedMessage = styled.p`
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  padding: 40px;
 `

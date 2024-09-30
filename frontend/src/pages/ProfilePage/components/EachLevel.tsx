@@ -162,32 +162,39 @@ const EachLevel: React.FC = () => {
 
       <L.ScrollContainer>
         <L.Title>{level} 추천 여행지</L.Title>
-        <L.Section1>
-          <L.SectionHeader>아직 방문하지 않음</L.SectionHeader>
-          <L.DestinationList>
-            {notVisited.map((place, index) => (
-              <LevelItem
-                key={place.contentid}
-                place={place}
-                index={index}
-                onClick={() => handleClick(place)}
-              />
-            ))}
-          </L.DestinationList>
-        </L.Section1>
+
+        {notVisited.length > 0 && (
+          <L.Section1>
+            <L.SectionHeader>아직 방문하지 않음</L.SectionHeader>
+            <L.DestinationList>
+              {notVisited.map((place, index) => (
+                <LevelItem
+                  key={place.contentid}
+                  place={place}
+                  index={index}
+                  onClick={() => handleClick(place)}
+                />
+              ))}
+            </L.DestinationList>
+          </L.Section1>
+        )}
 
         <L.Section2>
           <L.SectionHeader>방문 완료</L.SectionHeader>
-          <L.DestinationList>
-            {visited.map((place, index) => (
-              <LevelItem
-                key={place.contentid}
-                place={place}
-                index={index}
-                onClick={() => handleClick(place)}
-              />
-            ))}
-          </L.DestinationList>
+          {visited.length > 0 ? (
+            <L.DestinationList>
+              {visited.map((place, index) => (
+                <LevelItem
+                  key={place.contentid}
+                  place={place}
+                  index={index}
+                  onClick={() => handleClick(place)}
+                />
+              ))}
+            </L.DestinationList>
+          ) : (
+            <L.NoVisitedMessage>아직 방문한 장소가 없습니다</L.NoVisitedMessage>
+          )}
         </L.Section2>
       </L.ScrollContainer>
     </L.Container>
