@@ -17,42 +17,32 @@ export const Button = styled.button`
 export const DateInputContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 7px;
+  justify-content: space-between;
+  padding: 7px 0px;
+  width: 100%;
 `
-// export const DateInput = styled.input.attrs({ type: 'date' })`
-//   color: black;
-//   border: 1px solid #ddd;
-//   border-radius: 8px;
-//   padding: 6px;
-//   font-size: 14px;
-//   background-color: #fafafa;
-//   transition:
-//     border-color 0.3s ease,
-//     box-shadow 0.3s ease;
 
-//   &:focus {
-//     border-color: #007bff;
-//     box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.25);
-//     outline: none;
-//   }
-
-//   &::-webkit-calendar-picker-indicator {
-//     display: none;
-//   }
-// `
+export const DateGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
+`
 
 export const DateButton = styled.button`
   color: black;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 6px 16px;
+  padding: 6px 20px;
   font-size: 14px;
   background-color: #fafafa;
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
   cursor: pointer;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:focus {
     border-color: #007bff;
@@ -62,10 +52,8 @@ export const DateButton = styled.button`
 `
 
 export const Separator = styled.span`
-  font-size: 1.2rem;
-  color: #333;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 0 10px;
+  font-size: 14px;
 `
 
 export const Section = styled.div`
