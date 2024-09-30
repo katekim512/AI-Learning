@@ -17,9 +17,9 @@ export const ModalContainer = styled.div`
   background-color: white;
   border-radius: 10px; /* 둥근 모서리 */
   width: 80%;
-  padding: 20px;
+  padding: 20px 20px 10px 20px; /* 상 우 하 좌 순서로 패딩 설정 */
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0px 1px rgba(0, 0, 0, 0.05);
   position: relative;
 `
 
@@ -84,7 +84,7 @@ export const DateGroup = styled.div`
 export const DateHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-left: 7px;
 `
 
