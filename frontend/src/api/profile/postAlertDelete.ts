@@ -15,7 +15,7 @@ export const alertDelete = async (
   alertDeleteBody: AlertDeleteBody,
 ): Promise<AxiosResponse<SuccessResponse>> => {
   const response = await aiLearningAxios.post(
-    'profile/profile/alert-delete',
+    'profile/alert-delete',
     alertDeleteBody,
     {
       headers: {
