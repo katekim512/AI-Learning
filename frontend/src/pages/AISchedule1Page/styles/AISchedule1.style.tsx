@@ -19,8 +19,14 @@ export const Button = styled.button`
 export const DateInputContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 7px;
+  justify-content: space-between;
+  padding: 7px 0px;
+  width: 100%;
+`
+export const DateGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
 `
 // export const DateInput = styled.input.attrs({ type: 'date' })`
 //   color: black;
