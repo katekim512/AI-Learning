@@ -45,9 +45,10 @@ export const SectionTitle = styled.div`
   font-size: 16px;
   margin-bottom: 15px;
   margin-left: 5px;
-  align-items: center;
   display: flex;
-  position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
+  align-items: center; // 세로 중앙 정렬
+  justify-content: flex-start; // 가로 왼쪽 정렬 (필요에 따라 조정 가능)
+  position: relative;
   width: 100%;
 `
 
@@ -121,9 +122,9 @@ export const AddButton = styled.button`
 `
 export const gpsIcon = styled.button`
   display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-left: 6px;
+  width: 17px;
+  height: 17px;
+  margin-left: 10px;
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='black' d='M240 120h-24.37A88.13 88.13 0 0 0 136 40.37V16a8 8 0 0 0-16 0v24.37A88.13 88.13 0 0 0 40.37 120H16a8 8 0 0 0 0 16h24.37A88.13 88.13 0 0 0 120 215.63V240a8 8 0 0 0 16 0v-24.37A88.13 88.13 0 0 0 215.63 136H240a8 8 0 0 0 0-16m-112 80a72 72 0 1 1 72-72a72.08 72.08 0 0 1-72 72'/%3E%3C/svg%3E");
@@ -132,8 +133,8 @@ export const gpsIcon = styled.button`
 `
 export const ReloadIcon = styled.button`
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 14px;
+  height: 14px;
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Cpath fill='black' fill-rule='evenodd' d='M1.85 7.5c0-2.835 2.21-5.65 5.65-5.65c2.778 0 4.152 2.056 4.737 3.15H10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.813C12.296 3.071 10.666.85 7.5.85C3.437.85.85 4.185.85 7.5s2.587 6.65 6.65 6.65c1.944 0 3.562-.77 4.714-1.942a6.8 6.8 0 0 0 1.428-2.167a.5.5 0 1 0-.925-.38a5.8 5.8 0 0 1-1.216 1.846c-.971.99-2.336 1.643-4.001 1.643c-3.44 0-5.65-2.815-5.65-5.65' clip-rule='evenodd'/%3E%3C/svg%3E");
