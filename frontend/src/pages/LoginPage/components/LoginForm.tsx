@@ -9,6 +9,7 @@ import * as L from '../styles/Login.style'
 const LoginForm = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [showErrorPopup, setShowErrorPopup] = useState<boolean>(false)
   const navigate = useNavigate()
 
@@ -20,20 +21,32 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (email.trim() !== '' && password.trim() !== '') {
-      try {
-        const loginResult = await login(email, password)
+    if (email.trim() === '') {
+      setErrorMessage('이메일을 입력해주세요')
+      setShowErrorPopup(true)
+      return
+    }
 
-        if (loginResult && loginResult.data && loginResult.data.token) {
-          authToken.setToken(loginResult.data.token)
-          navigate('/calendar')
-        } else {
-          setShowErrorPopup(true)
-        }
-      } catch (error) {
-        console.error('Login error:', error)
+    if (password.trim() === '') {
+      setErrorMessage('비밀번호를 입력해주세요')
+      setShowErrorPopup(true)
+      return
+    }
+
+    try {
+      const loginResult = await login(email, password)
+
+      if (loginResult && loginResult.data && loginResult.data.token) {
+        authToken.setToken(loginResult.data.token)
+        navigate('/calendar')
+      } else {
+        setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다')
         setShowErrorPopup(true)
       }
+    } catch (error) {
+      console.error('Login error:', error)
+      setErrorMessage('아이디 혹은 비밀번호가 틀렸습니다')
+      setShowErrorPopup(true)
     }
   }
 
@@ -49,22 +62,19 @@ const LoginForm = () => {
           value={email}
           onChange={handleEmailChange}
           placeholder='이메일을 입력해주세요'
-          required
+          //required
         />
         <L.Input
           type='password'
           value={password}
           onChange={handlePasswordChange}
           placeholder='비밀번호를 입력해주세요'
-          required
+          //required
         />
         <L.LoginButton type='submit'>로그인</L.LoginButton>
       </L.Form>
       {showErrorPopup && (
-        <AlertPopUp1
-          message='아이디 혹은 비밀번호가 틀렸습니다'
-          onConfirm={handleCloseErrorPopup}
-        />
+        <AlertPopUp1 message={errorMessage} onConfirm={handleCloseErrorPopup} />
       )}
     </>
   )
