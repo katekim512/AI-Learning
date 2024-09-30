@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { login } from '../../../api/auth/postLogin'
+import AlertPopUp1 from '../../../components/AlertPopUp/AlertPopUp1/AlertPopUp1'
 import authToken from '../../../stores/authToken'
 import * as L from '../styles/Login.style'
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [showErrorPopup, setShowErrorPopup] = useState<boolean>(false)
   const navigate = useNavigate()
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -19,35 +21,52 @@ const LoginForm = () => {
     e.preventDefault()
 
     if (email.trim() !== '' && password.trim() !== '') {
-      const loginResult = await login(email, password)
+      try {
+        const loginResult = await login(email, password)
 
-      if (loginResult) {
-        authToken.setToken(loginResult.data.token)
-        navigate('/calendar')
-      } else {
-        console.error('login fail')
+        if (loginResult && loginResult.data && loginResult.data.token) {
+          authToken.setToken(loginResult.data.token)
+          navigate('/calendar')
+        } else {
+          setShowErrorPopup(true)
+        }
+      } catch (error) {
+        console.error('Login error:', error)
+        setShowErrorPopup(true)
       }
     }
   }
 
+  const handleCloseErrorPopup = () => {
+    setShowErrorPopup(false)
+  }
+
   return (
-    <L.Form onSubmit={handleSubmit}>
-      <L.Input
-        type='email'
-        value={email}
-        onChange={handleEmailChange}
-        placeholder='이메일을 입력해주세요'
-        required
-      />
-      <L.Input
-        type='password'
-        value={password}
-        onChange={handlePasswordChange}
-        placeholder='비밀번호를 입력해주세요'
-        required
-      />
-      <L.LoginButton type='submit'>로그인</L.LoginButton>
-    </L.Form>
+    <>
+      <L.Form onSubmit={handleSubmit}>
+        <L.Input
+          type='email'
+          value={email}
+          onChange={handleEmailChange}
+          placeholder='이메일을 입력해주세요'
+          required
+        />
+        <L.Input
+          type='password'
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder='비밀번호를 입력해주세요'
+          required
+        />
+        <L.LoginButton type='submit'>로그인</L.LoginButton>
+      </L.Form>
+      {showErrorPopup && (
+        <AlertPopUp1
+          message='아이디 혹은 비밀번호가 틀렸습니다'
+          onConfirm={handleCloseErrorPopup}
+        />
+      )}
+    </>
   )
 }
 
