@@ -119,7 +119,9 @@ const IndoorPlace: React.FC = () => {
     }
 
     const originalPlace = daySchedule.info.find(
-      place => place.contentid && place.contentid === Number(contentid),
+      place =>
+        place.contentid &&
+        place.contentid.toString() === Number(contentid).toString(),
     )
 
     if (!originalPlace) {
