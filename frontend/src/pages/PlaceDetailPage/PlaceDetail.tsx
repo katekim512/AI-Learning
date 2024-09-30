@@ -42,7 +42,7 @@ interface PlaceDetail {
 const PlaceDetail = () => {
   const token = authToken.getAccessToken()
   const location = useLocation()
-  const { date } = location.state || {} // date 가져오기
+  const { date, firstimage } = location.state
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
@@ -70,6 +70,7 @@ const PlaceDetail = () => {
   }, [menubarRef])
 
   useEffect(() => {
+    console.log(firstimage)
     fetchCommonPlaceInfo()
     fetchPlaceLikeTotal()
   }, [token, contentid])
@@ -81,7 +82,7 @@ const PlaceDetail = () => {
         setImageHeight(imageElement.clientHeight)
       }
     }
-  }, [placeDetail?.firstimage])
+  }, [firstimage])
 
   useEffect(() => {
     if (likeList && contentid) {
@@ -192,7 +193,7 @@ const PlaceDetail = () => {
         <L.HeaderContainer>
           <BackButton />
           <L.MapButton>
-            {placeDetail?.firstimage && (
+            {firstimage && (
               <>
                 {showMap ? (
                   <Icon
@@ -241,12 +242,9 @@ const PlaceDetail = () => {
             mapy={placeDetail?.mapy || 0}
             height={imageHeight}
           />
-        ) : placeDetail?.firstimage ? (
+        ) : firstimage && placeDetail ? (
           <L.ImageContainer ref={imageContainerRef}>
-            <L.PlaceImage
-              src={placeDetail.firstimage}
-              alt={placeDetail.title}
-            />
+            <L.PlaceImage src={firstimage} alt={placeDetail.title} />
           </L.ImageContainer>
         ) : (
           <PlaceMap

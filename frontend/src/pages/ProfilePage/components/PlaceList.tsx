@@ -29,6 +29,7 @@ const PlaceList = () => {
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(
         place.contentid,
       )}`,
+      { state: { firstimage: place.firstimage } },
     )
   }
 

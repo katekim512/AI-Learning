@@ -89,7 +89,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
     if (!isEditing) {
       navigate(
         `/place/${encodeURIComponent(item.contenttypeid)}/${encodeURIComponent(item.contentid)}`,
-        { state: { date } },
+        { state: { date, firstimage: item.firstimage } },
       )
     }
   }

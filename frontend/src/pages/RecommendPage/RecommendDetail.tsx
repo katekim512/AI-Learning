@@ -148,6 +148,7 @@ const RecommendDetail: React.FC = () => {
   const handleClick = (place: RecommendPlace) => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { firstimage: place.firstimage } },
     )
   }
 
