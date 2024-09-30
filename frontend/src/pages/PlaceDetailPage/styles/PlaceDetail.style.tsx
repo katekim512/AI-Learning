@@ -100,11 +100,22 @@ export const OverviewContainer = styled.div`
   padding: 1rem 0;
 `
 
+export const HomepageTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
+  color: #333;
+`
+
 export const OverviewTitle = styled.h3`
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #333;
+  border-top: 1px solid #d9d9d9;
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
 `
 
 export const OverviewText = styled.p`

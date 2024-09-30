@@ -34,6 +34,7 @@ const PlaceCard: React.FC<{
   const handleClick = () => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { firstimage: place.firstimage } },
     )
   }
 

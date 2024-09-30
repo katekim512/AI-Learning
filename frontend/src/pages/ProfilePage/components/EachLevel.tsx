@@ -151,6 +151,7 @@ const EachLevel: React.FC = () => {
   const handleClick = (place: Level) => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { firstimage: place.firstimage } },
     )
   }
 
