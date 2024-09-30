@@ -157,10 +157,12 @@ const PlaceDetail = () => {
     if (!token || !contentid) return
 
     try {
-      await postAddVisited(token, Number(contentid))
-      await refetchVisitedList()
-      await refetchUser()
-      setIsVisited(!isVisited)
+      if (!isVisited) {
+        await postAddVisited(token, Number(contentid))
+        await refetchVisitedList()
+        await refetchUser()
+        setIsVisited(!isVisited)
+      }
     } catch (error) {
       console.error('Error toggling visited:', error)
     }
