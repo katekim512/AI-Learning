@@ -12,7 +12,10 @@ export const Title = styled.div`
   align-items: center;
   color: black;
   line-height: 1.6rem;
-  padding: 2rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 1rem;
   text-align: left;
   font-size: 18px;
 `
