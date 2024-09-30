@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import menuIcon from '@iconify-icons/tabler/menu'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { AISchedule } from '../../../api/schedule/getSchedule'
@@ -29,6 +29,8 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
   const ref = React.useRef<HTMLDivElement>(null)
+  const placeNameRef = useRef<HTMLSpanElement>(null)
+  const [shouldFlow, setShouldFlow] = useState(false)
 
   const [, drop] = useDrop({
     accept: ItemType,
@@ -86,6 +88,23 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
     onDelete(index) // Trigger delete on button press
   }
 
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (placeNameRef.current) {
+        const isOverflowing =
+          placeNameRef.current.scrollWidth > placeNameRef.current.clientWidth
+        setShouldFlow(isOverflowing)
+      }
+    }
+
+    checkOverflow()
+    window.addEventListener('resize', checkOverflow)
+
+    return () => {
+      window.removeEventListener('resize', checkOverflow)
+    }
+  }, [item.place])
+
   return (
     <div
       style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
@@ -104,7 +123,11 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
           <L.CityBox style={{ backgroundColor: cityBackgroundColor }}>
             {city}
           </L.CityBox>
-          <L.PlaceName>{item.place}</L.PlaceName>
+          <L.PlaceName ref={placeNameRef}>
+            <L.FlowWrap className='flow-wrap' shouldFlow={shouldFlow}>
+              {shouldFlow ? `${item.place} ${item.place}` : item.place}
+            </L.FlowWrap>
+          </L.PlaceName>
           <L.IconContainer>
             <div ref={ref} style={{ display: 'inline-block', cursor: 'move' }}>
               <Icon icon={menuIcon} width='18' height='18' />
