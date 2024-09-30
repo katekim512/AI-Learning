@@ -90,7 +90,7 @@ const Rank: React.FC = () => {
         <h1>교육여행장소 TOP100</h1>
       </L.Title>
       <L.PlacesContainer>
-        {top100Places.map((place, index) => (
+        {top100Places.slice(0, 100).map((place, index) => (
           <PlaceCard
             key={place.contentid}
             place={place}
