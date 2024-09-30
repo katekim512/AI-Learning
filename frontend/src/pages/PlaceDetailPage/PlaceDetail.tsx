@@ -270,7 +270,7 @@ const PlaceDetail = () => {
         <L.OverviewContainer>
           {placeDetail?.homepage && (
             <>
-              <L.OverviewTitle>홈페이지</L.OverviewTitle>
+              <L.HomepageTitle>홈페이지</L.HomepageTitle>
               <L.HomepageLink
                 dangerouslySetInnerHTML={{ __html: placeDetail.homepage }}
               />
