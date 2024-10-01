@@ -47,14 +47,14 @@ const IndoorPlace: React.FC = () => {
   const { daySchedule, setDaySchedule } = useDayScheduleStore()
 
   const location = useLocation()
-  const { date: dateParam, contentid: contentidParam } = location.state as {
-    date: string
-    contentid: string
-  }
+  const { date: dateParam, contentid: contentidParam } =
+    (location.state as {
+      date?: string
+      contentid?: string
+    }) || {}
 
-  // null 체크 추가
-  const date = dateParam ?? ''
-  const contentid = contentidParam ?? ''
+  const date = dateParam || ''
+  const contentid = contentidParam || ''
 
   console.log('Date:', date)
 
