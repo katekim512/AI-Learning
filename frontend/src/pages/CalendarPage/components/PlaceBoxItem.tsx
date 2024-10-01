@@ -98,7 +98,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
     <>
       <L.NumberCircle>{index + 1}</L.NumberCircle>
       {index < totalItems - 1 && (
-        <L.DistancePlaceholder>{distance[index]}m</L.DistancePlaceholder>
+        <L.DistancePlaceholder>{distance[index]}</L.DistancePlaceholder>
       )}
       <L.PlaceBoxContainer
         isSliding={!isEditing && isSliding === index}
