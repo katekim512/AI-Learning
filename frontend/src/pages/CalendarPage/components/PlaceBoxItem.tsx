@@ -98,7 +98,7 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
     <>
       <L.NumberCircle>{index + 1}</L.NumberCircle>
       {index < totalItems - 1 && (
-        <L.DistancePlaceholder>{distance[index]}m</L.DistancePlaceholder>
+        <L.DistancePlaceholder>{distance[index]}</L.DistancePlaceholder>
       )}
       <L.PlaceBoxContainer
         isSliding={!isEditing && isSliding === index}
@@ -132,7 +132,10 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
             <L.PlaceBoxPic alt='placePreview' src={item.firstimage} />
             <L.DeleteIcon
               isVisible={isSliding === index}
-              onClick={() => onDelete(index)}
+              onClick={e => {
+                e.stopPropagation()
+                onDelete(index)
+              }}
             >
               삭제
             </L.DeleteIcon>
