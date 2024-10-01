@@ -36,6 +36,8 @@ const ChangeInfo = () => {
 
   useEffect(() => {
     if (userInfo) {
+      setYear(userInfo.birth)
+      console.log(userInfo)
       const cityInfo = getCityAndSigunguName(
         userInfo.areacode,
         userInfo.sigungucode,
@@ -46,7 +48,6 @@ const ChangeInfo = () => {
 
       // 지역이 설정되었을 때, 시군구 목록도 설정
       const sigungus = getSigunguByAreacode(cityInfo[0])
-      console.log(sigungus)
       setSigunguList(sigungus)
 
       setAreacode(userInfo.areacode)
@@ -119,7 +120,7 @@ const ChangeInfo = () => {
           <L.Select
             name='year'
             id='year'
-            value={userInfo?.birth}
+            value={year}
             onChange={handleSelectChange}
             required
           >
