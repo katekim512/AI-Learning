@@ -8,7 +8,8 @@ export interface User {
   nickname: string
   profile: string
   birth: number
-  city: string
+  areacode: number
+  sigungucode: number
   levels: Level
 }
 

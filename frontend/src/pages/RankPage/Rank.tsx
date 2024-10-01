@@ -6,6 +6,7 @@ import * as L from './styles/Rank.style'
 import { getRank } from '../../api/rank/getRank'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
+import { useWeatherAlert } from '../../stores/useWeatherAlert'
 
 interface Place {
   contentid: number
@@ -33,6 +34,7 @@ const PlaceCard: React.FC<{
   const handleClick = () => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
+      { state: { firstimage: place.firstimage } },
     )
   }
 
@@ -54,6 +56,7 @@ const Rank: React.FC = () => {
   const { visitedList } = useVisitedList()
   const [visitedPlaces, setVisitedPlaces] = useState<Set<number>>(new Set())
   const [top100Places, setTop100Places] = useState<Place[]>([])
+  const { setHasCheckedAlertToday } = useWeatherAlert()
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -77,15 +80,19 @@ const Rank: React.FC = () => {
 
     fetchPlaces()
     fetchVisitedPlaces()
-  }, [visitedList])
+
+    // hasCheckedAlertToday를 false로 리셋
+    setHasCheckedAlertToday(false)
+    console.log('hasCheckedAlertToday 상태가 false로 리셋되었습니다.')
+  }, [])
 
   return (
     <L.AppContainer>
       <L.Title>
-        <h1>교육여행장소 TOP100</h1>
+        <h1>교육여행장소 100곳</h1>
       </L.Title>
       <L.PlacesContainer>
-        {top100Places.map((place, index) => (
+        {top100Places.slice(0, 100).map((place, index) => (
           <PlaceCard
             key={place.contentid}
             place={place}

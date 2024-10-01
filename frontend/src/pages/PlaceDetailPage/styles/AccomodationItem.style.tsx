@@ -26,7 +26,7 @@ export const PlaceBoxText = styled.div`
   line-height: 1.2rem;
   justify-content: center;
   align-items: center;
-  margin-left: 0.5rem;
+
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 `

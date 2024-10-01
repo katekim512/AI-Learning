@@ -30,13 +30,22 @@ const ProfileSection = () => {
     const response = await postIndoor(token, '2024-10-12', 126508)
     if (response) console.log(response.data)
   }
+  const handleAlertClick = () => {
+    navigate('/alert') // AlertPage로 이동
+  }
 
   return (
     <>
       <L.ProfileHeaderSection>
         <L.Title onClick={handleTestAPI}>프로필</L.Title>
         <L.HeaderIcon>
-          <Icon icon='ph:bell' width='24' height='24' />
+          <Icon
+            icon='ph:bell'
+            width='24'
+            height='24'
+            onClick={handleAlertClick}
+            style={{ cursor: 'pointer' }}
+          />
           <Icon
             icon='line-md:logout'
             width='24'

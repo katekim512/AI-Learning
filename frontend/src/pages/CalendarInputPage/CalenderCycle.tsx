@@ -5,7 +5,7 @@ import CalendarFrame2 from './components/CalenderFrame2'
 import * as L from './styles/CalendarFrame.style'
 import AlertPopUp1 from '../../components/AlertPopUp/AlertPopUp1/AlertPopUp1'
 import CloseButton from '../../components/CloseButton/CloseButton'
-import InfoBanner from '../../components/InfoBanner/InfoBanner'
+import InfoBannerNoX from '../../components/InfoBannerNoX/InfoBannerNoX'
 import {
   useScheduleStore,
   calculateEndDate,
@@ -25,7 +25,6 @@ const CalendarCycle = () => {
     month: today.getMonth() + 1,
   })
 
-  const [showBanner, setShowBanner] = useState(true) // 배너를 보여줄지 여부를 결정하는 상태
   const [selectedDate, setSelectedDate] = useState<string>(
     type === 'start'
       ? startDate || today.toISOString().split('T')[0]
@@ -137,9 +136,7 @@ const CalendarCycle = () => {
           <CloseButton />
           <L.HeaderTitle>날짜 선택</L.HeaderTitle>
         </L.HeaderSection>
-        {showBanner && (
-          <InfoBanner text={bannerText} onClose={() => setShowBanner(false)} />
-        )}
+        <InfoBannerNoX text={bannerText} />
         <L.WeekSection>
           <L.HeaderText>일</L.HeaderText>
           <L.HeaderText>월</L.HeaderText>

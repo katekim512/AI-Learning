@@ -1,9 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import App from './App'
+import IndoorAlertPopUp from './components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import AISchedule1 from './pages/AISchedule1Page/AISchedule1'
 import AISchedule2 from './pages/AISchedule2Page/AISchedule2'
 import AISchedule3 from './pages/AISchedule3Page/AISchedule3'
+import Alert from './pages/AlertPage/Alert'
 import CalendarInput from './pages/CalendarInputPage/CalendarInput'
 import CalendarCycle from './pages/CalendarInputPage/CalenderCycle'
 import Calendar from './pages/CalendarPage/Calendar'
@@ -13,6 +15,7 @@ import ChangeNickname from './pages/ChangeNicknamePage/ChangeNickname'
 import ChangePassword from './pages/ChangePasswordPage/ChangePassword'
 import CheckPassword from './pages/CheckPasswordPage/CheckPassword'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
+import Guide from './pages/GuidePage/Guide'
 import IndoorPlace from './pages/IndoorPlacePage/IndoorPlace'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
 import Login from './pages/LoginPage/Login'
@@ -67,6 +70,10 @@ const router = createBrowserRouter([
         element: <Calendar />,
       },
       {
+        path: 'indoorAlertPopUp',
+        element: <IndoorAlertPopUp onClose={() => {}} />,
+      },
+      {
         path: 'addplace/:date',
         element: <AddPlace />,
       },
@@ -87,8 +94,16 @@ const router = createBrowserRouter([
         element: <IndoorPlace />,
       },
       {
+        path: 'guide',
+        element: <Guide />,
+      },
+      {
         path: 'profile',
         element: <Profile />,
+      },
+      {
+        path: 'alert',
+        element: <Alert />,
       },
       {
         path: 'eachlevel/:level',

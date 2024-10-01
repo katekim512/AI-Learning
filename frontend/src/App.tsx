@@ -18,6 +18,7 @@ const App = () => {
   const showBottomMenuBar = [
     '/calendar',
     '/profile',
+    '/guide',
     '/recommend-place',
     '/ranking-place',
   ].includes(location.pathname)

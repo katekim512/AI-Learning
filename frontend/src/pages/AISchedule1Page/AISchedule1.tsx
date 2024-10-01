@@ -1,4 +1,3 @@
-import calendarIcon from '@iconify/icons-mdi/calendar'
 import { Icon } from '@iconify/react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -157,23 +156,27 @@ const AISchedule1: React.FC = () => {
           <S.Label>얼마나</S.Label>
 
           <S.DateInputContainer>
-            <S.DateButton onClick={() => handleCalendarIconClick('start')}>
-              {startDate || 'Select Start Date'}
-            </S.DateButton>
-            <Icon
-              icon={calendarIcon}
-              onClick={() => handleCalendarIconClick('start')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
+            <S.DateGroup>
+              <S.DateButton onClick={() => handleCalendarIconClick('start')}>
+                {startDate || 'Select Start Date'}
+              </S.DateButton>
+              <Icon
+                icon='mdi:calendar'
+                onClick={() => handleCalendarIconClick('start')}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </S.DateGroup>
             <S.Separator>~</S.Separator>
-            <S.DateButton onClick={() => handleCalendarIconClick('end')}>
-              {endDate || 'Select End Date'}
-            </S.DateButton>
-            <Icon
-              icon={calendarIcon}
-              onClick={() => handleCalendarIconClick('end')}
-              style={{ cursor: 'pointer', marginLeft: '10px' }}
-            />
+            <S.DateGroup>
+              <S.DateButton onClick={() => handleCalendarIconClick('end')}>
+                {endDate || 'Select End Date'}
+              </S.DateButton>
+              <Icon
+                icon='mdi:calendar'
+                onClick={() => handleCalendarIconClick('end')}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </S.DateGroup>
           </S.DateInputContainer>
         </S.Section>
 
@@ -181,7 +184,7 @@ const AISchedule1: React.FC = () => {
           <S.Label>
             어느 주기로{' '}
             <Icon
-              icon={calendarIcon}
+              icon='mdi:calendar'
               style={{ cursor: 'pointer' }}
               onClick={() => handleCalendarIconClick2()}
             />

@@ -3,39 +3,37 @@ import styled from 'styled-components'
 export const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh; /* 전체 화면 높이 */
+  height: 100vh;
+  overflow: hidden;
 `
 
 export const Title = styled.div`
   display: flex;
-  justify-content: flex-start; /* 좌측 정렬 */
+  justify-content: flex-start;
   align-items: center;
   color: black;
   line-height: 2rem;
   margin-top: 0.5rem;
   height: 4.5rem;
-  padding-left: 2rem; /* 좌측 여백 추가 (필요에 따라 조정 가능) */
-  text-align: left; /* 텍스트를 좌측 정렬 */
+  padding-left: 2rem;
+  text-align: left;
   font-size: 18px;
+  z-index: 100;
+  position: relative;
 `
 
 export const PlacesContainer = styled.main`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
-  gap: 20px;
-  max-width: 1200px;
-  //margin: 0 auto;
-  padding-bottom: 6rem; //하단 메뉴 바 보다 조금 위에 위치
-  overflow-y: auto; /* 세로 스크롤 가능하게 설정 */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: calc((100vh - 16rem) / 8); // 8줄에 맞춰 높이 계산
+  gap: 15px;
+  padding: 10px 20px;
+  height: calc(100vh - 10rem); // Title(60px)과 하단 메뉴바(60px) 높이를 뺌
+  overflow-y: auto;
 `
 
 export const PlaceCardContainer = styled.div<{ selected: boolean }>`
-  width: 20%;
-  height: 10%;
-  aspect-ratio: 1;
-  background-color: ${props => (props.selected ? '#b3d8c3' : '#eeeeee;')};
+  background-color: ${props => (props.selected ? '#b3d8c3' : '#eeeeee')};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -43,6 +41,8 @@ export const PlaceCardContainer = styled.div<{ selected: boolean }>`
   text-align: center;
   transition: transform 0.2s;
   position: relative;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: scale(1.05);
@@ -53,18 +53,17 @@ export const PlaceImage = styled.img`
   width: 100%;
   height: 70%;
   object-fit: cover;
-  display: block;
 `
 
 export const NumberBadge = styled.div`
   position: absolute;
   top: -1px;
   left: -1px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   color: #333;
-  //border-radius: 10px;
-  width: 15px;
-  height: 15px;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,22 +73,23 @@ export const NumberBadge = styled.div`
 
 export const CheckMark = styled.div`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); // 가운데 정렬
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 50px;
   background-color: rgba(76, 175, 80, 0.3);
   color: white;
 `
 
 export const PlaceName = styled.p`
   margin: 0;
-  font-size: 8px;
   padding: 5px;
-  //font-weight: bold;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `

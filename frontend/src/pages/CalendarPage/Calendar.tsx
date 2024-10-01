@@ -5,24 +5,75 @@ import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
 import * as L from './styles/Calendar.style'
+import { getAlertPlace, AlertPlace } from '../../api/profile/getAlertList'
+import IndoorAlertPopUp from '../../components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
-
-const Calendar = () => {
+import authToken from '../../stores/authToken'
+import { useAlertStore } from '../../stores/useFutureAlerts'
+import { useScheduleStore, initialState } from '../../stores/useScheduleStore'
+import { useWeatherAlert } from '../../stores/useWeatherAlert'
+const Calendar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
+  const [showPopup, setShowPopup] = useState(false)
 
   const { refetch: refetchUser } = useUser()
   const { refetch: refetchLikeList } = useLikeList()
   const { refetch: refetchVisitedList } = useVisitedList()
+
+  const {
+    setLastCalendarVisit,
+    setHasCheckedAlertToday,
+    hasCheckedAlertToday,
+    resetDailyCheck,
+  } = useWeatherAlert()
+
+  const { futureAlerts, setFutureAlerts } = useAlertStore()
+  console.log(futureAlerts)
 
   const today = new Date()
   const [currentDate, setCurrentDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   })
+
+  useEffect(() => {
+    const fetchAlertPlaces = async () => {
+      const token = authToken.getAccessToken()
+      try {
+        const response = await getAlertPlace(token)
+        if (response && response.data) {
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+
+          const newFutureAlerts = response.data.filter((place: AlertPlace) => {
+            const placeDate = new Date(place.date)
+            return placeDate >= today
+          })
+
+          setFutureAlerts(newFutureAlerts)
+
+          if (newFutureAlerts.length > 0 && !hasCheckedAlertToday) {
+            setShowPopup(true)
+          }
+        }
+      } catch (error) {
+        console.error('알림 장소 가져오기 실패:', error)
+      }
+    }
+
+    setLastCalendarVisit(new Date().toISOString())
+    resetDailyCheck()
+    fetchAlertPlaces()
+
+    console.log(
+      'hasCheckedAlertToday:',
+      useWeatherAlert.getState().hasCheckedAlertToday,
+    )
+  }, [setLastCalendarVisit])
 
   // selectedDate가 존재하면 그 날짜의 Drawer를 열기 위한 로직
   useEffect(() => {
@@ -33,7 +84,6 @@ const Calendar = () => {
         month: Number(month),
       })
     } else {
-      // selectedDate가 없을 때만 현재 날짜로 설정
       setCurrentDate({
         year: today.getFullYear(),
         month: today.getMonth() + 1,
@@ -52,6 +102,7 @@ const Calendar = () => {
   }, [])
 
   const handleAIScheduleButton = () => {
+    useScheduleStore.setState(initialState)
     navigate('/ai-schedule-step1')
   }
 
@@ -121,6 +172,20 @@ const Calendar = () => {
     delta: 10,
   })
 
+  const handleClosePopup = () => {
+    setShowPopup(false)
+    setHasCheckedAlertToday(true)
+
+    console.log(
+      'hasCheckedAlertToday:',
+      useWeatherAlert.getState().hasCheckedAlertToday,
+    )
+  }
+
+  useEffect(() => {
+    console.log('showPopup:', showPopup)
+  }, [showPopup])
+
   return (
     <>
       <div {...handlers}>
@@ -152,6 +217,9 @@ const Calendar = () => {
           selectedDate={selectedDate}
         />
       </div>
+      {showPopup && !hasCheckedAlertToday && (
+        <IndoorAlertPopUp onClose={handleClosePopup} />
+      )}
     </>
   )
 }

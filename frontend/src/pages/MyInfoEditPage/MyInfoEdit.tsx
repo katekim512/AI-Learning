@@ -1,19 +1,16 @@
 import { useState } from 'react'
-import { useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
 import BackButton from './components/BackButton/BackButton'
 import ListItem from './components/ListItem'
+import ProfileDrawer from './components/ProfileDrawer'
 import * as L from './styles/MyInfoEdit.style'
-import { profileUpdate } from '../../api/profile/postProfileUpdate'
 import { useUser } from '../../hooks/useUser'
-import authToken from '../../stores/authToken'
 
 const MyInfoEdit = () => {
   const navigate = useNavigate()
-  const { data: userInfo, refetch } = useUser()
-  const queryClient = useQueryClient()
-  const [, setSelectedFile] = useState<File | null>(null)
+  const { data: userInfo } = useUser()
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const [previewSrc, setPreviewSrc] = useState<string>(
     userInfo ? userInfo.profile : '/img/profile-default.png',
   )
@@ -22,34 +19,13 @@ const MyInfoEdit = () => {
     navigate('/change-nickname')
   }
 
-  const handleFileUpload = () => {
-    const fileInput = document.createElement('input')
-    fileInput.type = 'file'
-    fileInput.accept = 'image/*'
-    fileInput.onchange = async e => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        setSelectedFile(file)
-        await handleUploadPhoto(file)
-      }
-    }
-    fileInput.click()
+  const handleChangeImage = () => {
+    setDrawerOpen(true)
   }
 
-  const handleUploadPhoto = async (file: File) => {
-    const token = authToken.getAccessToken()
-    if (token) {
-      const formData = new FormData()
-      formData.append('profile', file)
-
-      const successResponse = await profileUpdate(token, formData)
-      if (successResponse && successResponse.data) {
-        setPreviewSrc(URL.createObjectURL(file))
-
-        await refetch()
-        queryClient.invalidateQueries('user')
-      }
-    }
+  const handleProfileUpdate = (newProfileSrc: string) => {
+    setPreviewSrc(newProfileSrc) // 프로필 이미지 상태 업데이트
+    setDrawerOpen(false) // Drawer 닫기
   }
 
   return (
@@ -61,11 +37,7 @@ const MyInfoEdit = () => {
         </L.HeaderContainer>
         <L.ProfileSection>
           <L.ProfileContainer>
-            <L.ProfileImage
-              alt='profile'
-              src={previewSrc}
-              onClick={handleFileUpload}
-            />
+            <L.ProfileImage alt='profile' src={previewSrc} />
           </L.ProfileContainer>
           <L.ProfileInfoSection>
             <L.ProfileNickname>{userInfo?.nickname}</L.ProfileNickname>
@@ -74,7 +46,9 @@ const MyInfoEdit = () => {
         </L.ProfileSection>
         <L.MiddleButtonContainer>
           <L.MiddleButtonBox>
-            <L.MiddleButton>프로필 이미지 변경</L.MiddleButton>
+            <L.MiddleButton onClick={handleChangeImage}>
+              프로필 이미지 변경
+            </L.MiddleButton>
             <L.MiddleButton onClick={handleMoveNickname}>
               닉네임 변경
             </L.MiddleButton>
@@ -82,6 +56,12 @@ const MyInfoEdit = () => {
         </L.MiddleButtonContainer>
         <ListItem />
       </L.Container>
+      {drawerOpen && (
+        <ProfileDrawer
+          setDrawerOpen={setDrawerOpen}
+          onProfileUpdate={handleProfileUpdate}
+        />
+      )}
     </>
   )
 }

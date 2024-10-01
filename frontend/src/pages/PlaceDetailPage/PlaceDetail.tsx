@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import mapMarker from '@iconify/icons-majesticons/map-marker'
 import { Icon } from '@iconify/react'
 import heartIcon from '@iconify-icons/tabler/heart-filled'
 import React, { useEffect, useState, useRef } from 'react'
@@ -43,7 +42,7 @@ interface PlaceDetail {
 const PlaceDetail = () => {
   const token = authToken.getAccessToken()
   const location = useLocation()
-  const { date } = location.state || {} // date 가져오기
+  const { date, firstimage } = location.state
   const { contentid } = useParams<{ contentid: string }>()
   const { contenttypeid } = useParams<{ contenttypeid: string }>()
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null)
@@ -71,6 +70,7 @@ const PlaceDetail = () => {
   }, [menubarRef])
 
   useEffect(() => {
+    console.log(firstimage)
     fetchCommonPlaceInfo()
     fetchPlaceLikeTotal()
   }, [token, contentid])
@@ -82,7 +82,7 @@ const PlaceDetail = () => {
         setImageHeight(imageElement.clientHeight)
       }
     }
-  }, [placeDetail?.firstimage])
+  }, [firstimage])
 
   useEffect(() => {
     if (likeList && contentid) {
@@ -157,10 +157,12 @@ const PlaceDetail = () => {
     if (!token || !contentid) return
 
     try {
-      await postAddVisited(token, Number(contentid))
-      await refetchVisitedList()
-      await refetchUser()
-      setIsVisited(!isVisited)
+      if (!isVisited) {
+        await postAddVisited(token, Number(contentid))
+        await refetchVisitedList()
+        await refetchUser()
+        setIsVisited(!isVisited)
+      }
     } catch (error) {
       console.error('Error toggling visited:', error)
     }
@@ -193,7 +195,7 @@ const PlaceDetail = () => {
         <L.HeaderContainer>
           <BackButton />
           <L.MapButton>
-            {placeDetail?.firstimage && (
+            {firstimage && (
               <>
                 {showMap ? (
                   <Icon
@@ -226,7 +228,7 @@ const PlaceDetail = () => {
         </L.Title>
         <L.Title>
           <Icon
-            icon={mapMarker}
+            icon='icons-majesticons:map-marker'
             width='18'
             height='18'
             style={{ color: '#BCBCBC' }}
@@ -242,12 +244,9 @@ const PlaceDetail = () => {
             mapy={placeDetail?.mapy || 0}
             height={imageHeight}
           />
-        ) : placeDetail?.firstimage ? (
+        ) : firstimage && placeDetail ? (
           <L.ImageContainer ref={imageContainerRef}>
-            <L.PlaceImage
-              src={placeDetail.firstimage}
-              alt={placeDetail.title}
-            />
+            <L.PlaceImage src={firstimage} alt={placeDetail.title} />
           </L.ImageContainer>
         ) : (
           <PlaceMap
@@ -273,7 +272,7 @@ const PlaceDetail = () => {
         <L.OverviewContainer>
           {placeDetail?.homepage && (
             <>
-              <L.OverviewTitle>홈페이지</L.OverviewTitle>
+              <L.HomepageTitle>홈페이지</L.HomepageTitle>
               <L.HomepageLink
                 dangerouslySetInnerHTML={{ __html: placeDetail.homepage }}
               />

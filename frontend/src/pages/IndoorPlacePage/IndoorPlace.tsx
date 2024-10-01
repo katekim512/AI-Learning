@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import IndoorPlaceItem from './components/IndoorPlaceItem'
 import * as L from './styles/IndoorPlace.style'
@@ -10,11 +10,13 @@ import {
 } from '../../api/calendar/postTimelineDay'
 import { postTimelineFix } from '../../api/calendar/postTimelineFix'
 import { postIndoor } from '../../api/place/postIndoor'
+import { alertDelete } from '../../api/profile/postAlertDelete'
 import BackButton from '../../components/BackButton/BackButton'
 import Loading from '../../components/Loading/Loading'
 import { useAllPlace } from '../../hooks/useAllPlace'
 import authToken from '../../stores/authToken'
 import { useDayScheduleStore } from '../../stores/useDayScheduleStore'
+import { useAlertStore } from '../../stores/useFutureAlerts' // 추가
 import { getCityAndSigunguName } from '../../style/CityMapper2'
 import NoPlace from '../CalendarPage/components/NoPlace'
 import NoPlace2 from '../CalendarPage/components/NoPlace2'
@@ -44,12 +46,15 @@ const IndoorPlace: React.FC = () => {
   const navigate = useNavigate()
   const { daySchedule, setDaySchedule } = useDayScheduleStore()
 
-  const { date: dateParam, contentid: contentidParam } = useParams<{
+  const location = useLocation()
+  const { date: dateParam, contentid: contentidParam } = location.state as {
     date: string
     contentid: string
-  }>()
-  const date: string | null = dateParam ?? null
-  const contentid: string | null = contentidParam ?? null
+  }
+
+  // null 체크 추가
+  const date = dateParam ?? ''
+  const contentid = contentidParam ?? ''
 
   console.log('Date:', date)
 
@@ -64,21 +69,32 @@ const IndoorPlace: React.FC = () => {
     error: allPlacesError,
   } = useAllPlace() //전체 데이터 불러오기
 
+  const { futureAlerts, setFutureAlerts } = useAlertStore() // 추가
+
   useEffect(() => {
     const fetchData = async () => {
-      if (!token || !date) return
+      if (!token || !date || !contentid) {
+        console.error('Token, date, or contentid is missing', {
+          token,
+          date,
+          contentid,
+        })
+        return
+      }
 
       setIsLoading(true)
       try {
         // 일정 가져오기
         const scheduleResponse = await postTimelineDay(token, date)
         if (scheduleResponse && scheduleResponse.data) {
+          console.log('Received daySchedule:', scheduleResponse.data)
           setDaySchedule(scheduleResponse.data)
-          console.log('DaySchedule: ', scheduleResponse.data)
+        } else {
+          console.error('Failed to fetch day schedule or received empty data')
         }
 
         // 실내 장소 가져오기
-        console.log('contentid:', Number(contentid), 'date:', date)
+        console.log('contentid:', contentid, 'date:', date)
         const indoorResponse = await postIndoor(token, date, Number(contentid))
         if (indoorResponse && indoorResponse.data) {
           setIndoorPlaces(indoorResponse.data)
@@ -91,14 +107,32 @@ const IndoorPlace: React.FC = () => {
     }
 
     fetchData()
-  }, [token, date, setDaySchedule])
+  }, [token, date, contentid, setDaySchedule])
 
-  const findOriginalPlaceName = () => {
-    if (!daySchedule || !contentid) return ''
+  const findOriginalPlace = () => {
+    if (!daySchedule || !daySchedule.info || !contentid) {
+      console.log('daySchedule or contentid is null/undefined', {
+        daySchedule,
+        contentid,
+      })
+      return null
+    }
+
     const originalPlace = daySchedule.info.find(
-      place => place.contentid.toString() === contentid,
+      place =>
+        place.contentid &&
+        place.contentid.toString() === Number(contentid).toString(),
     )
-    return originalPlace ? originalPlace.place : ''
+
+    if (!originalPlace) {
+      console.log('Original place not found', {
+        contentid,
+        dayScheduleInfo: daySchedule.info,
+      })
+      return null
+    }
+
+    return originalPlace
   }
 
   const fetchPlaces = async () => {
@@ -123,22 +157,45 @@ const IndoorPlace: React.FC = () => {
   const handleClick = (place: RecommendPlace) => {
     navigate(
       `/place/${encodeURIComponent(place.contenttypeid)}/${encodeURIComponent(place.contentid)}`,
-      { state: { date } },
+      { state: { date, firstimage: place.firstimage } },
     )
   }
 
   const handleFixButtonClick = async (
     newPlace: RecommendPlace,
-    originalPlaceName: string,
+    originalPlace: PlacePreviewInfo | null,
   ) => {
-    if (!date || !daySchedule || !contentid) {
-      console.error('Date, day schedule, or contentid is null or undefined.')
+    if (!date || !daySchedule || !originalPlace) {
+      console.error(
+        'Date, day schedule, or originalPlace is null or undefined.',
+      )
       return
     }
 
+    // Zustand 스토어 업데이트
+    const updatedFutureAlerts = futureAlerts.filter(
+      alert => alert.contentid !== originalPlace.contentid,
+    )
+    setFutureAlerts(updatedFutureAlerts)
+
+    // 업데이트된 Zustand 스토어의 futureAlerts 값을 콘솔에 출력
+    console.log(
+      'Updated Zustand futureAlerts:',
+      useAlertStore.getState().futureAlerts,
+    )
+
+    const response = await alertDelete(token, {
+      date: date, // 원래 장소의 날짜
+      contentid: originalPlace.contentid, // 원래 장소의 contentid
+    })
+
+    console.log('Alert deleted response:', response)
+
     try {
       const indexToReplace = daySchedule.info.findIndex(
-        place => place.contentid.toString() === contentid,
+        place =>
+          place.contentid &&
+          place.contentid.toString() === originalPlace.contentid.toString(),
       )
 
       if (indexToReplace === -1) {
@@ -171,8 +228,9 @@ const IndoorPlace: React.FC = () => {
 
       if (response && response.data) {
         console.log(
-          `장소가 ${originalPlaceName}에서 ${newPlace.place}로 변경되었습니다.`,
+          `장소가 ${originalPlace?.place || '원래 장소'}에서 ${newPlace.place}로 변경되었습니다.`,
         )
+
         navigate('/calendar', {
           state: {
             selectedDate: date,
@@ -293,7 +351,7 @@ const IndoorPlace: React.FC = () => {
                     key={place.contentid}
                     place={place}
                     index={index}
-                    originalPlaceName={findOriginalPlaceName()}
+                    originalPlace={findOriginalPlace()}
                     onClick={handleClick}
                     onFixClick={handleFixButtonClick}
                   />
@@ -304,16 +362,19 @@ const IndoorPlace: React.FC = () => {
             )
           ) : indoorPlaces.length > 0 ? (
             <L.PlacesList>
-              {indoorPlaces.map((place, index) => (
-                <IndoorPlaceItem
-                  key={place.contentid}
-                  place={place}
-                  index={index}
-                  originalPlaceName={findOriginalPlaceName()}
-                  onClick={handleClick}
-                  onFixClick={handleFixButtonClick}
-                />
-              ))}
+              {indoorPlaces.map(
+                (place, index) =>
+                  place && (
+                    <IndoorPlaceItem
+                      key={place.contentid || index}
+                      place={place}
+                      index={index}
+                      originalPlace={findOriginalPlace()}
+                      onClick={handleClick}
+                      onFixClick={handleFixButtonClick}
+                    />
+                  ),
+              )}
             </L.PlacesList>
           ) : (
             <NoPlace />
