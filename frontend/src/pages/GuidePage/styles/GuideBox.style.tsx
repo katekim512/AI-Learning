@@ -31,6 +31,8 @@ export const OverviewText = styled.p`
   font-size: 0.9rem;
   line-height: 1.4;
   white-space: pre-wrap;
+  text-align: center;
+  padding: 2rem;
 `
 
 export const PlaceBoxText = styled.div`
