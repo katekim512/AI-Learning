@@ -19,7 +19,7 @@ interface DrawerCenterProps {
 
 export const DrawerContainer = styled.div<DrawerContainerProps>`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: ${({ isExpanded }) => (isExpanded ? 'calc(100vh - 10rem)' : '17rem')};
   background-color: white;
   position: fixed;
@@ -64,7 +64,7 @@ export const DeleteText = styled.p`
 export const DrawerBottom = styled.div`
   position: fixed;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   bottom: 5rem;
   justify-content: space-between;
 `

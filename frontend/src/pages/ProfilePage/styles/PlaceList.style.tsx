@@ -67,3 +67,13 @@ export const PlaceDescription = styled.p`
   color: #666;
   margin: 5px 0 0 0;
 `
+export const CenteredMessage = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  width: 100%;
+`

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import BottomNav from './BottomMenuBar/BottomMenuBar'
 
 const Container = styled.div`
-  max-width: 400px;
+  max-width: 440px;
   width: 100vw;
   margin-left: auto;
   margin-right: auto;

@@ -115,7 +115,7 @@ export const Description = styled.p`
 
 export const MoreButton = styled.button`
   width: calc(100% - 40px); // 좌우 20px 여백을 고려한 너비
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

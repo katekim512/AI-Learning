@@ -53,12 +53,12 @@ export const Form = styled.form`
   bottom: 0;
   padding: 1.5rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
 `
 
 export const Button = styled.button`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

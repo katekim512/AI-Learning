@@ -31,6 +31,7 @@ export const Title = styled.h1`
   display: flex; // Flexbox 사용
   justify-content: center; // 수평 중앙 정렬
   align-items: center; // 수직 중앙 정렬 (필요한 경우)
+  transform: translateX(-2px);
 `
 
 export const BoldText = styled.span`
@@ -75,4 +76,14 @@ export const AlertText = styled.p<PassedProps>`
 
 export const ArrowIcon = styled.div`
   font-size: 20px;
+`
+
+export const NoAlertsMessage = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 16px;
+  color: #666;
 `

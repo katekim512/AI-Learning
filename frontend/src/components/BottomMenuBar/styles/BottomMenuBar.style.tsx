@@ -5,7 +5,7 @@ export const MenuBar = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 5rem;
   position: fixed;
   bottom: 0;

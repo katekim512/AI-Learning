@@ -121,7 +121,7 @@ export const BottomButton = styled.button`
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 3rem);
-  max-width: 352px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

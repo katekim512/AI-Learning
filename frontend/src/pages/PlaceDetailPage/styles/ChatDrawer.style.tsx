@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const DrawerContainer = styled.div<{ isopen: boolean }>`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: calc(100vh - 5rem);
   background-color: #eff1ff;
   position: fixed;

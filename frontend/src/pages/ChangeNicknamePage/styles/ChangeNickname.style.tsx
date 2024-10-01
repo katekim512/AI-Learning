@@ -32,7 +32,7 @@ export const InputWrapper = styled.div`
 
 export const Input = styled.input`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 1rem;
   background-color: #f9fafb;
   border: 1px solid #d1d5db;
@@ -86,7 +86,7 @@ export const BottomButton = styled.button`
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 3rem);
-  max-width: 352px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

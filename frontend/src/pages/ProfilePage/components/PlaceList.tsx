@@ -74,7 +74,8 @@ const PlaceList = () => {
   // 탭별 데이터 렌더링
   const renderList = () => {
     if (selectedTab === 'recent') {
-      if (loadingRecent) return <div>로딩 중...</div>
+      if (loadingRecent)
+        return <L.CenteredMessage>로딩 중...</L.CenteredMessage>
       if (errorRecent) return <div>{errorRecent}</div>
       return recentList.map(place => (
         <PlaceItem key={place.contentid} place={place} onClick={handleClick} />
@@ -90,7 +91,7 @@ const PlaceList = () => {
         <PlaceItem key={place.contentid} place={place} onClick={handleClick} />
       ))
     }
-    return <div>목록이 없습니다.</div>
+    return <L.CenteredMessage>목록이 없습니다.</L.CenteredMessage>
   }
 
   return (

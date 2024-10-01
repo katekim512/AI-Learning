@@ -15,7 +15,7 @@ export const Overlay = styled.div`
 
 export const DrawerContainer = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 7rem;
   background-color: white;
   position: fixed;
@@ -39,7 +39,7 @@ export const DrawerHeaderText = styled.p`
 
 export const DrawerBottom = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   justify-content: start;
 `
 

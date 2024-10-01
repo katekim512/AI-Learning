@@ -68,7 +68,7 @@ export const ProfileEmail = styled.p`
 
 export const MiddleButtonContainer = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   bottom: 5rem;
   justify-content: space-between;
 `

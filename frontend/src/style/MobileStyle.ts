@@ -5,7 +5,7 @@ export const MobileContainer = styled.div`
   top: 0;
   left: 50%;
   transform: translateX(-50%) rotate(0deg);
-  max-width: 400px; /* 개발용 화면 디자인 확인 */
+  max-width: 440px; /* 개발용 화면 디자인 확인 */
   width: 100vw;
   height: 100vh;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

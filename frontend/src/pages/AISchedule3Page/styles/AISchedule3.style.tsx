@@ -25,7 +25,7 @@ export const ContainerTotal = styled.div`
 export const Container1 = styled.div`
   box-sizing: border-box;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 10rem;
   display: flex;
   flex-direction: column;
@@ -40,7 +40,7 @@ export const Container1 = styled.div`
 
 export const Divider = styled.div`
   width: 90%;
-  max-width: 400px;
+  max-width: 440px;
   height: 1px;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -52,7 +52,7 @@ export const Divider = styled.div`
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: calc(
     100vh - 14rem
   ); /* 화면 높이에서 Container1과 버튼의 높이를 제외한 값 */
@@ -212,7 +212,7 @@ export const BottomButton = styled.button`
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 3rem);
-  max-width: 352px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

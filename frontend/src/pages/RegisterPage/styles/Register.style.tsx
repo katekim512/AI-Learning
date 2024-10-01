@@ -23,7 +23,7 @@ export const Title = styled.h1`
 
 export const Form = styled.form`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
 `
 
 export const InputWrapper = styled.div`
@@ -40,7 +40,7 @@ export const Label = styled.p`
 
 export const Input = styled.input`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 1rem;
   background-color: #f9fafb;
   border: 1px solid #d1d5db;
@@ -58,7 +58,7 @@ export const Input = styled.input`
 
 export const Select = styled.select`
   width: 40%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 0.7rem;
   background-color: #f9fafb;
   border: 1px solid #d1d5db;
@@ -106,7 +106,7 @@ export const ValidationMessage = styled.p<ValidationMessageProps>`
 
 export const SubmitButton = styled.button`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

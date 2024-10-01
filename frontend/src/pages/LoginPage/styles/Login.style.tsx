@@ -20,12 +20,12 @@ export const ImgContainer = styled.img`
 
 export const Form = styled.form`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
 `
 
 export const Input = styled.input`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
@@ -36,7 +36,7 @@ export const Input = styled.input`
 
 export const Button = styled.button`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

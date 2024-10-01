@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import * as S from './styles/Alert.style'
 import { getAlertPlace, AlertPlace } from '../../api/profile/getAlertList'
 import BackButton from '../../components/BackButton/BackButton'
+import Loading from '../../components/Loading/Loading' // Loading 컴포넌트 import
 import authToken from '../../stores/authToken'
 import { useWeatherAlert } from '../../stores/useWeatherAlert'
 
 const Alert: React.FC = () => {
   const navigate = useNavigate()
   const [alerts, setAlerts] = useState<AlertPlace[]>([])
+  const [isLoading, setIsLoading] = useState(true) // Loading 상태 추가
 
   const getDateDifference = (dateString: string) => {
     const today = new Date()
@@ -100,6 +102,7 @@ const Alert: React.FC = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       const token = authToken.getAccessToken()
+      setIsLoading(true) // 데이터 로딩 시작
       try {
         const response = await getAlertPlace(token)
         if (response && response.data) {
@@ -108,6 +111,8 @@ const Alert: React.FC = () => {
         }
       } catch (error) {
         console.error('Failed to fetch alerts:', error)
+      } finally {
+        setIsLoading(false) // 데이터 로딩 완료
       }
     }
 
@@ -179,52 +184,60 @@ const Alert: React.FC = () => {
   //     fetchAlerts()
   //   }, [])
 
+  if (isLoading) {
+    return <Loading /> // 로딩 중일 때 Loading 컴포넌트 표시
+  }
+
   return (
     <S.Container>
       <S.Header>
         <BackButton />
         <S.Title>알림</S.Title>
       </S.Header>
-      <S.AlertList>
-        {alerts.map(alert => {
-          const isPassed = isDatePassed(alert.date)
-          return (
-            <S.AlertItem
-              key={alert.contentid}
-              onClick={() =>
-                !isPassed && handleAlertItemClick(alert.contentid, alert.date)
-              }
-              isPassed={isPassed}
-            >
-              <S.WeatherIcon>
-                <Icon
-                  icon={getWeatherIcon(alert.weather)}
-                  {...getWeatherIconSize(alert.weather)}
-                  color={isPassed ? '#A0A0A0' : '#525FD4'}
-                />
-              </S.WeatherIcon>
-              <S.AlertContent>
-                <S.AlertText isPassed={isPassed}>
-                  <S.BoldText>{getDateDifference(alert.date)}</S.BoldText>{' '}
-                  {getWeatherText(alert.weather)} 올 예정이에요
-                </S.AlertText>
-                <S.AlertText isPassed={isPassed}>
-                  예정된 <S.BoldText>{alert.place}</S.BoldText> 일정을
-                  변경해볼까요?
-                </S.AlertText>
-              </S.AlertContent>
-              <S.ArrowIcon>
-                <Icon
-                  icon='heroicons-solid:chevron-right'
-                  width='24'
-                  height='24'
-                  color={isPassed ? '#A0A0A0' : '#525FD4'}
-                />
-              </S.ArrowIcon>
-            </S.AlertItem>
-          )
-        })}
-      </S.AlertList>
+      {alerts.length === 0 ? (
+        <S.NoAlertsMessage>알림 내역이 없습니다</S.NoAlertsMessage>
+      ) : (
+        <S.AlertList>
+          {alerts.map(alert => {
+            const isPassed = isDatePassed(alert.date)
+            return (
+              <S.AlertItem
+                key={alert.contentid}
+                onClick={() =>
+                  !isPassed && handleAlertItemClick(alert.contentid, alert.date)
+                }
+                isPassed={isPassed}
+              >
+                <S.WeatherIcon>
+                  <Icon
+                    icon={getWeatherIcon(alert.weather)}
+                    {...getWeatherIconSize(alert.weather)}
+                    color={isPassed ? '#A0A0A0' : '#525FD4'}
+                  />
+                </S.WeatherIcon>
+                <S.AlertContent>
+                  <S.AlertText isPassed={isPassed}>
+                    <S.BoldText>{getDateDifference(alert.date)}</S.BoldText>{' '}
+                    {getWeatherText(alert.weather)} 올 예정이에요
+                  </S.AlertText>
+                  <S.AlertText isPassed={isPassed}>
+                    예정된 <S.BoldText>{alert.place}</S.BoldText> 일정을
+                    변경해볼까요?
+                  </S.AlertText>
+                </S.AlertContent>
+                <S.ArrowIcon>
+                  <Icon
+                    icon='heroicons-solid:chevron-right'
+                    width='24'
+                    height='24'
+                    color={isPassed ? '#A0A0A0' : '#525FD4'}
+                  />
+                </S.ArrowIcon>
+              </S.AlertItem>
+            )
+          })}
+        </S.AlertList>
+      )}
     </S.Container>
   )
 }

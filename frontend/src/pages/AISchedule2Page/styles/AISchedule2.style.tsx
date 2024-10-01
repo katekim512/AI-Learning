@@ -27,7 +27,7 @@ export const Highlighted = styled.span`
 
 export const InputBox = styled.textarea`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 1rem;
   height: 200px;
   border: none;

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const BottomButton = styled.button`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

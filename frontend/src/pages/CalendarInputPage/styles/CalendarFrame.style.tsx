@@ -154,7 +154,7 @@ export const BottomSection = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 5rem;
   align-items: center;
   justify-content: center;
@@ -169,7 +169,7 @@ export const FixedBottomButton = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   height: 46px;
   border-radius: 8px;
   border: none;

@@ -32,7 +32,7 @@ export const InputWrapper = styled.div`
 
 export const Input = styled.input`
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   padding: 1rem;
   background-color: #f9fafb;
   border: 1px solid #d1d5db;
