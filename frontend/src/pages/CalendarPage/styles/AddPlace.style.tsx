@@ -115,6 +115,7 @@ export const AddButton = styled.button`
   cursor: pointer;
   white-space: nowrap;
   border-radius: 22px;
+  margin-left: 5px;
 
   &:hover {
     background-color: #e0e0e0;
