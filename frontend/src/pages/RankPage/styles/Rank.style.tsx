@@ -28,7 +28,7 @@ export const PlacesContainer = styled.main`
   grid-auto-rows: calc((100vh - 16rem) / 8); // 8줄에 맞춰 높이 계산
   gap: 15px;
   padding: 10px 20px;
-  height: calc(100vh - 10rem); // Title(60px)과 하단 메뉴바(60px) 높이를 뺌
+  height: calc(100vh - 11rem); // Title(60px)과 하단 메뉴바(60px) 높이를 뺌
   overflow-y: auto;
 `
 
