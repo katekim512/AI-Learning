@@ -35,7 +35,7 @@ export const AIScheduleButton = styled.button`
 
 export const CalendarSection = styled.div`
   align-items: center;
-  height: calc(100vh - 12rem);
+  height: calc(100vh - 15rem);
 `
 
 export const WeekSection = styled.div`

@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
+import { useQuery } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable'
 
 import MainCalendar from './components/MainCalendar'
+import TodayMemo from './components/TodayMemo'
 import * as L from './styles/Calendar.style'
+import { postTimelineDay } from '../../api/calendar/postTimelineDay'
 import { getAlertPlace, AlertPlace } from '../../api/profile/getAlertList'
 import IndoorAlertPopUp from '../../components/AlertPopUp/IndoorAlertPopUp/IndoorAlertPopUp'
 import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
+import { useDayScheduleStore } from '../../stores/useDayScheduleStore'
 import { useAlertStore } from '../../stores/useFutureAlerts'
 import { useScheduleStore, initialState } from '../../stores/useScheduleStore'
 import { useWeatherAlert } from '../../stores/useWeatherAlert'
+
 const Calendar: React.FC = () => {
+  const token = authToken.getAccessToken()
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
+  const { daySchedule, setDaySchedule } = useDayScheduleStore()
   const [showPopup, setShowPopup] = useState(false)
 
   const { refetch: refetchUser } = useUser()
@@ -35,10 +42,25 @@ const Calendar: React.FC = () => {
   console.log(futureAlerts)
 
   const today = new Date()
+  const cyear = today.getFullYear()
+  const cmonth = String(today.getMonth() + 1).padStart(2, '0')
+  const cday = String(today.getDate()).padStart(2, '0')
+
+  const formattedDate = `${cyear}-${cmonth}-${cday}`
   const [currentDate, setCurrentDate] = useState({
-    year: today.getFullYear(),
+    year: cyear,
     month: today.getMonth() + 1,
   })
+
+  useQuery(
+    ['daySchedule', formattedDate],
+    () => postTimelineDay(token, formattedDate),
+    {
+      enabled: !!token,
+      select: response => response?.data,
+      onSuccess: formattedDate => setDaySchedule(formattedDate),
+    },
+  )
 
   useEffect(() => {
     const fetchAlertPlaces = async () => {
@@ -211,6 +233,7 @@ const Calendar: React.FC = () => {
             &nbsp;&nbsp;AI 교육여행
           </L.AIScheduleButton>
         </L.HeaderSection>
+        {daySchedule?.memo && <TodayMemo text={daySchedule.memo} />}
         <MainCalendar
           year={currentDate.year}
           month={currentDate.month}
