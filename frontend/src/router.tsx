@@ -25,6 +25,7 @@ import PasswordChange1 from './pages/PasswordChangePage/PasswordChange1'
 import PasswordChange3 from './pages/PasswordChangePage/PasswordChange3'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import EachLevel from './pages/ProfilePage/components/EachLevel'
+import Pattern from './pages/ProfilePage/components/Pattern'
 import Profile from './pages/ProfilePage/Profile'
 import Rank from './pages/RankPage/Rank'
 import Recommend from './pages/RecommendPage/Recommend'
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: <Profile />,
+      },
+      {
+        path: 'pattern',
+        element: <Pattern />,
       },
       {
         path: 'alert',
