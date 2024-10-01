@@ -13,10 +13,13 @@ export const Title = styled.div`
   align-items: center;
   color: black;
   line-height: 2rem;
-  padding: 1rem 2rem;
+  margin-top: 0.5rem;
+  height: 4.5rem;
+  padding-left: 2rem;
   text-align: left;
   font-size: 18px;
-  height: 3.75rem;
+  z-index: 100;
+  position: relative;
 `
 
 export const PlacesContainer = styled.main`
