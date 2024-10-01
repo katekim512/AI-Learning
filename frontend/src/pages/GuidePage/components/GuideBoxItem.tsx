@@ -43,8 +43,16 @@ const GuideBoxItem: React.FC<PlaceBoxItemProps> = ({ item }) => {
           <L.PlaceBoxPic alt='profile' src={item.profile} />
           <L.PlaceBoxText>
             <L.PlaceBoxTitle>{item.name}</L.PlaceBoxTitle>
-            <L.PlaceBoxCity>{item.description}</L.PlaceBoxCity>
+            <L.PlaceBoxCareer>{item.career}</L.PlaceBoxCareer>
+            <L.PlaceBoxTags>
+              <L.PlaceBoxTag>{item.city[0]}</L.PlaceBoxTag>
+              {item.city[1] && <L.PlaceBoxTag>{item.city[1]}</L.PlaceBoxTag>}
+              {item.city[2] && <L.PlaceBoxTag>{item.city[2]}</L.PlaceBoxTag>}
+            </L.PlaceBoxTags>
+
+            <L.PlaceBoxIntro>{item.description}</L.PlaceBoxIntro>
           </L.PlaceBoxText>
+          <L.ChatButton>채팅하기</L.ChatButton>
         </L.PlaceBoxContainer>
       </L.PlaceBoxWrapper>
     </>

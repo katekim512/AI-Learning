@@ -6,11 +6,15 @@ export const PlaceBoxWrapper = styled.div`
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-bottom: 1rem;
+
+  &:first-child {
+    margin-top: 1rem; /* 첫 번째 박스에만 윗 여백 추가 */
+  }
 `
 
 export const PlaceBoxContainer = styled.div`
   width: 100%;
-  height: 4.7rem;
+  height: 8rem;
   background-color: white;
   border-radius: 15px;
   padding: 1rem;
@@ -40,11 +44,37 @@ export const PlaceBoxText = styled.div`
 
 export const PlaceBoxTitle = styled.p`
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0.1rem;
+`
+
+export const PlaceBoxTags = styled.div`
+  display: flex;
   margin-left: 0.5rem;
 `
 
-export const PlaceBoxCity = styled.p`
+export const PlaceBoxTag = styled.div`
+  font-weight: 700;
+  width: 2.3rem;
+  font-size: 0.7rem;
+  text-align: center;
+  color: white;
+  border-radius: 1rem;
+  margin-bottom: 0.1rem;
+  margin-right: 0.3rem;
+  background-color: #00d9a5;
+`
+
+export const PlaceBoxCareer = styled.p`
+  font-weight: 700;
+  color: #353a40;
+  font-size: 0.8rem;
+  margin-bottom: 0.1rem;
+  margin-left: 0.5rem;
+`
+
+export const PlaceBoxIntro = styled.p`
   font-weight: 400;
   color: #626262;
   font-size: 0.75rem;
@@ -63,4 +93,15 @@ export const ScrollableContainer = styled.div`
   overflow-y: auto;
   margin-bottom: 5rem;
   padding-top: 0.3rem;
+`
+
+export const ChatButton = styled.button`
+  border: none;
+  border-radius: 1rem;
+  background-color: #525fd4;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  cursor: pointer;
 `
