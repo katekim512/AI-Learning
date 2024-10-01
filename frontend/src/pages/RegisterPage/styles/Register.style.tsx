@@ -9,6 +9,7 @@ export const Container = styled.div`
   gap: 1.6rem;
   align-items: center;
   padding: 1.5rem;
+  overflow-y: auto;
 `
 
 export const Title = styled.h1`
@@ -18,7 +19,6 @@ export const Title = styled.h1`
   text-align: center;
   padding: 1rem;
   border-bottom: 1px solid #dcdcdc;
-  margin-bottom: 1rem;
 `
 
 export const Form = styled.form`
@@ -122,7 +122,7 @@ export const SubmitButton = styled.button`
 `
 
 export const TextCenter = styled.p`
-  margin-top: 2.5rem;
+  margin-top: 1.2rem;
   text-align: center;
   font-size: 0.875rem;
   color: #6b7280;
@@ -138,7 +138,7 @@ export const Link = styled.a`
 
 export const ModalOverlay = styled.div`
   position: fixed;
-  top: 20px;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;

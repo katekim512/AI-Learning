@@ -5,6 +5,7 @@ import { checkEmail } from '../../../api/auth/postCheckEmail'
 import { checkNickname } from '../../../api/auth/postCheckNickname'
 import { login } from '../../../api/auth/postLogin'
 import { register } from '../../../api/auth/postRegister'
+import AlertPopUp1 from '../../../components/AlertPopUp/AlertPopUp1/AlertPopUp1'
 import {
   getAreaNames,
   getSigunguByAreacode,
@@ -55,38 +56,21 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const [selectedSigungu, setSelectedSigungu] = useState('') // 선택한 시군구
   const [sigunguList, setSigunguList] = useState<Sigungu[]>([]) // 해당 지역의 시군구 목록
 
+  const [alertMessage, setAlertMessage] = useState<string>('') // 알림창 메시지 상태
+  const [showAlert, setShowAlert] = useState<boolean>(false) // 알림창 표시 여부 상태
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-
     setSignupForm({ ...signupForm, [name]: value })
-
-    // if (name === 'email') {
-    //   setValidMessage(prev => ({
-    //     ...prev,
-    //     emailMessage: '다시 중복확인을 해주세요.',
-    //   }))
-    // }
-    // if (name === 'nickname') {
-    //   setValidMessage(prev => ({
-    //     ...prev,
-    //     nicknameMessage: '다시 중복확인을 해주세요.',
-    //   }))
-    // }
   }
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-
-    if (name === 'year') {
-      setSignupForm({ ...signupForm, [name]: Number(value) })
-    } else {
-      setSignupForm({ ...signupForm, [name]: value })
-    }
+    setSignupForm({ ...signupForm, [name]: Number(value) })
   }
 
   const handleCheckEmail = async () => {
     const emailResult = await checkEmail(signupForm.email)
-
     if (emailResult?.data.isExist === true) {
       setValidMessage(prev => ({
         ...prev,
@@ -110,7 +94,6 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
 
   const handleCheckNickname = async () => {
     const nicknameResult = await checkNickname(signupForm.nickname)
-
     if (nicknameResult?.data.isExist === true) {
       setValidMessage(prev => ({
         ...prev,
@@ -135,7 +118,6 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   // 비밀번호 유효성 검사
   useEffect(() => {
     const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,15}$/
-
     if (!regex.test(signupForm.password)) {
       setValidMessage(prev => ({
         ...prev,
@@ -175,11 +157,8 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     setSelectedArea(selectedAreaname) // 선택한 지역을 상태로 설정
     const sigungus = getSigunguByAreacode(selectedAreaname) // 시군구 목록 가져오기
     setSigunguList(sigungus) // 해당 시군구 목록 설정
-
-    // 시군구 선택 초기화
     setSelectedSigungu('')
 
-    // 선택한 지역의 첫 번째 시군구를 기본값으로 설정 (필요한 경우)
     if (sigungus.length > 0) {
       setSignupForm({
         ...signupForm,
@@ -193,7 +172,6 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const handleSigunguChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedSigunguName = e.target.value
     setSelectedSigungu(selectedSigunguName)
-
     const selectedSigungu = sigunguList.find(
       sigungu => sigungu.sigunguname === selectedSigunguName,
     )
@@ -208,168 +186,188 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (isValid) {
-      const registerResult = await register(
-        signupForm.email,
-        signupForm.nickname,
-        signupForm.password,
-        signupForm.year,
-        signupForm.areacode,
-        signupForm.sigungucode,
-        accessToken,
-      )
+    // 유효성 검사 실패 시 알림창 표시
+    if (!isValid.email) {
+      setAlertMessage('이메일 중복확인을 해주세요.')
+      setShowAlert(true)
+      return
+    }
+    if (!isValid.nickname) {
+      setAlertMessage('닉네임 중복확인을 해주세요.')
+      setShowAlert(true)
+      return
+    }
+    if (!isValid.password) {
+      setAlertMessage('비밀번호가 유효하지 않습니다.')
+      setShowAlert(true)
+      return
+    }
+    if (!isValid.checkedPassword) {
+      setAlertMessage('비밀번호가 일치하지 않습니다.')
+      setShowAlert(true)
+      return
+    }
 
-      console.log(signupForm.areacode)
+    const registerResult = await register(
+      signupForm.email,
+      signupForm.nickname,
+      signupForm.password,
+      signupForm.year,
+      signupForm.areacode,
+      signupForm.sigungucode,
+      accessToken,
+    )
 
-      if (registerResult && emailFromKakao) {
-        const successResponse = await login(
-          signupForm.email,
-          signupForm.password,
-        )
-        if (successResponse) {
-          authToken.setToken(successResponse.data.token)
-          navigate('/calendar')
-        }
-      } else if (registerResult) {
-        navigate('/login')
-      } else {
-        console.error('register fail')
+    if (registerResult && emailFromKakao) {
+      const successResponse = await login(signupForm.email, signupForm.password)
+      if (successResponse) {
+        authToken.setToken(successResponse.data.token)
+        navigate('/calendar')
       }
+    } else if (registerResult) {
+      navigate('/login')
     } else {
       console.error('register fail')
-      return
     }
   }
 
   return (
-    <L.Form onSubmit={handleSubmit}>
-      <L.InputWrapper>
-        <L.Label>이메일</L.Label>
-        <L.Input
-          type='email'
-          name='email'
-          id='email'
-          value={signupForm.email}
-          onChange={handleChange}
-          placeholder='이메일을 입력해주세요'
-          required
-          disabled={!!accessToken} // accessToken이 있으면 이메일 입력을 비활성화
+    <>
+      {showAlert && (
+        <AlertPopUp1
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
         />
-        {!accessToken && (
-          <L.Button type='button' onClick={handleCheckEmail}>
+      )}
+      <L.Form onSubmit={handleSubmit}>
+        <L.InputWrapper>
+          <L.Label>이메일</L.Label>
+          <L.Input
+            type='email'
+            name='email'
+            id='email'
+            value={signupForm.email}
+            onChange={handleChange}
+            placeholder='이메일을 입력해주세요'
+            required
+            disabled={!!accessToken} // accessToken이 있으면 이메일 입력을 비활성화
+          />
+          {!accessToken && (
+            <L.Button type='button' onClick={handleCheckEmail}>
+              중복확인
+            </L.Button>
+          )}
+          <L.ValidationMessage error={!isValid.email}>
+            {validMessage.emailMessage}
+          </L.ValidationMessage>
+        </L.InputWrapper>
+        <L.InputWrapper>
+          <L.Label>닉네임</L.Label>
+          <L.Input
+            type='text'
+            name='nickname'
+            id='nickname'
+            value={signupForm.nickname}
+            onChange={handleChange}
+            maxLength={10}
+            placeholder='닉네임'
+            required
+          />
+          <L.Button type='button' onClick={handleCheckNickname}>
             중복확인
           </L.Button>
-        )}
-        <L.ValidationMessage error={!isValid.email}>
-          {validMessage.emailMessage}
-        </L.ValidationMessage>
-      </L.InputWrapper>
-      <L.InputWrapper>
-        <L.Label>닉네임</L.Label>
-        <L.Input
-          type='text'
-          name='nickname'
-          id='nickname'
-          value={signupForm.nickname}
-          onChange={handleChange}
-          maxLength={10}
-          placeholder='닉네임'
-          required
-        />
-        <L.Button type='button' onClick={handleCheckNickname}>
-          중복확인
-        </L.Button>
-        <L.ValidationMessage error={!isValid.nickname}>
-          {validMessage.nicknameMessage}
-        </L.ValidationMessage>
-      </L.InputWrapper>
-      <L.InputWrapper>
-        <L.Label>자녀 출생연도</L.Label>
-        <L.Select
-          name='year'
-          id='year'
-          value={signupForm.year}
-          onChange={handleSelectChange}
-          required
-        >
-          <option value='' disabled>
-            출생연도
-          </option>
-          {years.map(year => (
-            <option key={year} value={year}>
-              {year}
+          <L.ValidationMessage error={!isValid.nickname}>
+            {validMessage.nicknameMessage}
+          </L.ValidationMessage>
+        </L.InputWrapper>
+        <L.InputWrapper>
+          <L.Label>자녀 출생연도</L.Label>
+          <L.Select
+            name='year'
+            id='year'
+            value={signupForm.year}
+            onChange={handleSelectChange}
+            required
+          >
+            <option value='' disabled>
+              출생연도
             </option>
-          ))}
-        </L.Select>
-      </L.InputWrapper>
-      <L.InputWrapper>
-        <L.Label>사는 지역</L.Label>
-        <L.Select
-          name='area'
-          value={selectedArea}
-          onChange={handleAreaChange}
-          required
-        >
-          <option value='' disabled>
-            지역 선택
-          </option>
-          {getAreaNames().map(area => (
-            <option key={area} value={area}>
-              {area}
+            {years.map(year => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </L.Select>
+        </L.InputWrapper>
+        <L.InputWrapper>
+          <L.Label>사는 지역</L.Label>
+          <L.Select
+            name='area'
+            value={selectedArea}
+            onChange={handleAreaChange}
+            required
+          >
+            <option value='' disabled>
+              지역 선택
             </option>
-          ))}
-        </L.Select>
-        <L.Select
-          name='sigungu'
-          value={selectedSigungu}
-          onChange={handleSigunguChange}
-          required
-        >
-          <option value='' disabled>
-            시/군/구 선택
-          </option>
-          {sigunguList.map(sigungu => (
-            <option key={sigungu.sigungucode} value={sigungu.sigunguname}>
-              {sigungu.sigunguname}
+            {getAreaNames().map(area => (
+              <option key={area} value={area}>
+                {area}
+              </option>
+            ))}
+          </L.Select>
+          <L.Select
+            name='sigungu'
+            value={selectedSigungu}
+            onChange={handleSigunguChange}
+            required
+          >
+            <option value='' disabled>
+              시/군/구 선택
             </option>
-          ))}
-        </L.Select>
-      </L.InputWrapper>
+            {sigunguList.map(sigungu => (
+              <option key={sigungu.sigungucode} value={sigungu.sigunguname}>
+                {sigungu.sigunguname}
+              </option>
+            ))}
+          </L.Select>
+        </L.InputWrapper>
 
-      <L.InputWrapper>
-        <L.Label>비밀번호</L.Label>
-        <L.Input
-          type='password'
-          name='password'
-          id='password'
-          value={signupForm.password}
-          onChange={handleChange}
-          placeholder='영문자, 숫자, 특수문자 포함 8~20자리'
-          required
-        />
-        <L.ValidationMessage error={!isValid.password}>
-          {validMessage.passwordMessage}
-        </L.ValidationMessage>
-        <L.Input
-          type='password'
-          name='checkedPassword'
-          id='checkedPassword'
-          placeholder='비밀번호 확인'
-          value={signupForm.checkedPassword}
-          onChange={handleChange}
-          required
-        />
-        <L.ValidationMessage error={!isValid.checkedPassword}>
-          {validMessage.checkedPasswordMessage}
-        </L.ValidationMessage>
-      </L.InputWrapper>
-      <br />
-      <L.SubmitButton type='submit'>회원가입 완료하기</L.SubmitButton>
-      <L.TextCenter>
-        이미 회원가입을 하셨나요?&nbsp;&nbsp;&nbsp;
-        <L.Link href='/login'>로그인하기</L.Link>
-      </L.TextCenter>
-    </L.Form>
+        <L.InputWrapper>
+          <L.Label>비밀번호</L.Label>
+          <L.Input
+            type='password'
+            name='password'
+            id='password'
+            value={signupForm.password}
+            onChange={handleChange}
+            placeholder='영문자, 숫자, 특수문자 포함 8~20자리'
+            required
+          />
+          <L.ValidationMessage error={!isValid.password}>
+            {validMessage.passwordMessage}
+          </L.ValidationMessage>
+          <L.Input
+            type='password'
+            name='checkedPassword'
+            id='checkedPassword'
+            placeholder='비밀번호 확인'
+            value={signupForm.checkedPassword}
+            onChange={handleChange}
+            required
+          />
+          <L.ValidationMessage error={!isValid.checkedPassword}>
+            {validMessage.checkedPasswordMessage}
+          </L.ValidationMessage>
+        </L.InputWrapper>
+        <br />
+        <L.SubmitButton type='submit'>회원가입 완료하기</L.SubmitButton>
+        <L.TextCenter>
+          이미 회원가입을 하셨나요?&nbsp;&nbsp;&nbsp;
+          <L.Link href='/login'>로그인하기</L.Link>
+        </L.TextCenter>
+      </L.Form>
+    </>
   )
 }
 
