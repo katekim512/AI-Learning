@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react'
-// import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { checkEmail } from '../../../api/auth/postCheckEmail'
 import { checkNickname } from '../../../api/auth/postCheckNickname'
+import { login } from '../../../api/auth/postLogin'
 import { register } from '../../../api/auth/postRegister'
 import {
   getAreaNames,
   getSigunguByAreacode,
   Sigungu,
 } from '../../../datas/RegisterCityMapper'
+import authToken from '../../../stores/authToken'
 import * as L from '../styles/Register.style'
 
 const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const emailFromKakao = location.state?.email || ''
-  //   const [openModal, setOpenModal] = useState(false)
-  //   const [openFailModal, setOpenFailModal] = useState(false)
 
   const [signupForm, setSignupForm] = useState({
     email: accessToken ? emailFromKakao : '',
@@ -222,24 +221,25 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
 
       console.log(signupForm.areacode)
 
-      if (registerResult) {
-        // setOpenModal(true)
+      if (registerResult && emailFromKakao) {
+        const successResponse = await login(
+          signupForm.email,
+          signupForm.password,
+        )
+        if (successResponse) {
+          authToken.setToken(successResponse.data.token)
+          navigate('/calendar')
+        }
+      } else if (registerResult) {
         navigate('/login')
       } else {
-        // setOpenFailModal(false)
         console.error('register fail')
       }
     } else {
-      //   setOpenFailModal(false)
       console.error('register fail')
       return
     }
   }
-
-  //   const handleSuccessPopUp = () => {
-  //     setOpenModal(false)
-  //     if (!openFailModal) navigate('/login')
-  //   }
 
   return (
     <L.Form onSubmit={handleSubmit}>
@@ -365,29 +365,10 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       </L.InputWrapper>
       <br />
       <L.SubmitButton type='submit'>회원가입 완료하기</L.SubmitButton>
-      {/* <L.TextCenter>
+      <L.TextCenter>
         이미 회원가입을 하셨나요?&nbsp;&nbsp;&nbsp;
-        <L.Link href="/login">로그인하기</L.Link>
-      </L.TextCenter> */}
-
-      {/* <L.ModalOverlay className={`${openModal ? 'block' : 'hidden'}`} />
-      <L.ModalWrapper className={`${openModal ? 'flex' : 'hidden'}`}>
-        <L.ModalContent>
-          <L.ModalBody>
-            <L.ModalIcon>
-              <HiOutlineExclamationCircle />
-            </L.ModalIcon>
-            <L.ModalText>
-              {openFailModal
-                ? '회원가입에 실패했습니다'
-                : '아이러닝의 회원이 되신 걸 환영합니다!'}
-            </L.ModalText>
-            <div className="flex justify-center gap-4">
-              <L.Button onClick={handleSuccessPopUp}>확인</L.Button>
-            </div>
-          </L.ModalBody>
-        </L.ModalContent>
-      </L.ModalWrapper> */}
+        <L.Link href='/login'>로그인하기</L.Link>
+      </L.TextCenter>
     </L.Form>
   )
 }
