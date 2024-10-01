@@ -10,7 +10,7 @@ const CreateAccount = () => {
   }
 
   const handleCalendar = () => {
-    navigate('/calendar') // 서버 꺼졌을 때 화면 테스트용 이동
+    navigate('/password-change1') // 서버 꺼졌을 때 화면 테스트용 이동
   }
 
   return (

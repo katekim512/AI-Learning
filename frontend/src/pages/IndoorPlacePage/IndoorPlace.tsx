@@ -119,7 +119,9 @@ const IndoorPlace: React.FC = () => {
     }
 
     const originalPlace = daySchedule.info.find(
-      place => place.contentid && place.contentid === Number(contentid),
+      place =>
+        place.contentid &&
+        place.contentid.toString() === Number(contentid).toString(),
     )
 
     if (!originalPlace) {
@@ -163,14 +165,16 @@ const IndoorPlace: React.FC = () => {
     newPlace: RecommendPlace,
     originalPlace: PlacePreviewInfo | null,
   ) => {
-    if (!date || !daySchedule || !contentid) {
-      console.error('Date, day schedule, or contentid is null or undefined.')
+    if (!date || !daySchedule || !originalPlace) {
+      console.error(
+        'Date, day schedule, or originalPlace is null or undefined.',
+      )
       return
     }
 
     // Zustand 스토어 업데이트
     const updatedFutureAlerts = futureAlerts.filter(
-      alert => alert.contentid !== Number(contentid),
+      alert => alert.contentid !== originalPlace.contentid,
     )
     setFutureAlerts(updatedFutureAlerts)
 
@@ -182,7 +186,7 @@ const IndoorPlace: React.FC = () => {
 
     const response = await alertDelete(token, {
       date: date, // 원래 장소의 날짜
-      contentid: Number(contentid), // 원래 장소의 contentid
+      contentid: originalPlace.contentid, // 원래 장소의 contentid
     })
 
     console.log('Alert deleted response:', response)
@@ -191,7 +195,7 @@ const IndoorPlace: React.FC = () => {
       const indexToReplace = daySchedule.info.findIndex(
         place =>
           place.contentid &&
-          place.contentid.toString() === contentid.toString(),
+          place.contentid.toString() === originalPlace.contentid.toString(),
       )
 
       if (indexToReplace === -1) {

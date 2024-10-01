@@ -105,6 +105,7 @@ export const AddButton = styled.button`
   background-color: #f0f0f0;
   border: none;
   padding: 5px 13px;
+  margin-left: 5px;
   font-size: 13px;
   cursor: pointer;
   white-space: nowrap;

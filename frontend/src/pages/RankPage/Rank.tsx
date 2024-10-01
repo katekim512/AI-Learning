@@ -74,6 +74,7 @@ const Rank: React.FC = () => {
           visitedList.map((place: VisitedPlace) => place.contentid),
         ) // Set 생성
         setVisitedPlaces(visitedIds)
+        console.log('방문한 장소 배열', visitedIds)
       }
     }
 
@@ -88,7 +89,7 @@ const Rank: React.FC = () => {
   return (
     <L.AppContainer>
       <L.Title>
-        <h1>교육여행장소 TOP100</h1>
+        <h1>교육여행장소 100곳</h1>
       </L.Title>
       <L.PlacesContainer>
         {top100Places.slice(0, 100).map((place, index) => (

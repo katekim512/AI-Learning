@@ -21,6 +21,8 @@ import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandl
 import Login from './pages/LoginPage/Login'
 import Start from './pages/LoginPage/Start'
 import MyInfoEdit from './pages/MyInfoEditPage/MyInfoEdit'
+import PasswordChange1 from './pages/PasswordChangePage/PasswordChange1'
+import PasswordChange3 from './pages/PasswordChangePage/PasswordChange3'
 import PlaceDetail from './pages/PlaceDetailPage/PlaceDetail'
 import EachLevel from './pages/ProfilePage/components/EachLevel'
 import Profile from './pages/ProfilePage/Profile'
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'password-change1',
+        element: <PasswordChange1 />,
+      },
+      {
+        path: 'password-change3',
+        element: <PasswordChange3 />,
       },
       {
         path: 'calendar',
