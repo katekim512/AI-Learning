@@ -8,6 +8,8 @@ export const Container = styled.div`
 export const ScrollContainer = styled.div`
   height: calc(100vh - 4rem);
   overflow-y: auto;
+  position: relative;
+  padding-bottom: 80px; // 버튼 높이 + 하단 여백을 고려한 패딩
 `
 export const ButtonContainer = styled.div`
   padding: 20px;
@@ -21,11 +23,16 @@ export const Section2 = styled.div`
   margin-top: 20px;
 `
 
-export const Title = styled.h2`
-  font-size: 22px;
-  color: #333;
-  margin: 0px 20px;
+export const Title = styled.h1`
+  font-size: 24px;
+  //text-align: center;
+  margin-left: 20px;
   margin-bottom: 20px;
+`
+
+export const BlueText = styled.span`
+  color: #525fd4;
+  font-weight: bold;
 `
 
 export const SectionHeader = styled.h2`
@@ -99,23 +106,47 @@ export const PatternText = styled.h2`
 `
 
 export const Description = styled.p`
-  text-align: center;
-  color: #666;
-  margin: 0 20px 40px;
+  color: #333;
+  font-size: 16px;
   line-height: 1.5;
+  text-align: start-end;
+  margin: 0; // 기본 마진 제거
 `
 
 export const MoreButton = styled.button`
-  background-color: #525fd4;
-  color: white;
+  width: calc(100% - 40px); // 좌우 20px 여백을 고려한 너비
+  max-width: 400px;
+  height: 46px;
+  border-radius: 8px;
   border: none;
-  padding: 15px 30px;
-  border-radius: 25px;
   font-size: 16px;
+  color: white;
+  font-weight: 600;
+  background-color: #525fd4;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); // 중앙 정렬을 위한 변환
   &:hover {
-    background-color: #4050b5;
+    background-color: #434cb1;
   }
+`
+
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px; // 콘텐츠의 최대 너비 설정
+  margin: 0 auto; // 가로 중앙 정렬
+  transform: translateY(25%); // 컨텐츠를 자신의 높이의 절반만큼 위로 이동
+`
+export const DescriptionBox = styled.div`
+  background-color: #eff1ff;
+  padding: 20px;
+  border-radius: 10px;
+  width: calc(100% - 40px); // 좌우 패딩을 고려한 너비
+  margin: 0 20px; // 좌우 여백 추가
 `
