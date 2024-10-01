@@ -26,9 +26,10 @@ export const PlacesContainer = styled.main`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: calc((100vh - 16rem) / 8); // 8줄에 맞춰 높이 계산
-  gap: 15px;
-  padding: 10px 20px;
-  height: calc(100vh - 10rem); // Title(60px)과 하단 메뉴바(60px) 높이를 뺌
+  gap: 0.9375rem; // 15px를 rem으로 변환
+  padding: 0.3125rem 1.25rem 1.25rem; // 10px 20px를 rem으로 변환
+  margin-bottom: 1rem;
+  height: calc(100vh - 12rem); // Title과 하단 메뉴바 높이를 뺌
   overflow-y: auto;
 `
 
@@ -57,13 +58,13 @@ export const PlaceImage = styled.img`
 
 export const NumberBadge = styled.div`
   position: absolute;
-  top: -1px;
-  left: -1px;
+  top: 0px;
+  left: 0px;
   background-color: rgba(255, 255, 255, 0.8);
   color: #333;
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
+  //border-radius: 50%;
+  width: 12px;
+  height: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
