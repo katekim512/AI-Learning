@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { postMessage } from '../../../api/guide/postMessage'
 import authToken from '../../../stores/authToken'
@@ -13,6 +14,7 @@ interface ChatGuide {
 const ChatGuideList = () => {
   const [chatGuides, setChatGuides] = useState<ChatGuide[]>([])
   const token = authToken.getAccessToken()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchChatGuides = async () => {
@@ -46,7 +48,12 @@ const ChatGuideList = () => {
   return (
     <L.ScrollableContainer>
       {chatGuides.map(guide => (
-        <L.PlaceBoxWrapper key={guide.guideId}>
+        <L.PlaceBoxWrapper
+          key={guide.guideId}
+          onClick={() =>
+            navigate(`/chat/${guide.guideId}/${guideData[guide.guideId].name}`)
+          }
+        >
           <L.PlaceBoxText>
             <L.PlaceBoxTitle>
               {guideData[guide.guideId]?.name || 'Unknown Guide'}
