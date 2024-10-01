@@ -132,7 +132,10 @@ const PlaceBoxItem: React.FC<PlaceBoxItemProps> = ({
             <L.PlaceBoxPic alt='placePreview' src={item.firstimage} />
             <L.DeleteIcon
               isVisible={isSliding === index}
-              onClick={() => onDelete(index)}
+              onClick={e => {
+                e.stopPropagation()
+                onDelete(index)
+              }}
             >
               삭제
             </L.DeleteIcon>
