@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
-import { useQuery } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable'
 
@@ -14,7 +13,6 @@ import useLikeList from '../../hooks/useLikeList'
 import { useUser } from '../../hooks/useUser'
 import useVisitedList from '../../hooks/useVisitedList'
 import authToken from '../../stores/authToken'
-import { useDayScheduleStore } from '../../stores/useDayScheduleStore'
 import { useAlertStore } from '../../stores/useFutureAlerts'
 import { useScheduleStore, initialState } from '../../stores/useScheduleStore'
 import { useWeatherAlert } from '../../stores/useWeatherAlert'
@@ -24,7 +22,6 @@ const Calendar: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const selectedDate = location.state?.selectedDate || null
-  const { daySchedule, setDaySchedule } = useDayScheduleStore()
   const [showPopup, setShowPopup] = useState(false)
 
   const { refetch: refetchUser } = useUser()
@@ -45,22 +42,12 @@ const Calendar: React.FC = () => {
   const cyear = today.getFullYear()
   const cmonth = String(today.getMonth() + 1).padStart(2, '0')
   const cday = String(today.getDate()).padStart(2, '0')
-
   const formattedDate = `${cyear}-${cmonth}-${cday}`
   const [currentDate, setCurrentDate] = useState({
     year: cyear,
     month: today.getMonth() + 1,
   })
-
-  useQuery(
-    ['daySchedule', formattedDate],
-    () => postTimelineDay(token, formattedDate),
-    {
-      enabled: !!token,
-      select: response => response?.data,
-      onSuccess: formattedDate => setDaySchedule(formattedDate),
-    },
-  )
+  const [myMemo, setMyMemo] = useState<string>()
 
   useEffect(() => {
     const fetchAlertPlaces = async () => {
@@ -119,8 +106,16 @@ const Calendar: React.FC = () => {
     await refetchVisitedList()
   }
 
+  const handleTodayMemo = async () => {
+    const successResponse = await postTimelineDay(token, formattedDate)
+    if (successResponse) {
+      setMyMemo(successResponse.data.memo)
+    }
+  }
+
   useEffect(() => {
     saveInfos()
+    handleTodayMemo()
   }, [])
 
   const handleAIScheduleButton = () => {
@@ -233,7 +228,7 @@ const Calendar: React.FC = () => {
             &nbsp;&nbsp;AI 교육여행
           </L.AIScheduleButton>
         </L.HeaderSection>
-        {daySchedule?.memo && <TodayMemo text={daySchedule.memo} />}
+        {myMemo && <TodayMemo text={myMemo} />}
         <MainCalendar
           year={currentDate.year}
           month={currentDate.month}
