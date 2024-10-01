@@ -177,8 +177,8 @@ const AISchedule3 = () => {
           />
           <L.GuideRequestButton onClick={() => handleGuideRequest()}>
             {/* <L.GradientIcon icon={peopleList16Filled} /> */}
-            <Icon icon='fluent:people-chat-16-filled' width='24' height='24' />
-            해당 일정으로 가이드를 구하고 싶나요?
+            <Icon icon='fluent:people-chat-16-filled' width='20' height='20' />
+            해당 일정으로 가이드탭에서 가이드를 구할 수 있어요!
           </L.GuideRequestButton>
         </L.Container>
       </L.ContainerTotal>

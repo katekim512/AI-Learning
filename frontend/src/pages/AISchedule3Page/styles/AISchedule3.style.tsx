@@ -263,7 +263,7 @@ export const GuideRequestButton = styled.button`
   background: transparent; // 배경을 투명하게 설정
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.7rem;
   display: flex;
   gap: 5px;
   align-items: center;
@@ -274,7 +274,7 @@ export const GuideRequestButton = styled.button`
   background-image: linear-gradient(to right, #00c6ff, #0072ff);
   -webkit-background-clip: text;
   background-clip: text;
-  color: #0072ff; /* 텍스트 색상을 투명하게 설정하여 그라데이션이 보이도록 함 */
+  color: #41aeec;
 
   &:hover {
     text-decoration: none;
