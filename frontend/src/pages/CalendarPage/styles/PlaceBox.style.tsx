@@ -45,21 +45,19 @@ export const PlaceBoxText = styled.div<PlaceBoxTextProps>`
   line-height: 1.5rem;
   justify-content: center;
   align-items: center;
-  margin-left: ${({ isEditing }) =>
-    isEditing ? '0' : '0.5rem'}; // isEditing 상태일 때 margin 제거
+  margin-left: ${({ isEditing }) => (isEditing ? '0' : '0.5rem')};
+  margin-right: ${({ isEditing }) => (isEditing ? '1.5rem' : '0.3rem')};
 `
 
 export const PlaceBoxTitle = styled.p`
   font-weight: 700;
-  font-size: 1.1rem;
-  margin-left: 0.5rem;
+  font-size: 1rem;
 `
 
 export const PlaceBoxCity = styled.p`
   font-weight: 400;
   color: #626262;
   font-size: 0.9rem;
-  margin-left: 0.5rem;
 `
 
 export const PlaceBoxPic = styled.img`
