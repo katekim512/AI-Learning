@@ -42,7 +42,7 @@ const Alert: React.FC = () => {
   }
 
   const handleAlertItemClick = (contentid: number, date: string) => {
-    navigate(`/indoorplace/${date}/${contentid}`)
+    navigate(`/indoorplace/${date}/${contentid}`, { state: { date } })
   }
 
   //더미데이터
