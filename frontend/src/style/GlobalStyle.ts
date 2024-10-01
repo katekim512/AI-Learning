@@ -91,6 +91,11 @@ img {
   -o-user-drag: none;
   user-drag: none;
 }
+
+#root {
+	padding-bottom: calc(5rem + env(safe-area-inset-bottom)); // 메뉴바 높이 + 안전 영역
+}
+
 `
 
 export default GlobalStyle

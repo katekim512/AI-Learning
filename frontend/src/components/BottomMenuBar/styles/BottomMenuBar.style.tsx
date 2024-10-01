@@ -11,6 +11,7 @@ export const MenuBar = styled.div`
   bottom: 0;
   background-color: #fff;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  padding-bottom: env(safe-area-inset-bottom); // iOS 안전 영역 고려
 `
 
 export const MenuIcon = styled.div`
