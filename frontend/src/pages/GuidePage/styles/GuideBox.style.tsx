@@ -5,11 +5,8 @@ export const PlaceBoxWrapper = styled.div`
   position: relative;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  padding-bottom: 1rem;
-
-  &:first-child {
-    margin-top: 1rem; /* 첫 번째 박스에만 윗 여백 추가 */
-  }
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
 `
 
 export const PlaceBoxContainer = styled.div`
@@ -94,7 +91,6 @@ export const PlaceBoxPic = styled.img`
 export const ScrollableContainer = styled.div`
   overflow-y: auto;
   margin-bottom: 5rem;
-  padding-top: 0.3rem;
 `
 
 export const ChatButton = styled.button`
