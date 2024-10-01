@@ -6,13 +6,21 @@ import * as L from './styles/InfoBanner.style'
 interface InfoBannerProps {
   text: string
   onClose: () => void
+  onClick: () => void // 새로운 prop 추가
 }
 
-const InfoBanner: React.FC<InfoBannerProps> = ({ text, onClose }) => {
+const InfoBanner: React.FC<InfoBannerProps> = ({ text, onClose, onClick }) => {
   return (
-    <L.BannerContainer>
+    <L.BannerContainer onClick={onClick}>
+      {' '}
+      {/* onClick 핸들러 추가 */}
       <L.CloseButtonContainer>
-        <L.CloseButton onClick={onClose}>
+        <L.CloseButton
+          onClick={e => {
+            e.stopPropagation() // 이벤트 버블링 방지
+            onClose()
+          }}
+        >
           <Icon icon='material-symbols-light:close' width='15' height='15' />
         </L.CloseButton>
       </L.CloseButtonContainer>
@@ -28,8 +36,7 @@ const InfoBanner: React.FC<InfoBannerProps> = ({ text, onClose }) => {
           }}
         />
         {text}
-      </L.BannerText>{' '}
-      {/* 전달받은 텍스트를 표시 */}
+      </L.BannerText>
     </L.BannerContainer>
   )
 }
