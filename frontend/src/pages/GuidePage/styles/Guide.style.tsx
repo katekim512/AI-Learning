@@ -23,3 +23,18 @@ export const Title = styled.div`
 export const Nickname = styled.span`
   color: #525fd4;
 `
+
+export const TabMenu = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
+
+export const Tab = styled.div<{ active: boolean }>`
+  width: 50%;
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: ${props => (props.active ? '2px solid #525fd4' : 'none')};
+  color: ${props => (props.active ? '#525fd4' : '#000')};
+`

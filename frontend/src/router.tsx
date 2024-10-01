@@ -15,6 +15,7 @@ import ChangeNickname from './pages/ChangeNicknamePage/ChangeNickname'
 import ChangePassword from './pages/ChangePasswordPage/ChangePassword'
 import CheckPassword from './pages/CheckPasswordPage/CheckPassword'
 import DateSelected from './pages/DateSelectedPage/DateSelected'
+import ChatRoom from './pages/GuidePage/components/ChatRoom'
 import Guide from './pages/GuidePage/Guide'
 import IndoorPlace from './pages/IndoorPlacePage/IndoorPlace'
 import KakaoRedirectHandle from './pages/LoginPage/components/KakaoRedirectHandle'
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
       {
         path: 'guide',
         element: <Guide />,
+      },
+      {
+        path: 'chat/:guideId/:name',
+        element: <ChatRoom />,
       },
       {
         path: 'profile',

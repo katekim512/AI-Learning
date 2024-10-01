@@ -23,7 +23,7 @@ export const guideData: GuideList = {
   },
   2: {
     guideId: 2,
-    name: '루피',
+    name: '박루피',
     profile: 'img/profile-default.png',
     career: '경력 3년차',
     city: ['부산', '울산'],
@@ -31,7 +31,7 @@ export const guideData: GuideList = {
   },
   3: {
     guideId: 3,
-    name: '타요',
+    name: '이역사',
     profile: 'img/profile-default.png',
     career: '경력 5년차',
     city: ['강원'],
@@ -39,7 +39,7 @@ export const guideData: GuideList = {
   },
   4: {
     guideId: 4,
-    name: '크롱',
+    name: '이크롱',
     profile: 'img/profile-default.png',
     career: '경력 2년차',
     city: ['대구', '경북'],
@@ -47,7 +47,7 @@ export const guideData: GuideList = {
   },
   5: {
     guideId: 5,
-    name: '뽀비',
+    name: '김뽀비',
     profile: 'img/profile-default.png',
     career: '경력 1년차',
     city: ['인천', '서울'],
@@ -55,7 +55,7 @@ export const guideData: GuideList = {
   },
   6: {
     guideId: 6,
-    name: '도라에몽',
+    name: '송한나',
     profile: 'img/profile-default.png',
     career: '경력 6년차',
     city: ['제주'],
@@ -63,7 +63,7 @@ export const guideData: GuideList = {
   },
   7: {
     guideId: 7,
-    name: '피카츄',
+    name: '박카스',
     profile: 'img/profile-default.png',
     career: '경력 3년차',
     city: ['서울'],
@@ -71,7 +71,7 @@ export const guideData: GuideList = {
   },
   8: {
     guideId: 8,
-    name: '짱구',
+    name: '신짱구',
     profile: 'img/profile-default.png',
     career: '경력 2년차',
     city: ['부산', '대전'],
@@ -87,7 +87,7 @@ export const guideData: GuideList = {
   },
   10: {
     guideId: 10,
-    name: '미니언',
+    name: '이시언',
     profile: 'img/profile-default.png',
     career: '경력 5년차',
     city: ['광주', '전남'],
@@ -95,7 +95,7 @@ export const guideData: GuideList = {
   },
   11: {
     guideId: 11,
-    name: '로보트 태권V',
+    name: '김보미',
     profile: 'img/profile-default.png',
     career: '경력 6년차',
     city: ['경기'],
@@ -127,7 +127,7 @@ export const guideData: GuideList = {
   },
   15: {
     guideId: 15,
-    name: '헬로키티',
+    name: '아이유',
     profile: 'img/profile-default.png',
     career: '경력 4년차',
     city: ['서울'],
@@ -135,7 +135,7 @@ export const guideData: GuideList = {
   },
   16: {
     guideId: 16,
-    name: '수달',
+    name: '윤수달',
     profile: 'img/profile-default.png',
     career: '경력 5년차',
     city: ['강원', '서울', '인천'],
@@ -143,7 +143,7 @@ export const guideData: GuideList = {
   },
   17: {
     guideId: 17,
-    name: '포켓몬',
+    name: '파이리',
     profile: 'img/profile-default.png',
     career: '경력 6년차',
     city: ['서울'],
