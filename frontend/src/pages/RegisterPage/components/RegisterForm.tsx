@@ -25,7 +25,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     year: 2024,
     areacode: 0,
     sigungucode: 0,
-    password: '',
+    c_password: '',
     checkedPassword: '',
   })
 
@@ -41,7 +41,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   const [isValid, setIsValid] = useState({
     email: !!accessToken,
     nickname: false,
-    password: false,
+    c_password: false,
     checkedPassword: false,
   })
 
@@ -58,10 +58,12 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
 
   const [alertMessage, setAlertMessage] = useState<string>('') // 알림창 메시지 상태
   const [showAlert, setShowAlert] = useState<boolean>(false) // 알림창 표시 여부 상태
+  const [navigateOnConfirm, setNavigateOnConfirm] = useState<boolean>(false)
   const [isChecked, setIsChecked] = useState({
     emailChecked: !!accessToken, // accessToken이 있으면 이미 확인된 상태로 간주
     nicknameChecked: false,
   })
+  const [myPassword, setMyPassword] = useState<boolean>(false)
 
   // 이메일 변경 시 중복확인 무효화
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,25 +149,29 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
   // 비밀번호 유효성 검사
   useEffect(() => {
     const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,15}$/
-    if (!regex.test(signupForm.password)) {
+
+    if (!regex.test(signupForm.c_password)) {
+      setMyPassword(false)
+      setIsValid({ ...isValid, c_password: false })
       setValidMessage(prev => ({
         ...prev,
         passwordMessage:
           '숫자, 영문, 특수문자를 포함하여 최소 8자를 입력해주세요',
       }))
-      setIsValid({ ...isValid, password: false })
     } else {
+      console.log('hihi')
+      setMyPassword(true)
+      setIsValid({ ...isValid, c_password: true })
       setValidMessage(prev => ({
         ...prev,
         passwordMessage: '',
       }))
-      setIsValid({ ...isValid, password: true })
     }
-  }, [signupForm.password])
+  }, [signupForm.c_password])
 
   // 비밀번호 확인
   useEffect(() => {
-    if (signupForm.password !== signupForm.checkedPassword) {
+    if (signupForm.c_password !== signupForm.checkedPassword) {
       setValidMessage(prev => ({
         ...prev,
         checkedPasswordMessage: '비밀번호가 일치하지 않습니다.',
@@ -178,7 +184,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       }))
       setIsValid({ ...isValid, checkedPassword: true })
     }
-  }, [signupForm.password, signupForm.checkedPassword])
+  }, [signupForm.c_password, signupForm.checkedPassword])
 
   // 지역 선택 핸들러
   const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -226,7 +232,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       setShowAlert(true)
       return
     }
-    if (!isValid.password) {
+    if (!myPassword) {
       setAlertMessage('비밀번호를 다시 한 번 확인해주세요.')
       setShowAlert(true)
       return
@@ -240,33 +246,48 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
     const registerResult = await register(
       signupForm.email,
       signupForm.nickname,
-      signupForm.password,
+      signupForm.c_password,
       signupForm.year,
       signupForm.areacode,
       signupForm.sigungucode,
       accessToken,
     )
 
-    if (registerResult && emailFromKakao) {
-      const successResponse = await login(signupForm.email, signupForm.password)
-      if (successResponse) {
-        authToken.setToken(successResponse.data.token)
-        navigate('/calendar')
-      }
-    } else if (registerResult) {
-      navigate('/login')
+    if (registerResult) {
+      setAlertMessage('아이러닝의 회원이 되신 것을 환영합니다!')
+      setShowAlert(true)
+      setNavigateOnConfirm(true) // navigateOnConfirm을 true로 설정
     } else {
-      console.error('register fail')
+      setAlertMessage('회원가입에 실패했습니다. 다시 시도해주세요.')
+      setShowAlert(true)
+      setNavigateOnConfirm(false) // 실패 시에는 navigate 없이 팝업만
+    }
+  }
+
+  // 팝업의 확인 버튼 클릭 시 navigate 처리
+  const handleConfirm = async () => {
+    setShowAlert(false) // 팝업 닫기
+
+    if (navigateOnConfirm) {
+      if (emailFromKakao) {
+        const successResponse = await login(
+          signupForm.email,
+          signupForm.c_password,
+        )
+        if (successResponse) {
+          authToken.setToken(successResponse.data.token)
+          navigate('/calendar')
+        }
+      } else {
+        navigate('/login')
+      }
     }
   }
 
   return (
     <>
       {showAlert && (
-        <AlertPopUp1
-          message={alertMessage}
-          onConfirm={() => setShowAlert(false)}
-        />
+        <AlertPopUp1 message={alertMessage} onConfirm={handleConfirm} />
       )}
       <L.Form onSubmit={handleSubmit}>
         <L.InputWrapper>
@@ -368,14 +389,14 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
           <L.Label>비밀번호</L.Label>
           <L.Input
             type='password'
-            name='password'
-            id='password'
-            value={signupForm.password}
+            name='c_password'
+            id='c_password'
+            value={signupForm.c_password}
             onChange={handleChange}
             placeholder='영문자, 숫자, 특수문자 포함 8~20자리'
             required
           />
-          <L.ValidationMessage error={!isValid.password}>
+          <L.ValidationMessage error={!isValid.c_password}>
             {validMessage.passwordMessage}
           </L.ValidationMessage>
           <L.Input
