@@ -58,17 +58,36 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
 
   const [alertMessage, setAlertMessage] = useState<string>('') // 알림창 메시지 상태
   const [showAlert, setShowAlert] = useState<boolean>(false) // 알림창 표시 여부 상태
+  const [isChecked, setIsChecked] = useState({
+    emailChecked: !!accessToken, // accessToken이 있으면 이미 확인된 상태로 간주
+    nicknameChecked: false,
+  })
 
+  // 이메일 변경 시 중복확인 무효화
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setSignupForm({ ...signupForm, [name]: value })
+
+    if (name === 'email') {
+      setIsValid(prev => ({ ...prev, email: false }))
+      setIsChecked(prev => ({ ...prev, emailChecked: false }))
+      setValidMessage(prev => ({
+        ...prev,
+        emailMessage: '',
+      }))
+    }
+
+    if (name === 'nickname') {
+      setIsValid(prev => ({ ...prev, nickname: false }))
+      setIsChecked(prev => ({ ...prev, nicknameChecked: false }))
+      setValidMessage(prev => ({
+        ...prev,
+        nicknameMessage: '',
+      }))
+    }
   }
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setSignupForm({ ...signupForm, [name]: Number(value) })
-  }
-
+  // 이메일 중복확인 버튼 클릭 시
   const handleCheckEmail = async () => {
     const emailResult = await checkEmail(signupForm.email)
     if (emailResult?.data.isExist === true) {
@@ -90,8 +109,11 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       }))
       setIsValid({ ...isValid, email: false })
     }
+
+    setIsChecked(prev => ({ ...prev, emailChecked: true })) // 중복확인 완료로 설정
   }
 
+  // 닉네임 중복확인 버튼 클릭 시
   const handleCheckNickname = async () => {
     const nicknameResult = await checkNickname(signupForm.nickname)
     if (nicknameResult?.data.isExist === true) {
@@ -113,6 +135,13 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       }))
       setIsValid({ ...isValid, nickname: false })
     }
+
+    setIsChecked(prev => ({ ...prev, nicknameChecked: true })) // 중복확인 완료로 설정
+  }
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setSignupForm({ ...signupForm, [name]: Number(value) })
   }
 
   // 비밀번호 유효성 검사
@@ -198,7 +227,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
       return
     }
     if (!isValid.password) {
-      setAlertMessage('비밀번호가 유효하지 않습니다.')
+      setAlertMessage('비밀번호를 다시 한 번 확인해주세요.')
       setShowAlert(true)
       return
     }
@@ -257,7 +286,7 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
               중복확인
             </L.Button>
           )}
-          <L.ValidationMessage error={!isValid.email}>
+          <L.ValidationMessage error={!isValid.email && isChecked.emailChecked}>
             {validMessage.emailMessage}
           </L.ValidationMessage>
         </L.InputWrapper>
@@ -276,7 +305,9 @@ const RegisterForm = ({ accessToken }: { accessToken?: string }) => {
           <L.Button type='button' onClick={handleCheckNickname}>
             중복확인
           </L.Button>
-          <L.ValidationMessage error={!isValid.nickname}>
+          <L.ValidationMessage
+            error={!isValid.nickname && isChecked.nicknameChecked}
+          >
             {validMessage.nicknameMessage}
           </L.ValidationMessage>
         </L.InputWrapper>
