@@ -79,10 +79,7 @@ const AISchedule2 = () => {
         </>
       )}
       {!loading && ( // Only show the button when not loading
-        <>
-          <BackButton />
-          <L.BottomButton onClick={handleSubmitAIInput}>완료</L.BottomButton>
-        </>
+        <L.BottomButton onClick={handleSubmitAIInput}>완료</L.BottomButton>
       )}
     </>
   )
