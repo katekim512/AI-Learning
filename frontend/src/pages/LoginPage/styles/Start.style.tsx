@@ -11,6 +11,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  min-height: -webkit-fill-available;
 `
 
 export const HeaderText = styled.p`
